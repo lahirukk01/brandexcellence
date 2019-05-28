@@ -1,0 +1,5 @@
+.floating-response {
+    position: absolute;
+    z-index: 100;
+    right: 10px;
+}

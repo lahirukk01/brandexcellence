@@ -15,6 +15,15 @@
     <div class="animated fadeIn">
         <div class="row">
 
+            @if (session('status'))
+                <div class="alert alert-success alert-dismissible fade show floating-response" role="alert">
+                    {{ session('status') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+
             <div class="col-md-12">
                 <div id="result-message"></div>
                 <div class="card">
@@ -22,7 +31,7 @@
                         <h3 class="text-center">Client Details</h3>
                     </div>
                     <div class="card-body">
-                        <div class="row" style="background-color: yellow;">
+                        <div class="row">
                             <div class="col-md-6">
                                 <h4 class="text-center mb-3">User</h4>
                                 <div class="row">
@@ -114,7 +123,7 @@
                         </div>
                     </div>
                     <div class="card-footer">
-
+                        <a href="{{route('client.edit', $client->id)}}" class="btn btn-primary">Edit Profile</a>
                     </div>
                 </div>
             </div>

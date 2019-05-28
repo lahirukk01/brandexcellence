@@ -34,10 +34,7 @@ class HomeController extends Controller
             case 3:
                 break;
             case 4:
-
-                $client = Auth::user();
-                return view('client.dashboard', compact('client'));
-
+                return redirect()->action('ClientController@index');
                 break;
             default:
                 die('Invalid user role');

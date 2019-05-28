@@ -6,6 +6,8 @@
 
         <title>Brand Excellence</title>
 
+        <link rel="shortcut icon" href="{{asset('images/be_logo.png')}}">
+
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
         <link rel="stylesheet" href="{{asset('vendors/bootstrap/dist/css/bootstrap.css')}}">
