@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Support\Facades\Auth;
 
 class Client
 {
@@ -15,10 +16,12 @@ class Client
      */
     public function handle($request, Closure $next)
     {
-        if(Auth::user()->role->name == 'client') {
-            return $next($request);
+        if(Auth::check()) {
+            if(Auth::user()->role->name == 'client') {
+                return $next($request);
+            }
         }
 
-        return redirect('home')->with('error','You have not admin access');
+        return redirect('home')->with('error','You have not client access');
     }
 }

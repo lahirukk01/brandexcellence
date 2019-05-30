@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Support\Facades\Auth;
 
 class Judge
 {
@@ -15,6 +16,12 @@ class Judge
      */
     public function handle($request, Closure $next)
     {
-        return $next($request);
+        if(Auth::check()) {
+            if(Auth::user()->role->name == 'judge') {
+                return $next($request);
+            }
+        }
+
+        return redirect('home')->with('error','You do not have judge access');
     }
 }

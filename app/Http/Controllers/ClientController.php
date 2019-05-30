@@ -24,7 +24,7 @@ class ClientController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  User  $client
      * @return \Illuminate\Http\Response
      */
     public function edit(User $client)
@@ -37,7 +37,7 @@ class ClientController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  User $client
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, User $client)
@@ -88,9 +88,6 @@ class ClientController extends Controller
         ]);
 
         $currentPassword = $request->input('old_password');
-
-//        print_r($currentPassword);
-//        die();
 
         if( ! Hash::check( $currentPassword, $user->password)) {
             return redirect()->back()->with('passwordError', 'Invalid current password');

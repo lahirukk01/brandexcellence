@@ -23,6 +23,7 @@
 
 
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
+    <link rel="stylesheet" href="{{asset('css/mystyle.css')}}">
 
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
 
@@ -42,15 +43,42 @@
             </button>
             <a class="navbar-brand" href="#">{{Auth::user()->name}}</a>
             <a class="navbar-brand" href="#"><h6>{{Auth::user()->role->name}}</h6></a>
-            <a class="navbar-brand hidden" href="#"><div style="width: 13px; height: 18px; background-color: gold;"></div></a>
+            <a class="navbar-brand hidden" href="#"><img src="{{ asset('images/be_logo.png') }}" alt="" class="img-fluid"></a>
         </div>
 
         <div id="main-menu" class="main-menu collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="active">
-                    <a href="{{route('home')}}"> <i class="menu-icon fa fa-dashboard"></i>Dashboard </a>
+                <li id="dashboard-li">
+                    <a href="{{route('admin.index')}}"> <i class="menu-icon fa fa-dashboard"></i>Dashboard </a>
                 </li>
 
+                <li id="clients-li">
+                    <a href="{{route('clients.index')}}"> <i class="menu-icon fa fa-briefcase"></i>Clients </a>
+                </li>
+
+                <li id="brands-li">
+                    <a href="{{route('admin.brands.index')}}"> <i class="menu-icon fa fa-first-order"></i>Brands </a>
+                </li>
+
+                @if( Auth::check() && Auth::user()->role_id == 1)
+
+                    <li id="categories-li">
+                        <a href="{{route('categories.index')}}"> <i class="menu-icon fa fa-snowflake-o"></i>Categories </a>
+                    </li>
+
+                    <li id="admins-li">
+                        <a href="{{route('admins.index')}}"> <i class="menu-icon fa fa-users"></i>Admins </a>
+                    </li>
+
+                @endif
+
+                @if( Auth::check() && Auth::user()->role_id == 2)
+
+                    <li id="categories-li">
+                        <a href="{{route('categories.show_all')}}"> <i class="menu-icon fa fa-snowflake-o"></i>Categories </a>
+                    </li>
+
+                @endif
 
             </ul>
         </div><!-- /.navbar-collapse -->
@@ -128,6 +156,13 @@
 <script src="{{asset('vendors/popper.js/dist/umd/popper.min.js')}}"></script>
 <script src="{{asset('vendors/bootstrap/dist/js/bootstrap.min.js')}}"></script>
 <script src="{{asset('js/main.js')}}"></script>
+<script src="{{asset('vendors/jQuery-Form-Validator/form-validator/jquery.form-validator.js')}}"></script>
+
+<script>
+    const $ = jQuery
+</script>
+
+@yield('scripts')
 
 </body>
 

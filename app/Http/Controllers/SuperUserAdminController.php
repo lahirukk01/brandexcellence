@@ -1,0 +1,138 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+
+class SuperUserAdminController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $admins = User::whereRoleId(2)->get();
+
+        return view('super.admins.index', compact('admins'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('super.admins.create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|max:255',
+            'email' => 'required|max:50|email|unique:users',
+            'contact_number' => 'required|digits:10',
+            'designation' => 'required|max:100',
+            'password' => 'required|alpha_num|min:3|max:15|confirmed',
+        ]);
+
+        $data = $request->all();
+
+        $admin = new User([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'contact_number' => $data['contact_number'],
+            'designation' => $data['designation'],
+            'password' => Hash::make($data['password']),
+        ]);
+
+        $admin->role_id = 2;
+        $admin->save();
+
+        return redirect()->route('admins.index')->with('status', 'Administrator created successfully');
+    }
+
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  User  $admin
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(User $admin)
+    {
+        return view('super.admins.edit', compact('admin'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  User $admin
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, User $admin)
+    {
+        $data = $request->all();
+
+        if($data['email'] == $admin->email) {
+            unset($data['email']);
+        }
+
+        $validation = Validator::make($data, [
+            'name' => 'required|max:100',
+            'email' => 'email|max:50|unique:users',
+            'contact_number' => 'required|digits:10',
+            'designation' => 'required|max:100',
+        ]);
+
+        if($validation->fails()) {
+            return redirect()->back()->with('errors', $validation->messages());
+        }
+
+        $admin->update($data);
+
+        return redirect()->route('admins.index')->with('status', 'Administrator updated successfully');
+
+    }
+
+
+    public function updatePassword(Request $request, User $admin)
+    {
+        $request->validate([
+            'password' => 'required|min:3|max:15|alpha_num|confirmed',
+        ]);
+
+        $password = $request->input('password');
+
+        $admin->update([
+            'password' => Hash::make($password)
+        ]);
+
+        return redirect()->route('admins.index')->with('status', 'Admin password updated successfully');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  User $admin
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(User $admin)
+    {
+        $admin->delete();
+
+        return redirect()->route('admins.index')->with('status', 'Administrator delete successfully');
+    }
+}

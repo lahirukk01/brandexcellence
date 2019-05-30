@@ -352,17 +352,58 @@
                                     <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 20px; padding-left: 20px; padding-top: 20px; padding-bottom: 20px; font-family: Arial, sans-serif"><![endif]-->
                                     <div style="color:#892C63;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;line-height:120%;padding-top:20px;padding-right:20px;padding-bottom:20px;padding-left:20px;">
                                         <div style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 12px; line-height: 14px; color: #892C63;">
-                                            <div style="line-height: 14px; font-size: 12px; text-align: center;"><span style="font-size: 24px; line-height: 28px;"><span style="line-height: 28px; font-size: 24px;">Thank you for registering a new brand <span id="autocomplete" style="font-size: 24px; line-height: 28px;"><span id="autocomplete-delimiter" style="font-size: 24px; line-height: 28px;">!</span><span id="autocomplete-searchtext" style="font-size: 24px; line-height: 28px;"><span style="font-size: 24px; line-height: 28px;">!!</span></span></span></span></span></div>
+                                            <div style="line-height: 14px; font-size: 12px; text-align: center;"><span style="font-size: 24px; line-height: 28px;"><span style="line-height: 28px; font-size: 24px;">Thank you for registering <span id="autocomplete" style="font-size: 24px; line-height: 28px;"><span id="autocomplete-delimiter" style="font-size: 24px; line-height: 28px;">!</span><span id="autocomplete-searchtext" style="font-size: 24px; line-height: 28px;"><span style="font-size: 24px; line-height: 28px;">!!</span></span></span></span></span></div>
                                         </div>
                                     </div>
                                     <!--[if mso]></td></tr></table><![endif]-->
                                     <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 20px; padding-left: 20px; padding-top: 0px; padding-bottom: 0px; font-family: Arial, sans-serif"><![endif]-->
                                     <div style="color:#555555;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;line-height:180%;padding-top:0px;padding-right:20px;padding-bottom:0px;padding-left:20px;">
                                         <div style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 12px; line-height: 21px; color: #555555;">
-                                            <p style="font-size: 16px; line-height: 28px; margin: 0;"><span style="font-size: 16px;">Company Name: </span> {{ $brand->company->name }}</p>
-                                            <p style="font-size: 16px; line-height: 28px; margin: 0;"><span style="font-size: 16px;">Brand Name: </span> {{ $brand->name }}</p>
-                                            <p style="font-size: 16px; line-height: 28px; margin: 0;"><span style="font-size: 16px;">Category: </span> {{ $brand->category->name }}</p>
-                                            <p style="font-size: 16px; line-height: 28px; margin: 0;"><span style="font-size: 16px;">ID String: </span> {{ $brand->id_string }}</p>
+
+                                            <table>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Applicant Name</td>
+                                                        <td>{{ $profile['name'] }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Email</td>
+                                                        <td>{{ $profile['email'] }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Contact Number</td>
+                                                        <td>{{ $profile['contact_number'] }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Designation</td>
+                                                        <td>{{ $profile['designation'] }}</td>
+                                                    </tr>
+
+                                                    <hr>
+
+                                                    <tr>
+                                                        <td>Company Name</td>
+                                                        <td>{{ $profile['company_name'] }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Company Address</td>
+                                                        <td>{{ $profile['company_address'] }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>CEO Name</td>
+                                                        <td>{{ $profile['ceo_name'] }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>CEO Email</td>
+                                                        <td>{{ $profile['ceo_email'] }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>CEO Contact Number</td>
+                                                        <td>{{ $profile['ceo_contact_number'] }}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
                                         </div>
                                     </div>
                                     <!--[if mso]></td></tr></table><![endif]-->

@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
         User::truncate();
 
         DB::table('roles')->insert([
-            ['name' => 'super user'],
+            ['name' => 'super'],
             ['name' => 'admin'],
             ['name' => 'judge'],
             ['name' => 'client']

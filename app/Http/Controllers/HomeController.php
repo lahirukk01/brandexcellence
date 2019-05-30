@@ -27,11 +27,13 @@ class HomeController extends Controller
         switch(Auth::user()->role_id)
         {
             case 1:
-                return view('admin.dashboard');
+                return redirect()->action('AdminController@index');
                 break;
             case 2:
+                return redirect()->action('AdminController@index');
                 break;
             case 3:
+                return redirect()->action('JudgeController@index');
                 break;
             case 4:
                 return redirect()->action('ClientController@index');

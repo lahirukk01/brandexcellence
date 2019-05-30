@@ -48,7 +48,7 @@
                             </div>
                             <div class="row form-group">
                                 <div class="col col-md-3"><label for="brand-description" class=" form-control-label">Description (max length 60 characters)</label></div>
-                                <div class="col-12 col-md-9"><textarea name="description" id="" rows="6" class="form-control" maxlength="60" data-validation="required"></textarea></div>
+                                <div class="col-12 col-md-9"><textarea name="description" id="" rows="6" class="form-control" maxlength="60" data-validation="required">{{ old('description') }}</textarea></div>
                             </div>
 
                             <div class="row form-group">
@@ -62,7 +62,7 @@
                             </div>
 
                             <div class="row form-group">
-                                <div class="col col-md-3"><label for="logo-input" class=" form-control-label">Logo (ai file)</label></div>
+                                <div class="col col-md-3"><label for="logo-input" class=" form-control-label">Brand Logo (ai file)</label></div>
                                 <div class="col-12 col-md-9">
                                     <input type="file" id="" name="logo" class="form-control-file" required value="{{old('logo')}}"
                                            accept="application/postscript" data-validation="ai_file">

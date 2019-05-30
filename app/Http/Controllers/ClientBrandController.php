@@ -9,6 +9,7 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
@@ -85,7 +86,7 @@ class ClientBrandController extends Controller
         $superUserEmail = User::where('role_id', 1)->first()->email;
         Mail::to($email)->cc($superUserEmail)->send(new BrandRegistered($brand));
 
-        return response()->json(['success'=>'Record is successfully added']);
+        return response()->json(['success'=>'Record added successfully']);
     }
 
     /**
@@ -119,7 +120,8 @@ class ClientBrandController extends Controller
      */
     public function edit(Brand $brand)
     {
-        //
+        $categories = Category::all();
+        return view('client.brands.edit', compact('brand', 'categories'));
     }
 
     /**
@@ -131,7 +133,68 @@ class ClientBrandController extends Controller
      */
     public function update(Request $request, Brand $brand)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'description' => 'required|max:60',
+            'category_id' => 'required',
+        ]);
+
+        if ($validator->fails()){
+            return response()->json(['errors'=>$validator->errors()->all()]);
+        }
+
+        $input = $request->all();
+
+        if( empty($input['entry_kit'])) {
+            unset($input['entry_kit']);
+        }
+
+        if( empty($input['logo'])) {
+            unset($input['logo']);
+        }
+
+        $oldEntryKit = $brand->entry_kit;
+        $oldLogo = $brand->logo;
+
+        if( $request->file('entry_kit') != null && $request->file('entry_kit')->isValid() ) {
+            $file1 = $request->file('entry_kit');
+            $fileName1 = Carbon::now()->format('Y_m_d_H_i_s') . '_' . preg_replace('/\s/', '_', $file1->getClientOriginalName());
+            $file1->move('uploads', $fileName1);
+            $input['entry_kit'] = $fileName1;
+        }
+
+        if( $request->file('logo') != null && $request->file('logo')->isValid() ) {
+            $file2 = $request->file('logo');
+            $fileName2 = Carbon::now()->format('Y_m_d_H_i_s') . '_' . preg_replace('/\s/', '_', $file2->getClientOriginalName());
+            $file2->move('uploads', $fileName2);
+            $input['logo'] = $fileName2;
+        }
+
+        $categoryCode = Category::findOrFail($input['category_id'])->code;
+        $count = Brand::where('category_id', $input['category_id'])->count();
+        $count++;
+        $count = sprintf('%03d', $count);
+        $input['id_string'] = "2019|$categoryCode|$count";
+
+//        $company = Auth::user()->company;
+//        $brand = $company->brands()->create($input);
+//
+//        $email = Auth::user()->email;
+//
+//        $superUserEmail = User::where('role_id', 1)->first()->email;
+//        Mail::to($email)->cc($superUserEmail)->send(new BrandRegistered($brand));
+
+        $brand->update($input);
+
+        if( isset($input['entry_kit']) ) {
+            File::delete($oldEntryKit);
+        }
+
+        if( isset($input['logo']) ) {
+            File::delete($oldLogo);
+        }
+
+        return response()->json(['success'=>'Brand updated successfully']);
     }
 
     /**

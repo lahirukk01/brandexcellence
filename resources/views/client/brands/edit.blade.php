@@ -1,12 +1,12 @@
 @extends('layouts.client')
 
-@section('title', 'Brand Excellence Client Create Brand')
+@section('title', 'Brand Excellence Client Edit Brand')
 
 @section('breadcrumbs_title', 'Brands')
 
 @section('breadcrumbs')
     <li><a href="{{route('brands.index')}}">Brands</a></li>
-    <li class="active">Create Brand</li>
+    <li class="active">Edit Brand</li>
 @endsection
 
 @section('content')
@@ -21,10 +21,11 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <form id="create-brand-form" action="{{route('brands.store')}}" method="post" enctype="multipart/form-data" class="form-horizontal">
+                    <form id="edit-brand-form" action="{{route('brands.update', $brand->id)}}" method="post" enctype="multipart/form-data" class="form-horizontal">
                         @csrf
+                        @method('PATCH')
                         <div class="card-header">
-                            <h3 class="text-center">Create Brand</h3>
+                            <h3 class="text-center">Edit Brand</h3>
                         </div>
                         <div class="card-body">
                             <h6 class="mb-3" style="color: red;">All fields are required</h6>
@@ -32,7 +33,7 @@
                                 <div class="col col-md-3"><label for="name-input" class=" form-control-label">Name</label></div>
                                 <div class="col-12 col-md-9">
                                     <input type="text" id="brand-name-input" name="name"
-                                           class="form-control" value="{{old('name')}}" data-validation="required">
+                                           class="form-control" value="{{ $brand->name }}" data-validation="required">
                                 </div>
                             </div>
                             <div class="row form-group">
@@ -41,30 +42,30 @@
                                     <select name="category_id" id="" data-validation="required">
                                         <option value="">Select Category</option>
                                         @foreach($categories as $c)
-                                            <option value="{{$c->id}}" @if(old('category') == $c->id) {{'selected'}} @endif>{{$c->name}}</option>
+                                            <option value="{{$c->id}}" @if( $brand->category_id == $c->id) {{'selected'}} @endif>{{$c->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
                             <div class="row form-group">
                                 <div class="col col-md-3"><label for="brand-description" class=" form-control-label">Description (max length 60 characters)</label></div>
-                                <div class="col-12 col-md-9"><textarea name="description" id="" rows="6" class="form-control" maxlength="60" data-validation="required"></textarea></div>
+                                <div class="col-12 col-md-9"><textarea name="description" id="" rows="6" class="form-control" maxlength="60" data-validation="required">{{ $brand->description }}</textarea></div>
                             </div>
 
                             <div class="row form-group">
                                 <div class="col col-md-3"><label for="entry-kit-input" class=" form-control-label">Entry Kit (pdf file)</label></div>
                                 <div class="col-12 col-md-9">
                                     <input type="file" id="" name="entry_kit"
-                                           class="form-control-file" required accept="application/pdf" value="{{old('entry_kit')}}"
+                                           class="form-control-file" accept="application/pdf" value=""
                                            data-validation="mime"
                                            data-validation-allowing="pdf" >
                                 </div>
                             </div>
 
                             <div class="row form-group">
-                                <div class="col col-md-3"><label for="logo-input" class=" form-control-label">Logo (ai file)</label></div>
+                                <div class="col col-md-3"><label for="logo-input" class=" form-control-label">Brand Logo (ai file)</label></div>
                                 <div class="col-12 col-md-9">
-                                    <input type="file" id="" name="logo" class="form-control-file" required value="{{old('logo')}}"
+                                    <input type="file" id="" name="logo" class="form-control-file" value=""
                                            accept="application/postscript" data-validation="ai_file">
                                 </div>
                             </div>
@@ -99,15 +100,17 @@
 
                 const pattern = /.+\.ai$/
                 const fileOb = $el.get()[0].files[0]
-                if( fileOb != undefined) {
+                if( fileOb !== undefined) {
                     if(fileOb.type === 'application/postscript' && fileOb.name.match(pattern)) {
                         return true
+                    } else {
+                        return false
                     }
                 }
 
-                return false
-
+                return true
             },
+
             errorMessage : 'Only ai files are allowed',
         })
 
@@ -117,7 +120,7 @@
 
         $('form').ajaxForm({
             beforeSubmit: function () {
-                if($('#create-brand-form').isValid()) {
+                if($('#edit-brand-form').isValid()) {
                     return true
                 } else {
                     return false
@@ -143,14 +146,15 @@
                 $('.alert-danger').empty()
                 $('.alert-danger').hide()
                 const response = JSON.parse(xhr.responseText)
-                // console.log(response)
-                if(response.success != undefined) {
-                    $('#create-brand-form')[0].reset()
+                console.log(response)
+                if(response.success !== undefined) {
+                    $('#edit-brand-form')[0].reset()
                     const percentVal = 'Form submitted successfully';
                     bar.width('100%')
                     bar.attr('aria-valuenow', '100')
                     bar.html(percentVal);
-                    alert('Form submitted successfully')
+                    alert('Form updated successfully')
+                    window.location.assign('{{route('brands.index')}}')
                 } else {
                     $.each(response.errors, function (key, val) {
                         $('.alert-danger').append(`<p>${val}</p>`)

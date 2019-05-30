@@ -7,3 +7,15 @@
 @section('breadcrumbs')
     <li class="active">Dashboard</li>
 @endsection
+
+
+
+
+
+@section('scripts')
+
+    <script>
+        $('#dashboard-li').addClass('active')
+    </script>
+
+@endsection

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Company;
+use App\Mail\ClientRegistered;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
@@ -74,9 +76,6 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-//        print_r($data);
-//        die();
-
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
@@ -98,5 +97,11 @@ class RegisterController extends Controller
             'ceo_contact_number' => $data['ceo_contact_number'],
             'user_id' => $user->id,
         ]);
+
+        unset($data['password']);
+        unset($data['password_confirmation']);
+
+        $superUserEmail = User::where('role_id', 1)->first()->email;
+        Mail::to($user->email)->cc($superUserEmail)->send(new ClientRegistered($data));
     }
 }
