@@ -134,7 +134,7 @@ class ClientBrandController extends Controller
     public function update(Request $request, Brand $brand)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
+            'name' => 'required|max:50',
             'description' => 'required|max:60',
             'category_id' => 'required',
         ]);

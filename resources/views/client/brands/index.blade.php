@@ -45,8 +45,8 @@
                                         <td>{{$b->id_string}}</td>
                                         <td>
                                             <a style="color: #0e6498;" href="{{route('brands.show', $b->id)}}">View</a>
-                                            <a style="color: green;" href="{{route('brands.edit', $b->id)}}">Edit</a>
-                                            <form action="{{route('brands.destroy', $b->id)}}" method="post">
+                                            <a class="mx-2" style="color: green;" href="{{route('brands.edit', $b->id)}}">Edit</a>
+                                            <form class="d-inline" action="{{route('brands.destroy', $b->id)}}" method="post">
                                                 @csrf
                                                 @method('DELETE')
 

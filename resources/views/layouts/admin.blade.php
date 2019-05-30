@@ -25,6 +25,8 @@
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
     <link rel="stylesheet" href="{{asset('css/mystyle.css')}}">
 
+    @yield('styles')
+
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
 
 </head>
@@ -60,7 +62,7 @@
                     <a href="{{route('admin.brands.index')}}"> <i class="menu-icon fa fa-first-order"></i>Brands </a>
                 </li>
 
-                @if( Auth::check() && Auth::user()->role_id == 1)
+                @if( Auth::check() && Auth::user()->role->name == 'super')
 
                     <li id="categories-li">
                         <a href="{{route('categories.index')}}"> <i class="menu-icon fa fa-snowflake-o"></i>Categories </a>
@@ -72,7 +74,7 @@
 
                 @endif
 
-                @if( Auth::check() && Auth::user()->role_id == 2)
+                @if( Auth::check() && Auth::user()->role->name == 'admin')
 
                     <li id="categories-li">
                         <a href="{{route('categories.show_all')}}"> <i class="menu-icon fa fa-snowflake-o"></i>Categories </a>

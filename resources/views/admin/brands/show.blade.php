@@ -1,13 +1,13 @@
 @extends('layouts.admin')
 
 
-@section('title', 'Brand Excellence Client Brands')
+@section('title', 'Brand Excellence Admin Show Brand')
 
-@section('breadcrumbs_title', 'Clients')
+@section('breadcrumbs_title', 'Brands')
 
 @section('breadcrumbs')
-    <li><a href="{{route('clients.index')}}">Clients</a></li>
-    <li class="active">View Client</li>
+    <li><a href="{{route('admin.brands.index')}}">Brands</a></li>
+    <li class="active">View Brand</li>
 @endsection
 
 
@@ -18,89 +18,40 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="text-center">Client Profile</h3>
+                        <h3 class="text-center">{{$brand->name}}</h3>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-sm-4">
-                                <label for="">Applicant Name</label>
+                                <label for="">ID String</label>
                             </div>
                             <div class="col-sm-8">
-                                <h6>{{$client->name}}</h6>
+                                <h6>{{$brand->id_string}}</h6>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-sm-4">
-                                <label for="">Email</label>
+                                <label for="">Category</label>
                             </div>
                             <div class="col-sm-8">
-                                <h6>{{$client->email}}</h6>
+                                <h6>{{$brand->category->name}}</h6>
                             </div>
                         </div>
-
                         <div class="row">
-                            <div class="col-sm-4">
-                                <label for="">Contact Number</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <h6>{{$client->contact_number}}</h6>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <label for="">Designation</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <h6>{{$client->designation}}</h6>
+                            <div class="col-sm-12">
+                                <p class="text-justify">{{$brand->description}}</p>
                             </div>
                         </div>
 
                         <hr>
 
                         <div class="row">
-                            <div class="col-sm-4">
-                                <label for="">Company Name</label>
+                            <div class="col-sm-6">
+                                <a class="btn btn-primary" target="_blank" href="{{url('/') . '/' . $brand->entry_kit}}">Entry Kit</a>
                             </div>
-                            <div class="col-sm-8">
-                                <h6>{{$client->company->name}}</h6>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <label for="">Company Address</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <h6>{{$client->company->address}}</h6>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <label for="">CEO Name</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <h6>{{$client->company->ceo_name}}</h6>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <label for="">CEO Email</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <h6>{{$client->company->ceo_email}}</h6>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <label for="">CEO Contact Number</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <h6>{{$client->company->ceo_contact_number}}</h6>
+                            <div class="col-sm-6">
+                                <a href="{{url('/') . '/' . $brand->logo}}" class="btn btn-info" download>Logo</a>
                             </div>
                         </div>
 
@@ -119,7 +70,7 @@
 
 @section('scripts')
     <script>
-        $('#clients-li').addClass('active')
+        $('#brands-li').addClass('active')
 
     </script>
 @endsection

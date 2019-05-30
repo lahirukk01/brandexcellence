@@ -1,246 +1,182 @@
-@extends('layouts.client')
+@extends('layouts.admin')
 
+@section('title', 'Brand Excellence Admin Edit Brand')
 
-@section('title', 'Brand Excellence Client Profile Edit')
-
-@section('breadcrumbs_title', 'Dashboard')
+@section('breadcrumbs_title', 'Brands')
 
 @section('breadcrumbs')
-    <li><a href="{{route('clients.index')}}">Clients</a></li>
-    <li class="active">Edit Profile</li>
+    <li><a href="{{route('admin.brands.index')}}">Brands</a></li>
+    <li class="active">Edit Brand</li>
 @endsection
 
-
 @section('content')
-
     <div class="animated fadeIn">
+
         <div class="row">
-
-            @if ($errors->any())
-                <div class="col-md-12">
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                </div>
-            @endif
-
-            @if(session('passwordError'))
-                <div class="col-md-12">
-                    <div class="alert alert-danger">
-                        <p>{{ session('passwordError') }}</p>
-                    </div>
-                </div>
-            @endif
-
             <div class="col-md-12">
-                <div id="result-message"></div>
+                <div style="display: none" class="alert alert-danger"></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">
-                        <h3 class="text-center">Client Details</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <form method="POST" action="{{ route('clients.update', $client->id) }}">
-                                    @csrf
-                                    @method('PATCH')
-                                    <div class="form-group row">
-                                        <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
-
-                                        <div class="col-md-6">
-                                            <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ $client->name }}" required autocomplete="name" autofocus>
-
-                                            @error('name')
-                                            <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
-
-                                        <div class="col-md-6">
-                                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ $client->email }}" required autocomplete="email">
-
-                                            @error('email')
-                                            <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('Designation') }}</label>
-
-                                        <div class="col-md-6">
-                                            <input id="designation" type="text" class="form-control @error('designation') is-invalid @enderror" name="designation" value="{{ $client->designation }}" required autocomplete="designation">
-
-                                            @error('designation')
-                                            <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <label for="contact-number" class="col-md-4 col-form-label text-md-right">{{ __('Contact Number (10 digit)') }}</label>
-
-                                        <div class="col-md-6">
-                                            <input id="contact-no" type="text" class="form-control @error('contact_number') is-invalid @enderror" name="contact_number" value="{{ $client->contact_number }}" required autocomplete="contact-number">
-
-                                            @error('contact_number')
-                                            <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    <hr>
-
-                                    <div class="form-group row">
-                                        <label for="company-name" class="col-md-4 col-form-label text-md-right">{{ __('Company Name') }}</label>
-
-                                        <div class="col-md-6">
-                                            <input id="company-name" type="text" class="form-control @error('company_name') is-invalid @enderror" name="company_name" value="{{ $client->company->name }}" required autocomplete="company-name">
-
-                                            @error('company_name')
-                                            <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <label for="company-address" class="col-md-4 col-form-label text-md-right">{{ __('Company Address') }}</label>
-
-                                        <div class="col-md-6">
-                                            <input id="company-address" type="text" class="form-control @error('address') is-invalid @enderror" name="address" value="{{ $client->company->address }}" required autocomplete="address">
-
-                                            @error('address')
-                                            <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <label for="ceo-name" class="col-md-4 col-form-label text-md-right">{{ __('CEO Name') }}</label>
-
-                                        <div class="col-md-6">
-                                            <input id="ceo-name" type="text" class="form-control @error('ceo_name') is-invalid @enderror" name="ceo_name" value="{{ $client->company->ceo_name }}" required autocomplete="ceo-name">
-
-                                            @error('ceo_name')
-                                            <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <label for="ceo-email" class="col-md-4 col-form-label text-md-right">{{ __('CEO Email') }}</label>
-
-                                        <div class="col-md-6">
-                                            <input id="ceo-email" type="text" class="form-control @error('ceo_email') is-invalid @enderror" name="ceo_email" value="{{ $client->company->ceo_email }}" required autocomplete="ceo-email">
-
-                                            @error('ceo_email')
-                                            <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <label for="ceo-contact-number" class="col-md-4 col-form-label text-md-right">{{ __('CEO Contact Number (10 digit)') }}</label>
-
-                                        <div class="col-md-6">
-                                            <input id="ceo-name" type="text" class="form-control @error('ceo_contact_number') is-invalid @enderror" name="ceo_contact_number" value="{{ $client->company->ceo_contact_number }}" required autocomplete="ceo-contact-number">
-
-                                            @error('ceo_contact_number')
-                                            <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row mb-0">
-                                        <div class="col-md-6 offset-md-4">
-                                            <button type="submit" class="btn btn-primary">
-                                                {{ __('Update Profile') }}
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
+                    <form id="edit-brand-form" action="{{route('admin.brands.update', $brand->id)}}" method="post" enctype="multipart/form-data" class="form-horizontal">
+                        @csrf
+                        @method('PATCH')
+                        <div class="card-header">
+                            <h3 class="text-center">Edit Brand</h3>
                         </div>
-                    </div>
-                    <div class="card-footer">
-                        <div class="row">
-                            <div class="col-md-12">
-
-                                <form action="{{route('clients.update.password', $client->id)}}" method="post">
-                                    @csrf
-                                    @method('PATCH')
-
-                                    <div class="form-group row">
-                                        <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('New Password (Alpha Numeric)') }}</label>
-
-                                        <div class="col-md-6">
-                                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" autocomplete="new-password">
-
-                                            @error('password')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
-
-                                        <div class="col-md-6">
-                                            <input id="password-confirm" type="password" class="form-control" name="password_confirmation" autocomplete="new-password">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row mb-0">
-                                        <div class="col-md-6 offset-md-4">
-                                            <button type="submit" class="btn btn-primary">
-                                                {{ __('Update Password') }}
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                </form>
-
+                        <div class="card-body">
+                            <h6 class="mb-3" style="color: red;">All fields are required</h6>
+                            <div class="row form-group">
+                                <div class="col col-md-3"><label for="name-input" class=" form-control-label">Name</label></div>
+                                <div class="col-12 col-md-9">
+                                    <input type="text" id="brand-name-input" name="name"
+                                           class="form-control" value="{{ $brand->name }}" data-validation="required">
+                                </div>
                             </div>
+                            <div class="row form-group">
+                                <div class="col col-md-3"><label for="category-select" class=" form-control-label">Category</label></div>
+                                <div class="col-12 col-md-9">
+                                    <select name="category_id" id="" data-validation="required">
+                                        <option value="">Select Category</option>
+                                        @foreach($categories as $c)
+                                            <option value="{{$c->id}}" @if( $brand->category_id == $c->id) {{'selected'}} @endif>{{$c->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col col-md-3"><label for="brand-description" class=" form-control-label">Description (max length 60 characters)</label></div>
+                                <div class="col-12 col-md-9">
+                                    <textarea name="description" id="" rows="6" class="form-control" maxlength="60"
+                                              data-validation="required length" data-validation-length="max60">{{ $brand->description }}</textarea>
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <div class="col col-md-3"><label for="entry-kit-input" class=" form-control-label">Entry Kit (pdf file)</label></div>
+                                <div class="col-12 col-md-9">
+                                    <input type="file" id="" name="entry_kit"
+                                           class="form-control-file" accept="application/pdf" value=""
+                                           data-validation="mime"
+                                           data-validation-allowing="pdf" >
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <div class="col col-md-3"><label for="logo-input" class=" form-control-label">Brand Logo (ai file)</label></div>
+                                <div class="col-12 col-md-9">
+                                    <input type="file" id="" name="logo" class="form-control-file" value=""
+                                           accept="application/postscript" data-validation="ai_file">
+                                </div>
+                            </div>
+
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+
                         </div>
-                    </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary btn-sm mb-3">
+                                <i class="fa fa-dot-circle-o"></i> Submit
+                            </button>
+                        </div>
+
+                    </form>
                 </div>
             </div>
-
-
         </div>
     </div><!-- .animated -->
-
 @endsection
 
 @section('scripts')
+
+    <script src="{{asset('vendors/form/src/jquery.form.js')}}"></script>
     <script>
-        $('#dashboard-li').addClass('active')
+        $('#brands-li').addClass('active')
+
+        $.formUtils.addValidator({
+            name : 'ai_file',
+            validatorFunction : function(value, $el, config, language, $form) {
+
+                const pattern = /.+\.ai$/
+                const fileOb = $el.get()[0].files[0]
+                if( fileOb !== undefined) {
+                    if(fileOb.type === 'application/postscript' && fileOb.name.match(pattern)) {
+                        return true
+                    } else {
+                        return false
+                    }
+                }
+
+                return true
+            },
+
+            errorMessage : 'Only ai files are allowed',
+        })
+
+        $.formUtils.loadModules('file')
+
+        let bar = $('.progress-bar')
+
+        $('form').ajaxForm({
+            beforeSubmit: function () {
+                if($('#edit-brand-form').isValid()) {
+                    return true
+                } else {
+                    return false
+                }
+            },
+
+            beforeSend: function () {
+                const value = 0
+                const percentValue = value + '%'
+                bar.attr('aria-valuenow', value)
+                bar.width(percentValue)
+                bar.html(percentValue)
+            },
+
+            uploadProgress: function(event, position, total, percentComplete) {
+                const percentValue = percentComplete + '%';
+                bar.width(percentValue)
+                bar.attr('aria-valuenow', percentComplete)
+                bar.html(percentValue);
+            },
+
+            complete: function(xhr, textStatus) {
+                $('.alert-danger').empty()
+                $('.alert-danger').hide()
+                // console.log(xhr.responseText)
+                const response = JSON.parse(xhr.responseText)
+                console.log(response)
+                if(response.success !== undefined) {
+                    $('#edit-brand-form')[0].reset()
+                    const percentVal = 'Form submitted successfully';
+                    bar.width('100%')
+                    bar.attr('aria-valuenow', '100')
+                    bar.html(percentVal);
+                    alert('Form updated successfully')
+                    window.location.assign('{{route('admin.brands.index')}}')
+                } else {
+                    $.each(response.errors, function (key, val) {
+                        $('.alert-danger').append(`<p>${val}</p>`)
+                    })
+                    $('.alert-danger').show()
+
+                    bar.html('Failed to submit form');
+                    alert('Failed to submit form')
+                }
+
+            },
+
+            error: function (xhr, textStatus) {
+                bar.html('Failed to submit form');
+            }
+
+        })
+
+
     </script>
 @endsection
