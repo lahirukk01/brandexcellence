@@ -22,10 +22,12 @@ class CreateBrandsTable extends Migration
             $table->string('logo');
             $table->string('id_string');
             $table->bigInteger('category_id')->unsigned();
+            $table->bigInteger('industry_category_id')->unsigned();
             $table->timestamps();
 
             $table->foreign('company_id')->references('id')->on('companies');
             $table->foreign('category_id')->references('id')->on('categories');
+            $table->foreign('industry_category_id')->references('id')->on('industry_categories');
         });
     }
 
