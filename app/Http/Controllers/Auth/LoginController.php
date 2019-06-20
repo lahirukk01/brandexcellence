@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Brand;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -18,7 +21,7 @@ class LoginController extends Controller
     |
     */
 
-    use AuthenticatesUsers;
+     use AuthenticatesUsers;
 
     /**
      * Where to redirect users after login.
@@ -35,5 +38,22 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    public function logout(Request $request)
+    {
+        if(Auth::user()->role == 'client' && session('brands')) {
+            $brands = session('brands');
+
+            foreach ($brands as $b) {
+                Brand::findOrFail($b->id)->delete();
+            }
+        }
+
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+
+        return $this->loggedOut($request) ?: redirect('/');
     }
 }

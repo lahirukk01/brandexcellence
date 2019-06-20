@@ -23,7 +23,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-sm-4">
-                                <label for="">ID String</label>
+                                <label for="">ID</label>
                             </div>
                             <div class="col-sm-8">
                                 <h6>{{$brand->id_string}}</h6>
@@ -38,6 +38,16 @@
                                 <h6>{{$brand->category->name}}</h6>
                             </div>
                         </div>
+
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <label for="">Industry Category</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <h6>{{$brand->industryCategory->name}}</h6>
+                            </div>
+                        </div>
+
                         <div class="row">
                             <div class="col-sm-12">
                                 <p class="text-justify">{{$brand->description}}</p>

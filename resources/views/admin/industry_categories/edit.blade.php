@@ -1,13 +1,13 @@
-@extends('layouts.client')
+@extends('layouts.admin')
 
 
-@section('title', 'Brand Excellence Super User Category Edit')
+@section('title', 'Brand Excellence Super User Industry Category Edit')
 
-@section('breadcrumbs_title', 'Categories')
+@section('breadcrumbs_title', 'Industry Categories')
 
 @section('breadcrumbs')
-    <li><a href="{{route('categories.index')}}">Categories</a></li>
-    <li class="active">Edit Category</li>
+    <li><a href="{{route('categories.index')}}">Industry Categories</a></li>
+    <li class="active">Edit Industry Category</li>
 @endsection
 
 
@@ -35,7 +35,7 @@
                         <h3 class="text-center">Category Details</h3>
                     </div>
 
-                    <form method="POST" action="{{ route('categories.update', $category->id) }}">
+                    <form method="POST" action="{{ route('industry_categories.update', $industryCategory->id) }}">
                         @csrf
                         @method('PATCH')
                         <div class="card-body">
@@ -46,7 +46,7 @@
                                         <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
 
                                         <div class="col-md-6">
-                                            <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ $category->name }}" required autocomplete="name" autofocus>
+                                            <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ $industryCategory->name }}" required autocomplete="name" autofocus>
 
                                             @error('name')
                                             <span class="invalid-feedback" role="alert">
@@ -60,7 +60,7 @@
                                         <label for="code" class="col-md-4 col-form-label text-md-right">{{ __('Code') }}</label>
 
                                         <div class="col-md-6">
-                                            <input id="code" type="text" class="form-control @error('code') is-invalid @enderror" name="code" value="{{ $category->code }}" required autocomplete="code">
+                                            <input id="code" type="text" class="form-control @error('code') is-invalid @enderror" name="code" value="{{ $industryCategory->code }}" required autocomplete="code">
 
                                             @error('code')
                                             <span class="invalid-feedback" role="alert">
@@ -78,7 +78,7 @@
                             <div class="form-group row mb-0">
                                 <div class="col-md-6 offset-md-4">
                                     <button type="submit" class="btn btn-primary">
-                                        {{ __('Update Category') }}
+                                        {{ __('Update Industry Category') }}
                                     </button>
                                 </div>
                             </div>

@@ -47,9 +47,22 @@
                                     </select>
                                 </div>
                             </div>
+
                             <div class="row form-group">
-                                <div class="col col-md-3"><label for="brand-description" class=" form-control-label">Description (max length 60 characters)</label></div>
-                                <div class="col-12 col-md-9"><textarea name="description" id="" rows="6" class="form-control" maxlength="60" data-validation="required">{{ $brand->description }}</textarea></div>
+                                <div class="col col-md-3"><label for="industry-category-select" class=" form-control-label">Industry Category</label></div>
+                                <div class="col-12 col-md-9">
+                                    <select name="industry_category_id" id="" data-validation="required">
+                                        <option value="">Select Industry Category</option>
+                                        @foreach($industryCategories as $c)
+                                            <option value="{{$c->id}}" @if( $brand->industry_category_id == $c->id) {{'selected'}} @endif>{{$c->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <div class="col col-md-3"><label for="brand-description" class=" form-control-label">Description (max length 60 words)</label></div>
+                                <div class="col-12 col-md-9"><textarea name="description" id="" rows="6" class="form-control" data-validation="required maxWords">{{ $brand->description }}</textarea></div>
                             </div>
 
                             <div class="row form-group">
@@ -95,6 +108,14 @@
         $('#brands-li').addClass('active')
 
         $.formUtils.addValidator({
+            name: 'maxWords',
+            validatorFunction: function(value, $el, config, language, $form) {
+                return value.split(' ').length <= 60;
+            },
+            errorMessage: 'Max word count is 60'
+        })
+
+        $.formUtils.addValidator({
             name : 'ai_file',
             validatorFunction : function(value, $el, config, language, $form) {
 
@@ -118,7 +139,7 @@
 
         let bar = $('.progress-bar')
 
-        $('form').ajaxForm({
+        $('#edit-brand-form').ajaxForm({
             beforeSubmit: function () {
                 if($('#edit-brand-form').isValid()) {
                     return true

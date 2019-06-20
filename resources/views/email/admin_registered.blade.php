@@ -365,19 +365,23 @@
                                                 <tbody>
                                                 <tr>
                                                     <td>Name</td>
-                                                    <td>{{ $judge['name'] }}</td>
+                                                    <td>{{ $admin['name'] }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Email</td>
-                                                    <td>{{ $judge['email'] }}</td>
+                                                    <td>{{ $admin['email'] }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Designation</td>
+                                                    <td>{{ $admin['designation'] }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Contact Number</td>
-                                                    <td>{{ $judge['contact_number'] }}</td>
+                                                    <td>{{ $admin['contact_number'] }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Password</td>
-                                                    <td>{{ $judge['password'] }}</td>
+                                                    <td>{{ $admin['password'] }}</td>
                                                 </tr>
 
                                                 </tbody>

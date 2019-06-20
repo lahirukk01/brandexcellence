@@ -1,6 +1,6 @@
 @extends('layouts.judge')
 
-@section('title', 'Brand Excellence Judge Score Entry')
+@section('title', 'Brand Excellence Judge Edit Score')
 
 @section('styles')
     <style>
@@ -19,7 +19,7 @@
 
 @section('breadcrumbs')
     <li><a href="{{route('judge.index')}}">Dashboard</a></li>
-    <li class="active">Score</li>
+    <li class="active">Edit Score</li>
 @endsection
 
 
@@ -46,10 +46,11 @@
             <div class="col-md-12">
                 <div id="result-message"></div>
                 <div class="card">
-                    <form action="{{ route('judge.store', $brand->id) }}" method="post">
+                    <form action="{{ route('judge.update', $brand->id) }}" method="post">
                         @csrf
+                        @method('PATCH')
                         <div class="card-header">
-                            <h3 class="text-center">Score Entry</h3>
+                            <h3 class="text-center">Edit Score</h3>
                         </div>
                         <div class="card-body">
 {{--                            <a href="{{ asset($brand->entry_kit) }}" class="embed">View Entry Kit</a>--}}
@@ -83,22 +84,24 @@
                                                     <td>
                                                         <input class="score-input" type="number" name="intent" id=""
                                                                min="0" max="15" required data-validation="required number"
-                                                               data-validation-allowing="range[0;15]">
+                                                               data-validation-allowing="range[0;15]" value="{{ $score->intent }}">
                                                     </td>
                                                     <td>
                                                         <input class="score-input" type="number" name="content" id="" min="0" max="15" required data-validation="required number"
-                                                               data-validation-allowing="range[0;15]">
+                                                               data-validation-allowing="range[0;15]" value="{{ $score->content }}">
                                                     </td>
                                                     <td>
                                                         <input class="score-input" type="number" name="process" id="" min="0" max="40" required data-validation="required number"
-                                                               data-validation-allowing="range[0;40]">
+                                                               data-validation-allowing="range[0;40]" value="{{ $score->process }}">
                                                     </td>
                                                     <td>
                                                         <input class="score-input" type="number" name="health" id="" min="0" max="18" required data-validation="required number"
-                                                               data-validation-allowing="range[0;18]">
+                                                               data-validation-allowing="range[0;18]" value="{{ $score->health }}">
                                                     </td>
-                                                    <td><input class="score-input" type="number" name="performance" id="" min="0" max="12" required data-validation="required number"
-                                                               data-validation-allowing="range[0;12]"></td>
+                                                    <td>
+                                                        <input class="score-input" type="number" name="performance" id="" min="0" max="12" required data-validation="required number"
+                                                               data-validation-allowing="range[0;12]" value="{{ $score->performance }}">
+                                                    </td>
                                                     <td class="text-center">
                                                         <span id="total-score"></span>
                                                         <input type="hidden" name="total" id="total-score-input">
@@ -111,7 +114,7 @@
                                                     <td>What is good?</td>
                                                     <td colspan="5">
                                                         <div class="form-group">
-                                                            <textarea name="good" id="" cols="30" rows="4" class="form-control"></textarea>
+                                                            <textarea name="good" id="" cols="30" rows="4" class="form-control" data-validation="required">{{ $score->good }}</textarea>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -119,7 +122,7 @@
                                                     <td>What is bad?</td>
                                                     <td colspan="5">
                                                         <div class="form-group">
-                                                            <textarea name="bad" id="" cols="30" rows="4" class="form-control"></textarea>
+                                                            <textarea name="bad" id="" cols="30" rows="4" class="form-control" data-validation="required">{{ $score->bad }}</textarea>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -127,7 +130,7 @@
                                                     <td>What needs to be improved?</td>
                                                     <td colspan="5">
                                                         <div class="form-group">
-                                                            <textarea name="improvement" id="" cols="30" rows="4" class="form-control"></textarea>
+                                                            <textarea name="improvement" id="" cols="30" rows="4" class="form-control" data-validation="required">{{ $score->improvement }}</textarea>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -167,13 +170,21 @@
         $(document).ready(function () {
 
             $('a.embed').gdocsViewer();
+
+            setTotal()
             
-            $('.score-input').change(function () {
+            $('.score-input').keyup(function () {
+                setTotal()
+            })
+
+            //////////////  Set total score //////////////////
+            function setTotal() {
                 let total = 0
-                
+
                 $('.score-input').each(function (index, element) {
                     let val = $(element).val()
-                    if(val != '') {
+
+                    if(val !== '') {
                         val = parseInt(val)
                     } else {
                         val = 0
@@ -183,22 +194,22 @@
 
                 $('#total-score').text(total)
                 $('#total-score-input').val(total)
-            })
-            
+            }
+
+            //////////////////// Set stop watch interval ////////////////////
             let elapsedSeconds = 0
 
             setInterval(function () {
                 elapsedSeconds++
                 let minutes = (getQuotient(elapsedSeconds, 60)).toString()
 
-                if(minutes.length == 1) {
+                if(minutes.length === 1) {
                     minutes = '0' + minutes
                 }
 
-
                 let seconds = (elapsedSeconds % 60).toString()
 
-                if(seconds.length == 1) {
+                if(seconds.length === 1) {
                     seconds = '0' + seconds
                 }
 

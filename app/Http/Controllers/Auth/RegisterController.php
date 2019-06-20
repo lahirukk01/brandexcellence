@@ -61,8 +61,9 @@ class RegisterController extends Controller
             'company_name' => ['required', 'string', 'max:255'],
             'company_address' => ['required', 'string', 'max:255'],
             'ceo_name' => ['required', 'string', 'max:100'],
-            'ceo_email' => ['required', 'string', 'email', 'max:100', 'unique:companies'],
+            'ceo_email' => ['required', 'string', 'email', 'max:100'],
             'ceo_contact_number' => ['required', 'string', 'digits:10'],
+            'vat_registration_number' => ['nullable', 'regex:/[0-9\-]{5,15}/g'],
 
             'password' => ['required', 'string', 'min:3', 'max:15', 'alpha_num', 'confirmed'],
         ]);
@@ -95,6 +96,7 @@ class RegisterController extends Controller
             'ceo_name' => $data['ceo_name'],
             'ceo_email' => $data['ceo_email'],
             'ceo_contact_number' => $data['ceo_contact_number'],
+            'vat_registration_number' => $data['vat_registration_number'],
             'user_id' => $user->id,
         ]);
 

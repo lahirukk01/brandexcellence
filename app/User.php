@@ -51,6 +51,23 @@ class User extends Authenticatable
         return $this->belongsTo('App\Role');
     }
 
+    public function blockedEntries()
+    {
+        return $this->hasMany('App\BlockedEntry');
+    }
+
+    public function brands()
+    {
+        return $this->belongsToMany('App\Brand')->as('score')
+            ->withPivot('intent', 'content', 'process', 'health', 'performance', 'total',
+            'good', 'bad', 'improvement')->withTimestamps();
+    }
+
+    public function industryCategories()
+    {
+        return $this->belongsToMany('App\IndustryCategory')->withTimestamps();
+    }
+
     public function delete()
     {
 

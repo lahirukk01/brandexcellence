@@ -41,14 +41,27 @@
                                     <select name="category_id" id="" data-validation="required">
                                         <option value="">Select Category</option>
                                         @foreach($categories as $c)
-                                            <option value="{{$c->id}}" @if(old('category') == $c->id) {{'selected'}} @endif>{{$c->name}}</option>
+                                            <option value="{{$c->id}}" @if(old('category_id') == $c->id) {{'selected'}} @endif>{{$c->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
+
                             <div class="row form-group">
-                                <div class="col col-md-3"><label for="brand-description" class=" form-control-label">Description (max length 60 characters)</label></div>
-                                <div class="col-12 col-md-9"><textarea name="description" id="" rows="6" class="form-control" maxlength="60" data-validation="required">{{ old('description') }}</textarea></div>
+                                <div class="col col-md-3"><label for="industry-category-select" class=" form-control-label">Industry Category</label></div>
+                                <div class="col-12 col-md-9">
+                                    <select name="industry_category_id" id="" data-validation="required">
+                                        <option value="">Select Industry Category</option>
+                                        @foreach($industryCategories as $ic)
+                                            <option value="{{$ic->id}}" @if(old('industry_category_id') == $ic->id) {{'selected'}} @endif>{{$ic->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <div class="col col-md-3"><label for="brand-description" class=" form-control-label">Description (max length 60 words)</label></div>
+                                <div class="col-12 col-md-9"><textarea name="description" id="" rows="6" class="form-control" data-validation="required maxWords">{{ old('description') }}</textarea></div>
                             </div>
 
                             <div class="row form-group">
@@ -85,13 +98,94 @@
             </div>
         </div>
     </div><!-- .animated -->
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="nextStepModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Next Step</h5>
+{{--                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">--}}
+{{--                        <span aria-hidden="true">&times;</span>--}}
+{{--                    </button>--}}
+                </div>
+                <div class="modal-body">
+                    Would you like to register another brand?
+                </div>
+                <div class="modal-footer">
+{{--                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>--}}
+{{--                    <button type="button" class="btn btn-primary">Save changes</button>--}}
+                    <a href="{{ route('brands.create') }}" class="btn btn-primary">Yes</a>
+                    <button id="goToPaymentChoice" class="btn btn-success">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="choiceOfPayment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel2">Choice of Payment</h5>
+                </div>
+                <div class="modal-body">
+                    How would you like to pay?
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-primary">Pay Online</a>
+                    <button id="payOffline" class="btn btn-success">Pay Offline</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
 @endsection
 
 @section('scripts')
 
     <script src="{{asset('vendors/form/src/jquery.form.js')}}"></script>
+
     <script>
         $('#brands-li').addClass('active')
+
+        $('#payOffline').click(function () {
+            $.get('{{ route('client.send_invoice') }}', {}, function (result) {
+                // result = JSON.parse(result)
+                // console.log(result.success)
+                if(result.success != undefined) {
+                    alert(result.success)
+                    $('#choiceOfPayment').modal('hide')
+                    window.location.assign('{{ route('brands.index') }}')
+                } else {
+                    alert('Failed to send invoice. Pay online at slim')
+                }
+            })
+        })
+
+        
+        $('#goToPaymentChoice').click(function () {
+            {{--window.location.assign('{{ route('client.session_test') }}')--}}
+            $('#nextStepModal').modal('hide')
+
+            $('#choiceOfPayment').modal({
+                backdrop: 'static',
+                keyboard: false
+            })
+        })
+        
+        $.formUtils.addValidator({
+            name: 'maxWords',
+            validatorFunction: function(value, $el, config, language, $form) {
+                return value.split(' ').length <= 60;
+            },
+            errorMessage: 'Max word count is 60'
+        })
 
         $.formUtils.addValidator({
             name : 'ai_file',
@@ -115,7 +209,7 @@
 
         let bar = $('.progress-bar')
 
-        $('form').ajaxForm({
+        $('#create-brand-form').ajaxForm({
             beforeSubmit: function () {
                 if($('#create-brand-form').isValid()) {
                     return true
@@ -151,7 +245,11 @@
                     bar.attr('aria-valuenow', '100')
                     bar.html(percentVal);
                     alert('Form submitted successfully')
-                    window.location.assign('{{route('brands.index')}}')
+                    {{--window.location.assign('{{route('brands.index')}}')--}}
+                    $('#nextStepModal').modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    })
                 } else {
                     $.each(response.errors, function (key, val) {
                         $('.alert-danger').append(`<p>${val}</p>`)

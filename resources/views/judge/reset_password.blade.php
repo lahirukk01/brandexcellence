@@ -1,6 +1,6 @@
-@extends('layouts.admin')
+@extends('layouts.judge')
 
-@section('title', 'Brand Excellence Admin Reset Password')
+@section('title', 'Brand Excellence Judge Reset Password')
 
 @section('breadcrumbs_title', 'Reset Password')
 
@@ -48,7 +48,7 @@
                             <div class="row form-group">
                                 <div class="col col-md-3"><label for="current-password-input" class=" form-control-label">Current Password</label></div>
                                 <div class="col-12 col-md-9">
-                                    <input type="text" id="current-password-input" name="current_password"
+                                    <input type="password" id="current-password-input" name="current_password"
                                            class="form-control" value="" data-validation="required" data-validation-length="3-15">
                                 </div>
                             </div>
@@ -56,7 +56,7 @@
                             <div class="row form-group">
                                 <div class="col col-md-3"><label for="new-password-input" class=" form-control-label">New Password (alpha numeric)</label></div>
                                 <div class="col-12 col-md-9">
-                                    <input type="text" id="new-password-input" name="password"
+                                    <input type="password" id="new-password-input" name="password"
                                            class="form-control" value="" data-validation="required" data-validation-length="3-15">
                                 </div>
                             </div>
@@ -64,7 +64,7 @@
                             <div class="row form-group">
                                 <div class="col col-md-3"><label for="new-password-confirm-input" class=" form-control-label">Confirm Password</label></div>
                                 <div class="col-12 col-md-9">
-                                    <input type="text" id="new-password-confirm-input" name="password_confirmation"
+                                    <input type="password" id="new-password-confirm-input" name="password_confirmation"
                                            class="form-control" value="" data-validation="required" data-validation-length="3-15">
                                 </div>
                             </div>

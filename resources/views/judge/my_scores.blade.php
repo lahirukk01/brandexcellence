@@ -1,7 +1,7 @@
 
 @extends('layouts.judge')
 
-@section('title', 'Brand Excellence Judge Dashboard')
+@section('title', 'Brand Excellence Judge Scores')
 
 
 @section('styles')
@@ -9,10 +9,10 @@
 @endsection
 
 
-@section('breadcrumbs_title', 'Entries')
+@section('breadcrumbs_title', 'My Scores')
 
 @section('breadcrumbs')
-    <li class="active">Entries</li>
+    <li class="active">My Scores</li>
 @endsection
 
 
@@ -20,21 +20,13 @@
 
     <div class="animated fadeIn">
         <div class="row">
-            @if (session('status'))
-                <div class="alert alert-success alert-dismissible fade show floating-response" role="alert">
-                    {{ session('status') }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            @endif
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="text-center">Entries</h3>
+                        <h3 class="text-center">Scored Entries</h3>
                     </div>
                     <div class="card-body">
-                        <table id="judge-entries-table" class="table table-striped table-bordered">
+                        <table id="judge-scored-entries-table" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
                                     <th>Entry ID</th>
@@ -54,13 +46,7 @@
                                     <td>{{ $b->industryCategory->name }}</td>
                                     <td>{{ $b->company->name }}</td>
                                     <td>
-
-                                        @if ($b->users->contains(Auth::user()))
-                                            <a class="mx-2 btn btn-success" href="{{route('judge.edit', $b->id)}}">Edit</a>
-                                        @else
-                                            <a class="btn btn-primary" href="{{route('judge.score', $b->id)}}">Score</a>
-                                        @endif
-
+                                        <a class="mx-2 btn btn-primary" href="{{route('judge.showScore', $b->id)}}">View</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -74,9 +60,6 @@
                                 <td></td>
                             </tfoot>
                         </table>
-                    </div>
-                    <div class="card-footer">
-                        <button id="submit-changes" class="btn btn-primary">Submit Changes</button>
                     </div>
                 </div>
             </div>
@@ -93,9 +76,9 @@
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/r-2.2.2/sl-1.3.0/datatables.js"></script>
 
     <script>
-        $('#dashboard-li').addClass('active')
+        $('#my-scores-li').addClass('active')
 
-        $('#judge-entries-table').DataTable( {
+        $('#judge-scored-entries-table').DataTable( {
             "columnDefs": [
                 { "orderable": false, "targets": 5 }
             ],

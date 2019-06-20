@@ -1,12 +1,11 @@
-
 @extends('layouts.admin')
 
-@section('title', 'Brand Excellence Admin Dashboard')
+@section('title', 'Brand Excellence Admin Judges')
 
-@section('breadcrumbs_title', 'Categories')
+@section('breadcrumbs_title', 'Judges')
 
 @section('breadcrumbs')
-    <li class="active">Categories</li>
+    <li class="active">Judges</li>
 @endsection
 
 
@@ -25,30 +24,32 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <a class="btn btn-primary" href="{{route('categories.create')}}">Create Category <i class="fa fa-plus"></i></a>
+                        <a class="btn btn-primary" href="{{route('admin.judges.create')}}">Create Judge <i class="fa fa-plus"></i></a>
                     </div>
                     <div class="card-body">
                         <table class="table table-striped table-bordered">
                             <thead>
                             <tr>
                                 <th>Name</th>
-                                <th>Code</th>
+                                <th>Email</th>
+                                <th>Telephone</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach ($categories as $c)
+                            @foreach ($judges as $j)
                                 <tr>
-                                    <td>{{$c->name}}</td>
-                                    <td>{{$c->code}}</td>
+                                    <td>{{ $j->name }}</td>
+                                    <td>{{ $j->email }}</td>
+                                    <td>{{ $j->telephone }}</td>
                                     <td>
-{{--                                        <a style="color: #0e6498;" href="{{route('categories.show', $c->id)}}">View</a>--}}
-                                        <a class="mx-2" style="color: green;" href="{{route('categories.edit', $c->id)}}">Edit</a>
-                                        <form class="d-inline" action="{{route('categories.destroy', $c->id)}}" method="post">
+                                        <a style="color: #0e6498;" href="{{route('admin.judges.show', $j->id)}}">View</a>
+                                        <a class="mx-2" style="color: green;" href="{{route('admin.judges.edit', $j->id)}}">Edit</a>
+                                        <form class="d-inline" action="{{route('admin.judges.destroy', $j->id)}}" method="post">
                                             @csrf
                                             @method('DELETE')
 
-                                            <a style="color: red;" href="#" class="delete-category mx-2">Delete</a>
+                                            <a style="color: red;" href="#" class="delete-judge mx-2">Delete</a>
                                         </form>
 
                                     </td>
@@ -74,11 +75,11 @@
 @section('scripts')
 
     <script>
-        $('#categories-li').addClass('active')
+        $('#judges-li').addClass('active')
 
-        $('.delete-category').click(function (e) {
+        $('.delete-judge').click(function (e) {
             e.preventDefault()
-            if(! confirm('Are you sure you want to delete this category?')) {
+            if(! confirm('Are you sure you want to delete this judge?')) {
                 return false
             }
 

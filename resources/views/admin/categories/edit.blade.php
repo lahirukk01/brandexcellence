@@ -1,4 +1,4 @@
-@extends('layouts.client')
+@extends('layouts.admin')
 
 
 @section('title', 'Brand Excellence Super User Category Edit')

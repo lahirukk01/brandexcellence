@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Brand;
 use App\Category;
+use App\IndustryCategory;
 use App\Mail\BrandRegistered;
+use App\Mail\ClientPayment;
+use App\Rules\MaxWords;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -34,8 +37,9 @@ class ClientBrandController extends Controller
      */
     public function create()
     {
+        $industryCategories = IndustryCategory::all();
         $categories = Category::all();
-        return view('client.brands.create', compact('categories'));
+        return view('client.brands.create', compact('categories', 'industryCategories'));
     }
 
     /**
@@ -47,9 +51,10 @@ class ClientBrandController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'description' => 'required|max:60',
-            'category_id' => 'required',
+            'name' => ['required'],
+            'description' => ['required', new MaxWords(60)],
+            'category_id' => ['required'],
+            'industry_category_id' => ['required'],
             'entry_kit' => 'required|file|mimetypes:application/pdf',
             'logo' => 'required|file',
         ]);
@@ -86,6 +91,12 @@ class ClientBrandController extends Controller
         $superUserEmail = User::where('role_id', 1)->first()->email;
         Mail::to($email)->cc($superUserEmail)->send(new BrandRegistered($brand));
 
+        if(!session()->exists('brands')) {
+            session()->put('brands', array());
+        }
+
+        session()->push('brands', ['name' => $input['name'], 'id' => $input['id_string']]);
+
         return response()->json(['success'=>'Record added successfully']);
     }
 
@@ -121,7 +132,8 @@ class ClientBrandController extends Controller
     public function edit(Brand $brand)
     {
         $categories = Category::all();
-        return view('client.brands.edit', compact('brand', 'categories'));
+        $industryCategories = IndustryCategory::all();
+        return view('client.brands.edit', compact('brand', 'categories', 'industryCategories'));
     }
 
     /**
@@ -135,8 +147,9 @@ class ClientBrandController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:50',
-            'description' => 'required|max:60',
+            'description' => ['required', new MaxWords(60)],
             'category_id' => 'required',
+            'industry_category_id' => 'required',
         ]);
 
         if ($validator->fails()){
@@ -208,5 +221,25 @@ class ClientBrandController extends Controller
         $brand->delete();
 
         return redirect('client/brands')->with('status', 'Brand deleted successfully');
+    }
+
+    public function sendInvoice()
+    {
+        $user = Auth::user();
+        $email = $user->email;
+
+        $superUserEmail = User::where('role_id', 1)->first()->email;
+
+        $data['brands'] = session()->pull('brands');
+        $data['clientName'] = $user->name;
+        $data['email'] = $user->email;
+        $data['contactNumber'] = $user->contact_number;
+        $data['companyName'] = $user->company->name;
+        $data['companyAddress'] = $user->company->address;
+        $data['vatNumber'] = $user->company->vat_registration_number;
+
+        Mail::to($email)->cc($superUserEmail)->send(new ClientPayment($data));
+
+        return response()->json(['success'=>'Invoice sent to your email address']);
     }
 }

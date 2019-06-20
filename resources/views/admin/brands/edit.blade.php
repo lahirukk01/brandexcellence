@@ -36,6 +36,7 @@
                                            class="form-control" value="{{ $brand->name }}" data-validation="required">
                                 </div>
                             </div>
+
                             <div class="row form-group">
                                 <div class="col col-md-3"><label for="category-select" class=" form-control-label">Category</label></div>
                                 <div class="col-12 col-md-9">
@@ -47,6 +48,19 @@
                                     </select>
                                 </div>
                             </div>
+
+                            <div class="row form-group">
+                                <div class="col col-md-3"><label for="industry-category-select" class=" form-control-label">Industry Category</label></div>
+                                <div class="col-12 col-md-9">
+                                    <select name="industry_category_id" id="" data-validation="required">
+                                        <option value="">Select Industry Category</option>
+                                        @foreach($industryCategories as $c)
+                                            <option value="{{$c->id}}" @if( $brand->industry_category_id == $c->id) {{'selected'}} @endif>{{$c->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
                             <div class="row form-group">
                                 <div class="col col-md-3"><label for="brand-description" class=" form-control-label">Description (max length 60 characters)</label></div>
                                 <div class="col-12 col-md-9">

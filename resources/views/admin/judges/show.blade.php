@@ -1,21 +1,21 @@
 
 @extends('layouts.admin')
 
-@section('title', 'Brand Excellence Admin Brands')
+@section('title', 'Brand Excellence Admin Judge Show')
 
 
 @section('styles')
-{{--    <link rel="stylesheet" href="{{asset('vendors/datatables.net/css/jquery.dataTables.css')}}">--}}
-{{--<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">--}}
+
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/r-2.2.2/sl-1.3.0/datatables.css"/>
 
 @endsection
 
 
-@section('breadcrumbs_title', 'Brands')
+@section('breadcrumbs_title', 'Judges')
 
 @section('breadcrumbs')
-    <li class="active">Brands</li>
+    <li><a href="{{route('admin.judges.index')}}">Judges</a></li>
+    <li class="active">Judge</li>
 @endsection
 
 
@@ -34,7 +34,8 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="text-center">Brands</h3>
+                        <h3 class="text-center">Entries</h3>
+                        <h5>{{ $judge->name }}</h5>
                     </div>
                     <div class="card-body">
                         <table id="admin-brands-table" class="table table-striped table-bordered">
@@ -43,14 +44,9 @@
                                 <th>Entry ID</th>
                                 <th>Brand Name</th>
                                 <th>Category</th>
+                                <th>Industry Category</th>
                                 <th>Company</th>
-                                <th>Action</th>
-                                <th>Show/Hide <br>Options
-{{--                                    <div class="form-check form-check-inline">--}}
-{{--                                        <input class="form-check-input" type="checkbox" id="select-all-entries" value="">--}}
-{{--                                    </div>--}}
-                                    <input class="d-block mx-auto" type="checkbox" id="select-all-entries" value="" checked>
-                                </th>
+                                <th>Blocked Entries</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -59,24 +55,16 @@
                                     <td>{{ $b->id_string }}</td>
                                     <td>{{ $b->name }}</td>
                                     <td>{{ $b->category->name }}</td>
+                                    <td>{{ $b->industryCategory->name }}</td>
                                     <td>{{ $b->company->name }}</td>
                                     <td>
-                                        <a style="color: #0e6498;" href="{{route('admin.brands.show', $b->id)}}">View</a>
-                                        <a class="mx-2" style="color: green;" href="{{route('admin.brands.edit', $b->id)}}">Edit</a>
-                                        <form class="d-inline" action="{{route('admin.brands.destroy', $b->id)}}" method="post">
-                                            @csrf
-                                            @method('DELETE')
+                                        @php
+                                            $inBlocked = in_array($b->id, $blocked);
+                                        @endphp
 
-                                            <a style="color: red;" href="#" class="delete-brand">Delete</a>
-                                        </form>
-
-                                    </td>
-                                    <td>
-{{--                                        <div class="form-check form-check-inline">--}}
-{{--                                            <input class="form-check-input show-hide-options" type="checkbox" value="">--}}
-{{--                                        </div>--}}
-
-                                        <input class="show-hide-options d-block mx-auto" type="checkbox" value="{{ $b->id }}" checked>
+                                        <input class="allow-block-entry d-inline-block mr-1" type="checkbox"
+                                               value="{{ $b->id }}" @if($inBlocked) checked @endif>
+                                        <span class="d-inline-block">{{ $inBlocked ? 'Blocked':'Allowed' }}</span>
                                     </td>
                                 </tr>
                             @endforeach
@@ -107,58 +95,42 @@
 
 @section('scripts')
 
-{{--    <script src="{{asset('vendors/datatables.net/js/jquery.dataTables.js')}}"></script>--}}
-{{--<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>--}}
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/r-2.2.2/sl-1.3.0/datatables.js"></script>
 
     <script>
-        $('#brands-li').addClass('active')
-
-        $('#select-all-entries').change(function () {
-            const allEntries = this
-            $('.show-hide-options').prop('checked', allEntries.checked)
-        })
-
-        $('.show-hide-options').change(function () {
-            if (this.checked == false) {
-                $('#select-all-entries').prop('checked', false)
-            }
-        })
+        $('#judges-li').addClass('active')
 
         $('#submit-changes').click(function () {
             let ids = []
 
-            $('.show-hide-options').each(function (index) {
-                ids.push([
-                    $(this).val(),
-                    $(this).prop('checked') ? 1:0
-                ])
+            $('.allow-block-entry:checked').each(function (index) {
+                ids.push($(this).val())
             })
 
             const data = {
+                judgeId: '{{ $judge->id }}',
                 ids,
                 _token: '{{ csrf_token() }}'
             }
 
-            $.post('{{ route('admin.brands.set_options') }}', data, function (result) {
-                // console.log(result)
+            $.post('{{ route('judges.set_blocked') }}', data, function (result) {
+
                 if(result.success != undefined) {
                     alert(result.success)
                 } else {
-                    alert('Failed to set client access to brands options')
+                    alert('Failed to set blocked entries for this judge')
                 }
             })
         })
 
-
-        $('.delete-brand').click(function (e) {
-            e.preventDefault()
-            if(! confirm('Are you sure you want to delete this brand?')) {
-                return false
-            }
-
-            $(this).closest('form').submit()
-        })
+        // $('.delete-brand').click(function (e) {
+        //     e.preventDefault()
+        //     if(! confirm('Are you sure you want to delete this brand?')) {
+        //         return false
+        //     }
+        //
+        //     $(this).closest('form').submit()
+        // })
 
 
         $('#admin-brands-table').DataTable( {

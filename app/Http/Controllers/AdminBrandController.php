@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Brand;
 use App\Category;
+use App\IndustryCategory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +20,6 @@ class AdminBrandController extends Controller
      */
     public function index()
     {
-//        $brands = Brand::all();
         $brands = Brand::orderBy('id_string')->get();
         return view('admin.brands.index', compact('brands'));
     }
@@ -45,7 +45,8 @@ class AdminBrandController extends Controller
     public function edit(Brand $brand)
     {
         $categories = Category::all();
-        return view('admin.brands.edit', compact('brand', 'categories'));
+        $industryCategories = IndustryCategory::all();
+        return view('admin.brands.edit', compact('brand', 'categories', 'industryCategories'));
     }
 
     /**
@@ -61,6 +62,7 @@ class AdminBrandController extends Controller
             'name' => 'required|max:50',
             'description' => 'required|max:60',
             'category_id' => 'required',
+            'industry_category_id' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -124,5 +126,17 @@ class AdminBrandController extends Controller
         $brand->delete();
 
         return redirect()->route('admin.brands.index')->with('status', 'Brand deleted successfully');
+    }
+
+    public function setOptions(Request $request)
+    {
+        $ids = $request->get('ids');
+
+        foreach ($ids as $i) {
+            Brand::where('id', $i[0])->update(['show_options' => $i[1]]);
+        }
+
+//        return response()->json(['success'=> $ids[0][0]]);
+        return response()->json(['success'=>'Brand access levels for clients set successfully']);
     }
 }

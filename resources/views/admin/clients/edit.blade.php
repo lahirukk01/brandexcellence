@@ -1,4 +1,4 @@
-@extends('layouts.client')
+@extends('layouts.admin')
 
 
 @section('title', 'Brand Excellence Client Profile Edit')
@@ -130,6 +130,20 @@
                                             <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="vat-registration-number" class="col-md-4 col-form-label text-md-right">{{ __('VAT Registration Number') }}</label>
+
+                                        <div class="col-md-6">
+                                            <input id="vat-registration-number" type="text" class="form-control @error('vat_registration_number') is-invalid @enderror" name="vat_registration_number" value="{{ $client->company->vat_registration_number }}" required autocomplete="vat-registration-number">
+
+                                            @error('vat_registration_number')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
                                             @enderror
                                         </div>
                                     </div>

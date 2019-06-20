@@ -72,6 +72,7 @@
                             </div>
                             <div class="col-md-6">
                                 <h4 class="text-center mb-3">Company</h4>
+
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <p>Name</p>
@@ -87,6 +88,15 @@
                                     </div>
                                     <div class="col-sm-8">
                                         <p>{{$client->company->address}}</p>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <p>VAT Registration Number</p>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <p>{{$client->company->vat_registration_number}}</p>
                                     </div>
                                 </div>
 

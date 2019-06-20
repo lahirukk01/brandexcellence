@@ -1,12 +1,11 @@
 @extends('layouts.admin')
 
-@section('title', 'Brand Excellence Super User Create Category')
+@section('title', 'Brand Excellence Admin Reset Password')
 
-@section('breadcrumbs_title', 'Categories')
+@section('breadcrumbs_title', 'Reset Password')
 
 @section('breadcrumbs')
-    <li><a href="{{route('categories.index')}}">Categories</a></li>
-    <li class="active">Create Category</li>
+    <li class="active">Reset Password</li>
 @endsection
 
 @section('content')
@@ -27,36 +26,53 @@
         @endif
 
         <div class="row">
+            @if (session('status'))
+            <div class="alert alert-success alert-dismissible fade show floating-response" role="alert">
+                {{ session('status') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @endif
             <div class="col-md-12">
                 <div class="card">
-                    <form id="create-brand-form" action="{{route('categories.store')}}" method="post" enctype="multipart/form-data" class="form-horizontal">
+                    <form id="create-brand-form" action="{{route('update_password')}}" method="post" enctype="multipart/form-data" class="form-horizontal">
                         @csrf
+                        @method('PATCH')
                         <div class="card-header">
-                            <h3 class="text-center">Create Category</h3>
+                            <h3 class="text-center">Reset Password</h3>
                         </div>
                         <div class="card-body">
                             <h6 class="mb-3" style="color: red;">All fields are required</h6>
 
                             <div class="row form-group">
-                                <div class="col col-md-3"><label for="name-input" class=" form-control-label">Name</label></div>
+                                <div class="col col-md-3"><label for="current-password-input" class=" form-control-label">Current Password</label></div>
                                 <div class="col-12 col-md-9">
-                                    <input type="text" id="category-name-input" name="name"
-                                           class="form-control" value="{{old('name')}}" data-validation="required">
+                                    <input type="text" id="current-password-input" name="current_password"
+                                           class="form-control" value="" data-validation="required" data-validation-length="3-15">
                                 </div>
                             </div>
 
                             <div class="row form-group">
-                                <div class="col col-md-3"><label for="code-input" class=" form-control-label">Code</label></div>
+                                <div class="col col-md-3"><label for="new-password-input" class=" form-control-label">New Password (alpha numeric)</label></div>
                                 <div class="col-12 col-md-9">
-                                    <input type="text" id="category-code-input" name="code"
-                                           class="form-control" value="{{old('code')}}" data-validation="required">
+                                    <input type="text" id="new-password-input" name="password"
+                                           class="form-control" value="" data-validation="required" data-validation-length="3-15">
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <div class="col col-md-3"><label for="new-password-confirm-input" class=" form-control-label">Confirm Password</label></div>
+                                <div class="col-12 col-md-9">
+                                    <input type="text" id="new-password-confirm-input" name="password_confirmation"
+                                           class="form-control" value="" data-validation="required" data-validation-length="3-15">
                                 </div>
                             </div>
 
                         </div>
                         <div class="card-footer">
                             <button type="submit" class="btn btn-primary btn-sm mb-3">
-                                <i class="fa fa-dot-circle-o"></i> Create Category
+                                <i class="fa fa-dot-circle-o"></i> Update Password
                             </button>
                         </div>
 
@@ -71,7 +87,7 @@
 
     <script src="{{asset('vendors/form/src/jquery.form.js')}}"></script>
     <script>
-        $('#categories-li').addClass('active')
+        $('#resetpw-li').addClass('active')
 
         $.validate()
 

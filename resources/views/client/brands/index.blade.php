@@ -33,7 +33,7 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Category</th>
-                                <th>ID String</th>
+                                <th>ID</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
@@ -45,6 +45,8 @@
                                         <td>{{$b->id_string}}</td>
                                         <td>
                                             <a style="color: #0e6498;" href="{{route('brands.show', $b->id)}}">View</a>
+
+                                            @if ($b->show_options == 1)
                                             <a class="mx-2" style="color: green;" href="{{route('brands.edit', $b->id)}}">Edit</a>
                                             <form class="d-inline" action="{{route('brands.destroy', $b->id)}}" method="post">
                                                 @csrf
@@ -52,7 +54,7 @@
 
                                                 <a style="color: red;" href="#" class="delete-brand">Delete</a>
                                             </form>
-
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach

@@ -61,6 +61,7 @@ class ClientController extends Controller
 
             'company_name' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:255'],
+            'vat_registration_number' => ['alpha_num', 'max:50'],
             'ceo_name' => ['string', 'max:100'],
             'ceo_email' => ['string', 'email', 'max:100', 'unique:companies'],
             'ceo_contact_number' => ['required', 'string', 'digits:10'],

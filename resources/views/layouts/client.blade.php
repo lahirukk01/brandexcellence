@@ -43,7 +43,7 @@
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-menu" aria-controls="main-menu" aria-expanded="false" aria-label="Toggle navigation">
                 <i class="fa fa-bars"></i>
             </button>
-            <a class="navbar-brand" href="#">{{Auth::user()->name}}</a>
+            <a class="navbar-brand" style="white-space: inherit; text-align: center; line-height: inherit;" href="#">{{Auth::user()->name}}</a>
             <a class="navbar-brand" href="#"><h6>{{Auth::user()->role->name}}</h6></a>
             <a class="navbar-brand hidden" href="#"><div style="width: 13px; height: 18px; background-color: gold;"></div></a>
         </div>
@@ -56,6 +56,10 @@
 
                 <li id="brands-li">
                     <a href="{{route('brands.index')}}"> <i class="menu-icon fa fa-first-order"></i>Brands </a>
+                </li>
+
+                <li id="resetpw-li">
+                    <a href="{{route('reset_password')}}"> <i class="menu-icon fa fa-key"></i>Reset Password </a>
                 </li>
 
             </ul>

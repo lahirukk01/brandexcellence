@@ -79,6 +79,15 @@
 
                         <div class="row">
                             <div class="col-sm-4">
+                                <label for="">VAT Registration Number</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <h6>{{$client->company->vat_registration_number}}</h6>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-4">
                                 <label for="">CEO Name</label>
                             </div>
                             <div class="col-sm-8">

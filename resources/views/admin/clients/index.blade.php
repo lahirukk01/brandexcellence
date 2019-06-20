@@ -1,7 +1,11 @@
 
 @extends('layouts.admin')
 
-@section('title', 'Brand Excellence Admin Dashboard')
+@section('title', 'Brand Excellence Admin All Clients')
+
+@section('styles')
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/r-2.2.2/sl-1.3.0/datatables.css"/>
+@endsection
 
 @section('breadcrumbs_title', 'Clients')
 
@@ -28,7 +32,7 @@
                         <h3 class="text-center">Profiles</h3>
                     </div>
                     <div class="card-body">
-                        <table class="table table-striped table-bordered">
+                        <table id="all-clients-table" class="table table-striped table-bordered">
                             <thead>
                             <tr>
                                 <th>Company Name</th>
@@ -77,6 +81,8 @@
 
 @section('scripts')
 
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/r-2.2.2/sl-1.3.0/datatables.js"></script>
+
     <script>
         $('#clients-li').addClass('active')
 
@@ -87,6 +93,12 @@
             }
 
             $(this).closest('form').submit()
+        })
+
+        $('#all-clients-table').DataTable({
+            "columnDefs": [
+                { "orderable": false, "targets": 4 }
+            ],
         })
 
     </script>

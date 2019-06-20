@@ -1,12 +1,12 @@
 
 @extends('layouts.admin')
 
-@section('title', 'Brand Excellence Admin Categories')
+@section('title', 'Brand Excellence Admin Industry Categories')
 
-@section('breadcrumbs_title', 'Categories')
+@section('breadcrumbs_title', 'Industry Categories')
 
 @section('breadcrumbs')
-    <li class="active">Categories</li>
+    <li class="active">Industry Categories</li>
 @endsection
 
 
@@ -18,7 +18,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="text-center">All Categories</h3>
+                        <h3 class="text-center">All Industry Categories</h3>
                     </div>
                     <div class="card-body">
                         <table class="table table-striped table-bordered">
@@ -29,7 +29,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach ($categories as $c)
+                            @foreach ($industryCategories as $c)
                                 <tr>
                                     <td>{{$c->name}}</td>
                                     <td>{{$c->code}}</td>
@@ -55,16 +55,7 @@
 @section('scripts')
 
     <script>
-        $('#categories-li').addClass('active')
-
-        $('.delete-category').click(function (e) {
-            e.preventDefault()
-            if(! confirm('Are you sure you want to delete this category?')) {
-                return false
-            }
-
-            $(this).closest('form').submit()
-        })
+        $('#industry-categories-li').addClass('active')
 
     </script>
 

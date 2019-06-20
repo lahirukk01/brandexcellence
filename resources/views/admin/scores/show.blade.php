@@ -1,14 +1,20 @@
-@extends('layouts.judge')
+@extends('layouts.admin')
 
-@section('title', 'Brand Excellence Judge Show Score')
+@section('title', 'Brand Excellence Admin Show Score')
 
 @section('styles')
 @endsection
 
-@section('breadcrumbs_title', 'Dashboard')
+@section('breadcrumbs_title', 'Scores')
 
 @section('breadcrumbs')
-    <li><a href="{{route('judge.my_scores')}}">My Scores</a></li>
+    @if($direction == 'entrywise')
+    <li><a href="{{route('scores.entryWise')}}">Entry Wise</a></li>
+    <li><a href="{{route('scores.entryWiseJudges', $brand->id)}}">Entry Wise Judges</a></li>
+    @else
+    <li><a href="{{route('scores.judgeWise')}}">Judge Wise</a></li>
+    <li><a href="{{route('scores.judgeWiseEntries', $judge->id)}}">Judge Wise Entries</a></li>
+    @endif
     <li class="active">View Score</li>
 @endsection
 
@@ -26,7 +32,7 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-3">Judge Name: {{ Auth::user()->name }}</div>
+                            <div class="col-md-3">Judge Name: {{ $judge->name }}</div>
                             <div class="col-md-2">Entry ID: {{ $brand->id_string }}</div>
                             <div class="col-md-2">Brand: {{ $brand->name }}</div>
                             <div class="col-md-2">Round 1</div>
@@ -78,10 +84,6 @@
                                                 </td>
                                             </tr>
                                         </tbody>
-{{--                                        <tfoot>--}}
-{{--                                            <td colspan="3">Updated Time: {{ $score->updated_at }}</td>--}}
-{{--                                            <td colspan="3"><span id="duration"></span></td>--}}
-{{--                                        </tfoot>--}}
                                     </table>
                                 </div>
                             </div>
@@ -101,11 +103,9 @@
 
 
 @section('scripts')
-    <script src="{{asset('vendors/form/src/jquery.form.js')}}"></script>
-    <script src="{{ asset('vendors/jquery.gdocviewer/jquery.gdocsviewer.min.js') }}"></script>
 
     <script>
-        $('#my-scores-li').addClass('active')
+        $('#scores-li').addClass('active')
 
     </script>
 

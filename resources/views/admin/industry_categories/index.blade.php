@@ -1,12 +1,12 @@
 
 @extends('layouts.admin')
 
-@section('title', 'Brand Excellence Admin Dashboard')
+@section('title', 'Brand Excellence Super User Industry Categories')
 
-@section('breadcrumbs_title', 'Categories')
+@section('breadcrumbs_title', 'Industry Categories')
 
 @section('breadcrumbs')
-    <li class="active">Categories</li>
+    <li class="active">Industry Categories</li>
 @endsection
 
 
@@ -25,7 +25,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <a class="btn btn-primary" href="{{route('categories.create')}}">Create Category <i class="fa fa-plus"></i></a>
+                        <a class="btn btn-primary" href="{{route('industry_categories.create')}}">Create Industry Category <i class="fa fa-plus"></i></a>
                     </div>
                     <div class="card-body">
                         <table class="table table-striped table-bordered">
@@ -37,19 +37,18 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach ($categories as $c)
+                            @foreach ($industryCategories as $c)
                                 <tr>
                                     <td>{{$c->name}}</td>
                                     <td>{{$c->code}}</td>
                                     <td>
-{{--                                        <a style="color: #0e6498;" href="{{route('categories.show', $c->id)}}">View</a>--}}
-                                        <a class="mx-2" style="color: green;" href="{{route('categories.edit', $c->id)}}">Edit</a>
-                                        <form class="d-inline" action="{{route('categories.destroy', $c->id)}}" method="post">
-                                            @csrf
-                                            @method('DELETE')
+                                        <a class="mx-2" style="color: green;" href="{{route('industry_categories.edit', $c->id)}}">Edit</a>
+{{--                                        <form class="d-inline" action="{{route('industry_categories.destroy', $c->id)}}" method="post">--}}
+{{--                                            @csrf--}}
+{{--                                            @method('DELETE')--}}
 
-                                            <a style="color: red;" href="#" class="delete-category mx-2">Delete</a>
-                                        </form>
+{{--                                            <a style="color: red;" href="#" class="delete-industry-category mx-2">Delete</a>--}}
+{{--                                        </form>--}}
 
                                     </td>
                                 </tr>
@@ -74,11 +73,11 @@
 @section('scripts')
 
     <script>
-        $('#categories-li').addClass('active')
+        $('#industry-categories-li').addClass('active')
 
-        $('.delete-category').click(function (e) {
+        $('.delete-industry-category').click(function (e) {
             e.preventDefault()
-            if(! confirm('Are you sure you want to delete this category?')) {
+            if(! confirm('Are you sure you want to delete this industry category?')) {
                 return false
             }
 

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\AdminRegistered;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class SuperUserAdminController extends Controller
@@ -60,6 +62,7 @@ class SuperUserAdminController extends Controller
         $admin->role_id = 2;
         $admin->save();
 
+        Mail::to($admin->email)->send(new AdminRegistered($data));
         return redirect()->route('admins.index')->with('status', 'Administrator created successfully');
     }
 

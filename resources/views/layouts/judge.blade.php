@@ -9,7 +9,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>@yield('title', 'Brand Excellence Admin Panel')</title>
+    <title>@yield('title', 'Brand Excellence Judge Panel')</title>
     <meta name="description" content="Brand Excellence">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -51,51 +51,15 @@
         <div id="main-menu" class="main-menu collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 <li id="dashboard-li">
-                    <a href="{{route('admin.index')}}"> <i class="menu-icon fa fa-dashboard"></i>Dashboard </a>
+                    <a href="{{route('judge.index')}}"> <i class="menu-icon fa fa-dashboard"></i>Dashboard </a>
                 </li>
 
-                <li id="clients-li">
-                    <a href="{{route('clients.index')}}"> <i class="menu-icon fa fa-briefcase"></i>Clients </a>
+                <li id="my-scores-li">
+                    <a href="{{route('judge.my_scores')}}"> <i class="menu-icon fa fa-star"></i>My Scores </a>
                 </li>
-
-                <li id="brands-li">
-                    <a href="{{route('admin.brands.index')}}"> <i class="menu-icon fa fa-first-order"></i>Brands </a>
-                </li>
-
-                <li id="judges-li">
-                    <a href="{{route('judges.index')}}"> <i class="menu-icon fa fa-gavel"></i>Judges </a>
-                </li>
-
-                @if( Auth::check() && Auth::user()->role->name == 'super')
-
-                    <li id="categories-li">
-                        <a href="{{route('categories.index')}}"> <i class="menu-icon fa fa-snowflake-o"></i>Categories </a>
-                    </li>
-
-                    <li id="industry-categories-li">
-                        <a href="{{route('industry_categories.index')}}"> <i class="menu-icon fa fa-industry"></i>Industry Categories </a>
-                    </li>
-
-                    <li id="admins-li">
-                        <a href="{{route('admins.index')}}"> <i class="menu-icon fa fa-users"></i>Admins </a>
-                    </li>
-
-                @endif
-
-                @if( Auth::check() && Auth::user()->role->name == 'admin')
-
-                    <li id="categories-li">
-                        <a href="{{route('categories.show_all')}}"> <i class="menu-icon fa fa-snowflake-o"></i>Categories </a>
-                    </li>
-
-                    <li id="industry-categories-li">
-                        <a href="{{route('industry_categories.show_all')}}"> <i class="menu-icon fa fa-industry"></i>Industry Categories </a>
-                    </li>
-
-                @endif
 
                 <li id="resetpw-li">
-                    <a href="{{route('resetpw.index')}}"> <i class="menu-icon fa fa-key"></i>Reset Password </a>
+                    <a href="{{route('reset_password')}}"> <i class="menu-icon fa fa-key"></i>Reset Password </a>
                 </li>
 
             </ul>

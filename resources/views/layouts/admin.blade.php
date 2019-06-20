@@ -43,7 +43,7 @@
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-menu" aria-controls="main-menu" aria-expanded="false" aria-label="Toggle navigation">
                 <i class="fa fa-bars"></i>
             </button>
-            <a class="navbar-brand" href="#">{{Auth::user()->name}}</a>
+            <a class="navbar-brand" style="white-space: inherit; text-align: center; line-height: inherit;" href="#">{{Auth::user()->name}}</a>
             <a class="navbar-brand" href="#"><h6>{{Auth::user()->role->name}}</h6></a>
             <a class="navbar-brand hidden" href="#"><img src="{{ asset('images/be_logo.png') }}" alt="" class="img-fluid"></a>
         </div>
@@ -62,10 +62,26 @@
                     <a href="{{route('admin.brands.index')}}"> <i class="menu-icon fa fa-first-order"></i>Brands </a>
                 </li>
 
+                <li id="judges-li">
+                    <a href="{{route('admin.judges.index')}}"> <i class="menu-icon fa fa-gavel"></i>Judges </a>
+                </li>
+
+                <li id="scores-li" class="menu-item-has-children dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-star"></i>Scores</a>
+                    <ul class="sub-menu children dropdown-menu">
+                        <li id="judge-wise-li"><i class="fa fa-user"></i><a href="{{ route('scores.judgeWise') }}">Judge Wise</a></li>
+                        <li id="entry-wise-li"><i class="fa fa-list"></i><a href="{{ route('scores.entryWise') }}">Entry Wise</a></li>
+                    </ul>
+                </li>
+
                 @if( Auth::check() && Auth::user()->role->name == 'super')
 
                     <li id="categories-li">
                         <a href="{{route('categories.index')}}"> <i class="menu-icon fa fa-snowflake-o"></i>Categories </a>
+                    </li>
+
+                    <li id="industry-categories-li">
+                        <a href="{{route('industry_categories.index')}}"> <i class="menu-icon fa fa-industry"></i>Industry Categories </a>
                     </li>
 
                     <li id="admins-li">
@@ -80,7 +96,15 @@
                         <a href="{{route('categories.show_all')}}"> <i class="menu-icon fa fa-snowflake-o"></i>Categories </a>
                     </li>
 
+                    <li id="industry-categories-li">
+                        <a href="{{route('industry_categories.show_all')}}"> <i class="menu-icon fa fa-industry"></i>Industry Categories </a>
+                    </li>
+
                 @endif
+
+                <li id="resetpw-li">
+                    <a href="{{route('reset_password')}}"> <i class="menu-icon fa fa-key"></i>Reset Password </a>
+                </li>
 
             </ul>
         </div><!-- /.navbar-collapse -->

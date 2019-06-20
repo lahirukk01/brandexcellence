@@ -1,12 +1,12 @@
 @extends('layouts.admin')
 
-@section('title', 'Brand Excellence Super User Create Category')
+@section('title', 'Brand Excellence Super User Create Industry Category')
 
-@section('breadcrumbs_title', 'Categories')
+@section('breadcrumbs_title', 'Industry Categories')
 
 @section('breadcrumbs')
-    <li><a href="{{route('categories.index')}}">Categories</a></li>
-    <li class="active">Create Category</li>
+    <li><a href="{{route('industry_categories.index')}}">Industry Categories</a></li>
+    <li class="active">Create Industry Category</li>
 @endsection
 
 @section('content')
@@ -29,10 +29,10 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <form id="create-brand-form" action="{{route('categories.store')}}" method="post" enctype="multipart/form-data" class="form-horizontal">
+                    <form id="create-brand-form" action="{{route('industry_categories.store')}}" method="post" enctype="multipart/form-data" class="form-horizontal">
                         @csrf
                         <div class="card-header">
-                            <h3 class="text-center">Create Category</h3>
+                            <h3 class="text-center">Create Industry Category</h3>
                         </div>
                         <div class="card-body">
                             <h6 class="mb-3" style="color: red;">All fields are required</h6>
@@ -56,7 +56,7 @@
                         </div>
                         <div class="card-footer">
                             <button type="submit" class="btn btn-primary btn-sm mb-3">
-                                <i class="fa fa-dot-circle-o"></i> Create Category
+                                <i class="fa fa-dot-circle-o"></i> Create Industry Category
                             </button>
                         </div>
 
@@ -71,7 +71,7 @@
 
     <script src="{{asset('vendors/form/src/jquery.form.js')}}"></script>
     <script>
-        $('#categories-li').addClass('active')
+        $('#industry-categories-li').addClass('active')
 
         $.validate()
 

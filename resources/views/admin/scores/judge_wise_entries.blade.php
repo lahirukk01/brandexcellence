@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Brand Excellence Admin Brands')
+@section('title', 'Brand Excellence Judge Wise Entries')
 
 
 @section('styles')
@@ -9,10 +9,11 @@
 @endsection
 
 
-@section('breadcrumbs_title', 'Brands')
+@section('breadcrumbs_title', 'Scores')
 
 @section('breadcrumbs')
-    <li class="active">Brands</li>
+    <li><a href="{{route('scores.judgeWise')}}">Judge Wise</a></li>
+    <li class="active">Judge Wise Entries</li>
 @endsection
 
 
@@ -23,7 +24,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="text-center">Entry Wise Scores</h3>
+                        <h3 class="text-center">Judge Wise Scores</h3>
                     </div>
                     <div class="card-body">
                         <table id="admin-brands-table" class="table table-striped table-bordered">
@@ -34,7 +35,7 @@
                                     <th>Category</th>
                                     <th>Industry Category</th>
                                     <th>Company</th>
-                                    <th>View Scores</th>
+                                    <th>View Score</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -46,7 +47,7 @@
                                     <td>{{ $b->industryCategory->name }}</td>
                                     <td>{{ $b->company->name }}</td>
                                     <td>
-                                        <a class="btn btn-primary" href="{{route('scores.entryWiseJudges', $b->id)}}">View</a>
+                                        <a class="btn btn-primary" href="{{ route('scores.show', ['judge' =>$judge->id, 'brand' => $b->id, 'direction' => 'judgewise']) }}">View</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -78,7 +79,7 @@
 
     <script>
         $('#scores-li').addClass('active')
-        $('#judge-wise-li').addClass('active')
+        $('#judge-wise-li > i').css('color', 'white')
 
 
         $('#admin-brands-table').DataTable( {

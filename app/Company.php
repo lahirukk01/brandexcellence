@@ -13,6 +13,7 @@ class Company extends Model
         'ceo_email',
         'ceo_contact_number',
         'user_id',
+        'vat_registration_number',
     ];
 
     public function brands()

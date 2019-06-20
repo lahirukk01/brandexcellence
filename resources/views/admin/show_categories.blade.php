@@ -57,15 +57,6 @@
     <script>
         $('#categories-li').addClass('active')
 
-        $('.delete-category').click(function (e) {
-            e.preventDefault()
-            if(! confirm('Are you sure you want to delete this category?')) {
-                return false
-            }
-
-            $(this).closest('form').submit()
-        })
-
     </script>
 
 @endsection

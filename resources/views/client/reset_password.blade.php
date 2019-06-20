@@ -1,6 +1,6 @@
-@extends('layouts.admin')
+@extends('layouts.client')
 
-@section('title', 'Brand Excellence Admin Reset Password')
+@section('title', 'Brand Excellence Client Reset Password')
 
 @section('breadcrumbs_title', 'Reset Password')
 

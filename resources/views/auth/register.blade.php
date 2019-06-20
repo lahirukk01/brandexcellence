@@ -13,7 +13,6 @@
                 <div class="card-body">
                     <form method="POST" action="{{ route('register') }}">
                         @csrf
-                        <h6 style="color: red;">All fields are required</h6>
                         <div class="form-group row">
                             <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
 
@@ -93,6 +92,20 @@
                                 <input id="company-address" type="text" class="form-control @error('company_address') is-invalid @enderror" name="company_address" value="{{ old('company_address') }}" required autocomplete="company-address">
 
                                 @error('company_address')
+                                <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="vat-registration-number" class="col-md-4 col-form-label text-md-right">{{ __('VAT Registration Number') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="vat-registration-number" type="text" class="form-control @error('vat_registration_number') is-invalid @enderror" name="vat_registration_number" value="{{ old('vat_registration_number') }}" required autocomplete="vat-registration-number">
+
+                                @error('vat_registration_number')
                                 <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
