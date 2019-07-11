@@ -114,6 +114,27 @@
                         </div>
 
                         <div class="form-group row">
+                            <label for="svat-nbt" class="col-md-4 col-form-label text-md-right">{{ __('Leave what is appropriate') }}</label>
+
+                            <div class="col-md-6" style="padding-top: 7px; padding-bottom: 7px;">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="svat">SVAT <input type="checkbox" name="svat-checkbox" id="" checked></label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="svat">NBT <input type="checkbox" name="nbt-checkbox" id="" checked></label>
+                                    </div>
+
+{{--                                @error('vat_registration_number')--}}
+{{--                                <span class="invalid-feedback" role="alert">--}}
+{{--                                        <strong>{{ $message }}</strong>--}}
+{{--                                    </span>--}}
+{{--                                @enderror--}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <label for="ceo-name" class="col-md-4 col-form-label text-md-right">{{ __('CEO Name') }}</label>
 
                             <div class="col-md-6">

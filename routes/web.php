@@ -19,13 +19,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-//Auth::routes(['verify' => true]);
-Auth::routes();
+Auth::routes(['verify' => true]);
+//Auth::routes();
 
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('/reset_pw', 'Auth\ResetPasswordController@index')->name('reset_password');
     Route::patch('/update_pw', 'Auth\ResetPasswordController@update')->name('update_password');

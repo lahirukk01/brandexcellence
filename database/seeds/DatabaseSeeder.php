@@ -2,7 +2,6 @@
 
 use App\Category;
 use App\IndustryCategory;
-use App\Judge;
 use App\Role;
 use App\User;
 use Carbon\Carbon;
@@ -26,7 +25,6 @@ class DatabaseSeeder extends Seeder
         Role::truncate();
         Category::truncate();
         IndustryCategory::truncate();
-        Judge::truncate();
         User::truncate();
 
         DB::table('roles')->insert([
@@ -37,7 +35,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
-            'name' => 'Super User',
+            'name' => 'Lahiru Super',
             'email' => 'admin@gmail.com',
             'designation' => 'Super User',
             'role_id' => 1,

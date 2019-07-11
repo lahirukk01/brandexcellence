@@ -22,6 +22,8 @@ class CreateCompaniesTable extends Migration
             $table->string('ceo_email');
             $table->string('ceo_contact_number');
             $table->string('vat_registration_number')->nullable();
+            $table->boolean('svat')->nullable();
+            $table->boolean('nbt')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

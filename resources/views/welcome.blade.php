@@ -15,7 +15,7 @@
         <!-- Styles -->
         <style>
             html, body {
-                background-color: #fff;
+                background-color: #343a40;
                 color: #636b6f;
                 font-family: 'Nunito', sans-serif;
                 font-weight: 200;
@@ -49,6 +49,7 @@
 
             .title {
                 font-size: 84px;
+                color: #d4ac5b;
             }
 
             .links > a {
