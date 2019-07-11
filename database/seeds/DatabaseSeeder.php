@@ -1,6 +1,7 @@
 <?php
 
 use App\Category;
+use App\Company;
 use App\IndustryCategory;
 use App\Role;
 use App\User;
@@ -23,8 +24,9 @@ class DatabaseSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
 
         Role::truncate();
-        Category::truncate();
-        IndustryCategory::truncate();
+//        Category::truncate();
+//        IndustryCategory::truncate();
+        Company::truncate();
         User::truncate();
 
         DB::table('roles')->insert([
@@ -47,24 +49,52 @@ class DatabaseSeeder extends Seeder
 
         DB::table('categories')->insert([
             [
-                'name' => 'Category1',
-                'code' => 'C1'
+                'name' => 'Local Brand of the Year',
+                'code' => 'LB'
             ],
             [
-                'name' => 'Category2',
-                'code' => 'C2'
+                'name' => 'Service Brand of the Year',
+                'code' => 'SB'
             ],
             [
-                'name' => 'Category3',
-                'code' => 'C3'
+                'name' => 'Product Brand of the Year',
+                'code' => 'PB'
             ],
             [
-                'name' => 'Category4',
-                'code' => 'C4'
+                'name' => 'B2B Brand of the Year',
+                'code' => 'B2B'
             ],
             [
-                'name' => 'Category5',
-                'code' => 'C5'
+                'name' => 'Turnaround Brand of the Year',
+                'code' => 'TB'
+            ],
+            [
+                'name' => 'CSR Brand of the Year',
+                'code' => 'CSR'
+            ],
+            [
+                'name' => 'Export Brand of the Year',
+                'code' => 'EXP'
+            ],
+            [
+                'name' => 'Innovative Brand of the Year',
+                'code' => 'INV'
+            ],
+            [
+                'name' => 'International Brand of the Year',
+                'code' => 'INT'
+            ],
+            [
+                'name' => 'Online Brand of the Year',
+                'code' => 'OB'
+            ],
+            [
+                'name' => 'Best New Entrant Brand of the Year',
+                'code' => 'BNE'
+            ],
+            [
+                'name' => 'Regional Brand of the Year',
+                'code' => 'RB'
             ],
         ]);
 
