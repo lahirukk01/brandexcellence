@@ -23,8 +23,8 @@ class CreateBrandUserTable extends Migration
             $table->text('good')->nullable();
             $table->text('bad')->nullable();
             $table->text('improvement')->nullable();
-            $table->bigInteger('brand_id');
-            $table->bigInteger('user_id');
+            $table->bigInteger('brand_id')->unsigned();
+            $table->bigInteger('user_id')->unsigned();
             $table->timestamps();
 
             $table->foreign('brand_id')->references('id')

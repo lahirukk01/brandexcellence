@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateIndustryCategoryJudgeTable extends Migration
+class CreateIndustryCategoryUserTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,8 +15,8 @@ class CreateIndustryCategoryJudgeTable extends Migration
     {
         Schema::create('industry_category_user', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('user_id');
-            $table->bigInteger('industry_category_id');
+            $table->bigInteger('user_id')->unsigned();
+            $table->bigInteger('industry_category_id')->unsigned();
             $table->timestamps();
 
             $table->foreign('industry_category_id')->references('id')
@@ -33,6 +33,6 @@ class CreateIndustryCategoryJudgeTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('industry_category_judge');
+        Schema::dropIfExists('industry_category_user');
     }
 }
