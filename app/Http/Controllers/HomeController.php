@@ -38,6 +38,9 @@ class HomeController extends Controller
             case 4:
                 return redirect()->action('ClientController@index');
                 break;
+            case 5:
+                return redirect()->action('AuditorController@index');
+                break;
             default:
                 die('Invalid user role');
                 break;

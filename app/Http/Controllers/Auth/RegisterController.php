@@ -97,6 +97,8 @@ class RegisterController extends Controller
             'ceo_email' => $data['ceo_email'],
             'ceo_contact_number' => $data['ceo_contact_number'],
             'vat_registration_number' => $data['vat_registration_number'],
+            'svat' => isset($data['svat-checkbox']) ? 1 : 0,
+            'nbt' => isset($data['nbt-checkbox']) ? 1 : 0,
             'user_id' => $user->id,
         ]);
 

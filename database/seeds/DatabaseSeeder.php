@@ -1,9 +1,10 @@
 <?php
 
+use App\Admin;
+use App\Auditor;
 use App\Category;
-use App\Company;
 use App\IndustryCategory;
-use App\Role;
+use App\Judge;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
@@ -23,29 +24,32 @@ class DatabaseSeeder extends Seeder
 
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
 
-        Role::truncate();
-//        Category::truncate();
-//        IndustryCategory::truncate();
         Company::truncate();
+        Category::truncate();
+        IndustryCategory::truncate();
+        Admin::truncate();
+        Judge::truncate();
+        Auditor::truncate();
         User::truncate();
 
-        DB::table('roles')->insert([
-            ['name' => 'super'],
-            ['name' => 'admin'],
-            ['name' => 'judge'],
-            ['name' => 'client']
-        ]);
+//        DB::table('admins')->insert([
+//            'name' => 'Super User',
+//            'email' => 'admin@gmail.com',
+//            'designation' => 'Super User',
+//            'contact_number' => '0771234567',
+//            'password' => Hash::make('123'),
+//            'created_at' => Carbon::now(),
+//            'updated_at' => Carbon::now(),
+//        ]);
 
-        DB::table('users')->insert([
-            'name' => 'Lahiru Super',
-            'email' => 'admin@gmail.com',
-            'designation' => 'Super User',
-            'role_id' => 1,
-            'contact_number' => '0771234567',
-            'password' => Hash::make('123'),
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
-        ]);
+        $admin = new Admin();
+        $admin->name = 'Super User';
+        $admin->email = 'admin@gmail.com';
+        $admin->designation = 'Developer';
+        $admin->contact_number = '0771234567';
+        $admin->is_super = 1;
+        $admin->password = Hash::make('123');
+        $admin->save();
 
         DB::table('categories')->insert([
             [

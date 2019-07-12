@@ -2,13 +2,16 @@
 
 namespace App;
 
+use App\Notifications\JudgeResetPasswordNotification;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable implements MustVerifyEmail
+class Judge extends Authenticatable
 {
     use Notifiable;
+
+    protected $guard = 'judge';
 
     /**
      * The attributes that are mass assignable.
@@ -36,4 +39,9 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new JudgeResetPasswordNotification($token));
+    }
 }

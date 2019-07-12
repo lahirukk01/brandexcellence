@@ -15,14 +15,14 @@ class CreateBlockedEntriesTable extends Migration
     {
         Schema::create('blocked_entries', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('user_id')->unsigned();
+            $table->bigInteger('judge_id')->unsigned();
             $table->bigInteger('brand_id')->unsigned();
             $table->timestamps();
 
             $table->foreign('brand_id')->references('id')
                 ->on('brands')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')
-                ->on('users')->onDelete('cascade');
+            $table->foreign('judge_id')->references('id')
+                ->on('judges')->onDelete('cascade');
         });
     }
 
