@@ -17,6 +17,7 @@ class CreateBrandJudgeTable extends Migration
             $table->bigIncrements('id');
             $table->integer('intent');
             $table->integer('content');
+            $table->integer('process');
             $table->integer('health');
             $table->integer('performance');
             $table->integer('total');
@@ -25,6 +26,7 @@ class CreateBrandJudgeTable extends Migration
             $table->text('improvement')->nullable();
             $table->bigInteger('brand_id')->unsigned();
             $table->bigInteger('judge_id')->unsigned();
+            $table->enum('round', [1, 2])->default(1);
             $table->timestamps();
 
             $table->foreign('brand_id')->references('id')

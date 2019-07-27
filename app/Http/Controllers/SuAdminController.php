@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Admin;
 use App\Mail\AdminRegistered;
 use App\User;
 use Illuminate\Http\Request;
@@ -9,7 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
-class SuperUserAdminController extends Controller
+class SuAdminController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,7 +19,7 @@ class SuperUserAdminController extends Controller
      */
     public function index()
     {
-        $admins = User::whereRoleId(2)->get();
+        $admins = Admin::whereIsSuper(0)->get();
 
         return view('super.admins.index', compact('admins'));
     }
@@ -43,7 +44,7 @@ class SuperUserAdminController extends Controller
     {
         $request->validate([
             'name' => 'required|max:255',
-            'email' => 'required|max:50|email|unique:users',
+            'email' => 'required|max:50|email|unique:admins',
             'contact_number' => 'required|digits:10',
             'designation' => 'required|max:100',
             'password' => 'required|alpha_num|min:3|max:15|confirmed',
@@ -51,19 +52,19 @@ class SuperUserAdminController extends Controller
 
         $data = $request->all();
 
-        $admin = new User([
+        $admin = new Admin([
             'name' => $data['name'],
             'email' => $data['email'],
             'contact_number' => $data['contact_number'],
             'designation' => $data['designation'],
             'password' => Hash::make($data['password']),
+            'is_super' => 0,
         ]);
 
-        $admin->role_id = 2;
         $admin->save();
 
         Mail::to($admin->email)->send(new AdminRegistered($data));
-        return redirect()->route('admins.index')->with('status', 'Administrator created successfully');
+        return redirect()->route('super.admin.index')->with('status', 'Administrator created successfully');
     }
 
 
@@ -73,7 +74,7 @@ class SuperUserAdminController extends Controller
      * @param  User  $admin
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $admin)
+    public function edit(Admin $admin)
     {
         return view('super.admins.edit', compact('admin'));
     }
@@ -85,17 +86,13 @@ class SuperUserAdminController extends Controller
      * @param  User $admin
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $admin)
+    public function update(Request $request, Admin $admin)
     {
         $data = $request->all();
 
-        if($data['email'] == $admin->email) {
-            unset($data['email']);
-        }
-
         $validation = Validator::make($data, [
             'name' => 'required|max:100',
-            'email' => 'email|max:50|unique:users',
+            'email' => 'email|max:50|unique:admins,email,' . $admin->id,
             'contact_number' => 'required|digits:10',
             'designation' => 'required|max:100',
         ]);
@@ -106,12 +103,12 @@ class SuperUserAdminController extends Controller
 
         $admin->update($data);
 
-        return redirect()->route('admins.index')->with('status', 'Administrator updated successfully');
+        return redirect()->route('super.admin.index')->with('status', 'Administrator updated successfully');
 
     }
 
 
-    public function updatePassword(Request $request, User $admin)
+    public function updatePassword(Request $request, Admin $admin)
     {
         $request->validate([
             'password' => 'required|min:3|max:15|alpha_num|confirmed',
@@ -123,19 +120,19 @@ class SuperUserAdminController extends Controller
             'password' => Hash::make($password)
         ]);
 
-        return redirect()->route('admins.index')->with('status', 'Admin password updated successfully');
+        return redirect()->route('super.admin.index')->with('status', 'Admin password updated successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  User $admin
+     * @param  Admin $admin
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $admin)
+    public function destroy(Admin $admin)
     {
         $admin->delete();
 
-        return redirect()->route('admins.index')->with('status', 'Administrator delete successfully');
+        return redirect()->route('super.admin.index')->with('status', 'Administrator delete successfully');
     }
 }

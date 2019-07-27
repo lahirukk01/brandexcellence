@@ -5,7 +5,7 @@
 @section('breadcrumbs_title', 'Categories')
 
 @section('breadcrumbs')
-    <li><a href="{{route('categories.index')}}">Categories</a></li>
+    <li><a href="{{route('super.category.index')}}">Categories</a></li>
     <li class="active">Create Category</li>
 @endsection
 
@@ -29,7 +29,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <form id="create-brand-form" action="{{route('categories.store')}}" method="post" enctype="multipart/form-data" class="form-horizontal">
+                    <form id="create-brand-form" action="{{route('super.category.store')}}" method="post" enctype="multipart/form-data" class="form-horizontal">
                         @csrf
                         <div class="card-header">
                             <h3 class="text-center">Create Category</h3>
@@ -50,6 +50,14 @@
                                 <div class="col-12 col-md-9">
                                     <input type="text" id="category-code-input" name="code"
                                            class="form-control" value="{{old('code')}}" data-validation="required">
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <div class="col col-md-3"><label for="benchmark-input" class=" form-control-label">Benchmark</label></div>
+                                <div class="col-12 col-md-9">
+                                    <input type="text" id="category-benchmark-input" name="benchmark"
+                                           class="form-control" value="{{old('benchmark')}}" data-validation="required number">
                                 </div>
                             </div>
 

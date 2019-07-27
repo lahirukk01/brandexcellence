@@ -2,10 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Admin;
 use App\BlockedEntry;
 use App\Brand;
+//use App\Judge;
+use App\Mail\JudgeEditedScore;
+use App\Mail\JudgeFinalized;
+use App\Mail\JudgeScored;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class JudgeController extends Controller
 {
@@ -19,18 +27,18 @@ class JudgeController extends Controller
         $judge = Auth::user();
         $industryCategories = $judge->industryCategories->pluck('id')->toArray();
 
-        $blockedEntries = BlockedEntry::where('user_id', $judge->id)->get()->pluck('brand_id')->toArray();
+        $blockedEntries = BlockedEntry::where('judge_id', $judge->id)->get()->pluck('brand_id')->toArray();
 
         $brands = Brand::whereIn('industry_category_id', $industryCategories)
             ->whereNotIn('id', $blockedEntries)->get();
 
-        return view('judge.dashboard', compact('brands'));
+        return view('judge.entries', compact('brands'));
     }
 
     public function myScores()
     {
         $judge = Auth::user();
-        $brands = $judge->brands;
+        $brands = $judge->brands()->where('r2_selected', 0)->get();
 
         return view('judge.my_scores', compact('brands'));
     }
@@ -42,7 +50,9 @@ class JudgeController extends Controller
      */
     public function score(Brand $brand)
     {
-        return view('judge.score', compact('brand'));
+        $scoringStart = Carbon::now();
+        session(['scoringStart' => $scoringStart]);
+        return view('judge.score', compact('brand', 'scoringStart'));
     }
 
     /**
@@ -65,10 +75,20 @@ class JudgeController extends Controller
         ]);
 
         $data = $request->all();
+        $data['round'] = 1;
 
         unset($data['_token']);
 
         Auth::user()->brands()->attach($brand->id, $data);
+
+        $emailData['start'] = session()->pull('scoringStart');
+        $emailData['end'] = Carbon::now();
+        $emailData['entryId'] = $brand->id_string;
+        $emailData['judgeName'] = Auth::user()->name;
+        $emailData['round'] = 1;
+
+        $superUserEmail = Admin::whereIsSuper(1)->first()->email;
+        Mail::to($superUserEmail)->send(new JudgeScored($emailData));
 
         return redirect()->route('judge.index')->with('status', 'Score entered successfully');
     }
@@ -96,7 +116,10 @@ class JudgeController extends Controller
     {
         $score = Auth::user()->brands()->whereBrandId($brand->id)->first()->score;
 
-        return view('judge.edit', compact('brand', 'score'));
+        $startEditing = Carbon::now();
+        session(['startEditing' => $startEditing]);
+
+        return view('judge.edit', compact('brand', 'score', 'startEditing'));
     }
 
     /**
@@ -125,6 +148,82 @@ class JudgeController extends Controller
 
         Auth::user()->brands()->updateExistingPivot($brand->id, $data);
 
+        $emailData['start'] = session()->pull('startEditing');
+        $emailData['end'] = Carbon::now();
+        $emailData['entryId'] = $brand->id_string;
+        $emailData['judgeName'] = Auth::user()->name;
+
+        $superUserEmail = Admin::whereIsSuper(1)->first()->email;
+        Mail::to($superUserEmail)->send(new JudgeEditedScore($emailData));
+
         return redirect()->route('judge.index')->with('status', 'Score edited successfully');
+    }
+
+    public function finalize(Request $request)
+    {
+        $judge = Auth::user();
+        $judge->finalized = true;
+
+        $data['number'] = $request->get('numberOfEntriesFinalized');
+        $data['name'] = $judge->name;
+        $data['round'] = 1;
+
+        if($judge->save()) {
+            $superUserEmail = Admin::whereIsSuper(1)->first()->email;
+            Mail::to($superUserEmail)->send(new JudgeFinalized($data));
+            return 'success';
+        } else {
+            return 'failure';
+        }
+    }
+
+    public function scorePattern()
+    {
+        $judge = Auth::user();
+        $brands = $judge->brands;
+
+        $names = [];
+        $scores = [];
+
+        foreach ($brands as $b) {
+            $names[] = $b->name;
+            $scores[] = $b->score->total;
+        }
+
+        $names = json_encode($names);
+        $scores = json_encode($scores);
+
+        return view('judge.score_pattern', compact('names', 'scores'));
+    }
+
+    ///////////////////////////// Inside Password Reset ///////////////////////////////////
+
+    public function selfUpdatePassword(Request $request)
+    {
+        $user = Auth::user();
+
+        $request->validate([
+            'current_password' => ['required', 'string', 'min:3', 'max:15', 'alpha_num',],
+            'password' => ['required', 'string', 'min:3', 'max:15', 'alpha_num', 'confirmed'],
+        ]);
+
+        $currentPassword = $request->input('current_password');
+
+        if( ! Hash::check( $currentPassword, $user->password)) {
+            return redirect()->back()->with('passwordError', 'Invalid current password');
+        }
+
+        $password = $request->input('password');
+
+        $user->update([
+            'password' => Hash::make($password)
+        ]);
+
+        return redirect('judge')->with('status', 'Password updated successfully');
+    }
+
+    public function showInsidePasswordResetForm()
+    {
+        return view('judge.reset_password');
     }
 }

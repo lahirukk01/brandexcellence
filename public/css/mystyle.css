@@ -3,3 +3,7 @@
     z-index: 100;
     right: 10px;
 }
+
+.navbar .navbar-nav li.active > a {
+    color: white !important;
+}

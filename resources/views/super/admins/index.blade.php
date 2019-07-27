@@ -25,7 +25,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <a class="btn btn-primary" href="{{route('admins.create')}}">Create Admin <i class="fa fa-plus"></i></a>
+                        <a class="btn btn-primary" href="{{route('super.admin.create')}}">Create Admin <i class="fa fa-plus"></i></a>
                     </div>
                     <div class="card-body">
                         <table class="table table-striped table-bordered">
@@ -49,8 +49,8 @@
                                     <td>{{ $a->created_at }}</td>
                                     <td>
 {{--                                        <a style="color: #0e6498;" href="{{route('clients.show', $a->id)}}">View</a>--}}
-                                        <a class="mr-2" style="color: green;" href="{{route('admins.edit', $a->id)}}">Edit</a>
-                                        <form class="d-inline" action="{{route('admins.destroy', $a->id)}}" method="post">
+                                        <a class="mr-2" style="color: green;" href="{{route('super.admin.edit', $a->id)}}">Edit</a>
+                                        <form class="d-inline" action="{{route('super.admin.destroy', $a->id)}}" method="post">
                                             @csrf
                                             @method('DELETE')
 

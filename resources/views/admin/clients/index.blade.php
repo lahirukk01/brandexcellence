@@ -40,6 +40,7 @@
                                 <th>Email</th>
                                 <th>Contact Number</th>
                                 <th>Action</th>
+                                <th>Allowed/<br>Blocked</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -50,15 +51,22 @@
                                     <td>{{$c->email}}</td>
                                     <td>{{ $c->contact_number }}</td>
                                     <td>
-                                        <a style="color: #0e6498;" href="{{route('clients.show', $c->id)}}">View</a>
-                                        <a style="color: green;" href="{{route('clients.edit', $c->id)}}">Edit</a>
-                                        <form class="d-inline" action="{{route('clients.destroy', $c->id)}}" method="post">
+                                        <a style="color: #0e6498;" href="{{route('admin.client.show', $c->id)}}">View</a>
+                                        <a style="color: green;" href="{{route('admin.client.edit', $c->id)}}">Edit</a>
+                                        <form class="d-inline" action="{{route('admin.client.destroy', $c->id)}}" method="post">
                                             @csrf
                                             @method('DELETE')
 
                                             <a style="color: red;" href="#" class="delete-client">Delete</a>
                                         </form>
 
+                                    </td>
+                                    <td>
+                                        @if($c->allowed)
+                                            <a href="{{ route('admin.client.toggle_status', $c->id) }}" class="btn btn-danger">Block</a>
+                                        @else
+                                            <a href="{{ route('admin.client.toggle_status', $c->id) }}" class="btn btn-primary">Allow</a>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

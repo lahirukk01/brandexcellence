@@ -34,9 +34,19 @@
                 </button>
             </div>
             @endif
+
+            @if (session('passwordError'))
+                <div class="alert alert-danger alert-dismissible fade show floating-response" role="alert">
+                    {{ session('passwordError') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+
             <div class="col-md-12">
                 <div class="card">
-                    <form id="create-brand-form" action="{{route('update_password')}}" method="post" enctype="multipart/form-data" class="form-horizontal">
+                    <form id="create-brand-form" action="{{route('admin.self_update_password')}}" method="post" enctype="multipart/form-data" class="form-horizontal">
                         @csrf
                         @method('PATCH')
                         <div class="card-header">

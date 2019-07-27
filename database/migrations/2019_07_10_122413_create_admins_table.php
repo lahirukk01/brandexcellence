@@ -21,7 +21,7 @@ class CreateAdminsTable extends Migration
             $table->string('password');
             $table->string('designation')->nullable();
             $table->string('contact_number')->nullable();
-            $table->boolean('is_super');
+            $table->boolean('is_super')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

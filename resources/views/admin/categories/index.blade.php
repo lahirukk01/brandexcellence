@@ -25,7 +25,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <a class="btn btn-primary" href="{{route('categories.create')}}">Create Category <i class="fa fa-plus"></i></a>
+                        <a class="btn btn-primary" href="{{route('super.category.create')}}">Create Category <i class="fa fa-plus"></i></a>
                     </div>
                     <div class="card-body">
                         <table class="table table-striped table-bordered">
@@ -33,6 +33,7 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Code</th>
+                                <th>Benchmark</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
@@ -41,10 +42,10 @@
                                 <tr>
                                     <td>{{$c->name}}</td>
                                     <td>{{$c->code}}</td>
+                                    <td>{{ $c->benchmark }}</td>
                                     <td>
-{{--                                        <a style="color: #0e6498;" href="{{route('categories.show', $c->id)}}">View</a>--}}
-                                        <a class="mx-2" style="color: green;" href="{{route('categories.edit', $c->id)}}">Edit</a>
-                                        <form class="d-inline" action="{{route('categories.destroy', $c->id)}}" method="post">
+                                        <a class="mx-2" style="color: green;" href="{{route('super.category.edit', $c->id)}}">Edit</a>
+                                        <form class="d-inline" action="{{route('super.category.destroy', $c->id)}}" method="post">
                                             @csrf
                                             @method('DELETE')
 

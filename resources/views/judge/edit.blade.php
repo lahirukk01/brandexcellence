@@ -49,23 +49,22 @@
                     <form action="{{ route('judge.update', $brand->id) }}" method="post">
                         @csrf
                         @method('PATCH')
-                        <div class="card-header">
-                            <h3 class="text-center">Edit Score</h3>
+                        <div class="row">
+                            <div class="col-md-3">Judge Name: {{ Auth::user()->name }}</div>
+                            <div class="col-md-2">Entry ID: {{ $brand->id_string }}</div>
+                            <div class="col-md-2">Brand: {{ $brand->name }}</div>
+                            <div class="col-md-2">Round 1</div>
+                            <div class="col-md-3">Entry Category: {{ $brand->category->name }}</div>
                         </div>
+                        <hr>
                         <div class="card-body">
-{{--                            <a href="{{ asset($brand->entry_kit) }}" class="embed">View Entry Kit</a>--}}
+                            @if($brand->supporting_material)
+                            <a class="btn btn-primary" target="_blank" href="{{ asset($brand->supporting_material) }}">Supporting Material</a>
+                            @endif
+{{--                            <a href="{{ asset($brand->entry_kit) }}" class="embed"></a>--}}
                             <a href="http://www.africau.edu/images/default/sample.pdf" class="embed"></a>
-                            <a class="btn btn-primary" href="{{ asset($brand->logo) }}" download>Download Brand Logo</a>
-                            <hr>
-                            <div class="row">
-                                <div class="col-md-3">Judge Name: {{ Auth::user()->name }}</div>
-                                <div class="col-md-2">Entry ID: {{ $brand->id_string }}</div>
-                                <div class="col-md-2">Brand: {{ $brand->name }}</div>
-                                <div class="col-md-2">Round 1</div>
-                                <div class="col-md-3">Entry Category: {{ $brand->category->name }}</div>
-                            </div>
 
-                            <div class="row mt-5">
+                            <div class="row">
                                 <div class="col-md-12">
                                     <div class="table-responsive">
                                         <table class="table table-bordered">
@@ -136,7 +135,7 @@
                                                 </tr>
                                             </tbody>
                                             <tfoot>
-                                                <td colspan="3">Login Time: {{ \Carbon\Carbon::now() }}</td>
+                                                <td colspan="3">Login Time: {{ $startEditing }}</td>
                                                 <td colspan="3">Duration: <span id="duration"></span></td>
                                             </tfoot>
                                         </table>
@@ -170,6 +169,8 @@
         $(document).ready(function () {
 
             $('a.embed').gdocsViewer();
+
+            $('body').addClass('open')
 
             setTotal()
             

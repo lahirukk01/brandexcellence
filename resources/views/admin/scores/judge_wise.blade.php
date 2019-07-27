@@ -24,7 +24,6 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Email</th>
-                                <th>Telephone</th>
                                 <th>View Scores</th>
                             </tr>
                             </thead>
@@ -33,9 +32,8 @@
                                 <tr>
                                     <td>{{ $j->name }}</td>
                                     <td>{{ $j->email }}</td>
-                                    <td>{{ $j->telephone }}</td>
                                     <td>
-                                        <a class="btn btn-primary" href="{{route('scores.judgeWiseEntries', $j->id)}}">View</a>
+                                        <a class="btn btn-primary" href="{{route('admin.score.judge_wise_entries', $j->id)}}">View</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -59,7 +57,7 @@
 @section('scripts')
 
     <script>
-        $('#scores-li').addClass('active')
+        $('#scores-li-1').addClass('active')
         $('#judge-wise-li > i').css('color', 'white')
 
     </script>

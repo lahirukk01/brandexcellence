@@ -6,7 +6,7 @@
 @section('breadcrumbs_title', 'Dashboard')
 
 @section('breadcrumbs')
-    <li><a href="{{route('clients.index')}}">Clients</a></li>
+    <li><a href="{{route('admin.client.index')}}">Clients</a></li>
     <li class="active">Edit Profile</li>
 @endsection
 
@@ -45,7 +45,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <form method="POST" action="{{ route('clients.update', $client->id) }}">
+                                <form method="POST" action="{{ route('admin.client.update', $client->id) }}">
                                     @csrf
                                     @method('PATCH')
                                     <div class="form-group row">
@@ -205,7 +205,7 @@
                         <div class="row">
                             <div class="col-md-12">
 
-                                <form action="{{route('clients.update.password', $client->id)}}" method="post">
+                                <form action="{{route('admin.client.update_password', $client->id)}}" method="post">
                                     @csrf
                                     @method('PATCH')
 

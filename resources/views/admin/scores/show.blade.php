@@ -9,11 +9,11 @@
 
 @section('breadcrumbs')
     @if($direction == 'entrywise')
-    <li><a href="{{route('scores.entryWise')}}">Entry Wise</a></li>
-    <li><a href="{{route('scores.entryWiseJudges', $brand->id)}}">Entry Wise Judges</a></li>
+    <li><a href="{{route('admin.score.entry_wise')}}">Entry Wise</a></li>
+    <li><a href="{{route('admin.score.entry_wise_judges', $brand->id)}}">Entry Wise Judges</a></li>
     @else
-    <li><a href="{{route('scores.judgeWise')}}">Judge Wise</a></li>
-    <li><a href="{{route('scores.judgeWiseEntries', $judge->id)}}">Judge Wise Entries</a></li>
+    <li><a href="{{route('admin.score.judge_wise')}}">Judge Wise</a></li>
+    <li><a href="{{route('admin.score.judge_wise_entries', $judge->id)}}">Judge Wise Entries</a></li>
     @endif
     <li class="active">View Score</li>
 @endsection
@@ -105,7 +105,7 @@
 @section('scripts')
 
     <script>
-        $('#scores-li').addClass('active')
+        $('#scores-li-1').addClass('active')
 
     </script>
 

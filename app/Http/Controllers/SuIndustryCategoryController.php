@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\IndustryCategory;
 use Illuminate\Http\Request;
 
-class SuperUserIndustryCategoryController extends Controller
+class SuIndustryCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -48,7 +48,7 @@ class SuperUserIndustryCategoryController extends Controller
             'code' => $data['code'],
         ]);
 
-        return redirect()->route('industry_categories.index')->with('status', 'Industry Category created successfully');
+        return redirect()->route('super.industry_category.index')->with('status', 'Industry Category created successfully');
     }
 
 
@@ -85,7 +85,7 @@ class SuperUserIndustryCategoryController extends Controller
             'code' => $data['code'],
         ]);
 
-        return redirect()->route('industry_categories.index')->with('status', 'Industry Category updated successfully');
+        return redirect()->route('super.industry_category.index')->with('status', 'Industry Category updated successfully');
     }
 
     /**

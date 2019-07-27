@@ -353,17 +353,15 @@
                                     <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 20px; padding-left: 20px; padding-top: 20px; padding-bottom: 20px; font-family: Arial, sans-serif"><![endif]-->
                                     <div style="color:#892C63;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;line-height:120%;padding-top:20px;padding-right:20px;padding-bottom:20px;padding-left:20px;">
                                         <div style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 12px; line-height: 14px; color: #892C63;">
-                                            <div style="line-height: 14px; font-size: 12px; text-align: center;"><span style="font-size: 24px; line-height: 28px;"><span style="line-height: 28px; font-size: 24px;">Judge Scoring Attempt Information </span></span></div>
+                                            <div style="line-height: 14px; font-size: 12px; text-align: center;"><span style="font-size: 24px; line-height: 28px;"><span style="line-height: 28px; font-size: 24px;">Judge Finalized Scoring </span></span></div>
                                         </div>
                                     </div>
                                     <!--[if mso]></td></tr></table><![endif]-->
                                     <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 20px; padding-left: 20px; padding-top: 0px; padding-bottom: 0px; font-family: Arial, sans-serif"><![endif]-->
                                     <div style="color:#555555;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;line-height:180%;padding-top:0px;padding-right:20px;padding-bottom:0px;padding-left:20px;">
                                         <div style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 12px; line-height: 21px; color: #555555;">
-                                            <p style="font-size: 16px; line-height: 28px; margin: 0;"><span style="font-size: 16px;">Judge Name: </span> {{ $data['judgeName'] }}</p>
-                                            <p style="font-size: 16px; line-height: 28px; margin: 0;"><span style="font-size: 16px;">Entry ID: </span> {{ $data['entryId'] }}</p>
-                                            <p style="font-size: 16px; line-height: 28px; margin: 0;"><span style="font-size: 16px;">Start Time: </span> {{ $data['start'] }}</p>
-                                            <p style="font-size: 16px; line-height: 28px; margin: 0;"><span style="font-size: 16px;">End Time: </span> {{ $data['end'] }}</p>
+                                            <p style="font-size: 16px; line-height: 28px; margin: 0;"><span style="font-size: 16px;">Judge Name: </span> {{ $data['name'] }}</p>
+                                            <p style="font-size: 16px; line-height: 28px; margin: 0;"><span style="font-size: 16px;">Number Of Entries Finalized: </span> {{ $data['number'] }}</p>
                                         </div>
                                     </div>
                                     <!--[if mso]></td></tr></table><![endif]-->

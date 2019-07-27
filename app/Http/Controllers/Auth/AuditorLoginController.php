@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Rules\AllowedToLogin;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -49,9 +50,17 @@ class AuditorLoginController extends Controller
     protected function validateLogin(Request $request)
     {
         $request->validate([
-            $this->username() => 'required|string',
+            $this->username() => ['required', 'string',],
             'password' => 'required|string|min:3|max:15',
         ]);
+    }
+
+    protected function authenticated(Request $request, $user)
+    {
+        if($user->allowed == false) {
+            Auth::guard('auditor')->logout();
+            return redirect()->route('auditor.login')->with('userBlocked', 'You have been blocked out');
+        }
     }
 
 }

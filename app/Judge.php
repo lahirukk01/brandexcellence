@@ -44,4 +44,26 @@ class Judge extends Authenticatable
     {
         $this->notify(new JudgeResetPasswordNotification($token));
     }
+
+    public function industryCategories()
+    {
+        return $this->belongsToMany('App\IndustryCategory')->withTimestamps();
+    }
+
+    public function blockedEntries()
+    {
+        return $this->hasMany('App\BlockedEntry');
+    }
+
+    public function brands()
+    {
+        return $this->belongsToMany('App\Brand')->as('score')
+            ->withPivot('intent', 'content', 'process', 'health', 'performance', 'total',
+                'good', 'bad', 'improvement', 'round')->withTimestamps();
+    }
+
+    public function panels()
+    {
+        return $this->belongsToMany('App\Panel');
+    }
 }

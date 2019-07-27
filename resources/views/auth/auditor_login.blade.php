@@ -11,6 +11,10 @@
                     <form method="POST" action="{{ route('auditor.login.submit') }}">
                         @csrf
 
+                        @if(session('userBlocked'))
+                            <h3 class="text-center text-danger">{{ session('userBlocked') }}</h3>
+                        @endif
+
                         <div class="form-group row">
                             <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
 

@@ -44,22 +44,22 @@
                 <i class="fa fa-bars"></i>
             </button>
             <a class="navbar-brand" style="white-space: inherit; text-align: center; line-height: inherit;" href="#">{{Auth::user()->name}}</a>
-            <a class="navbar-brand" href="#"><h6>{{Auth::user()->role->name}}</h6></a>
+            <a class="navbar-brand" href="#"><h6>Client</h6></a>
             <a class="navbar-brand hidden" href="#"><div style="width: 13px; height: 18px; background-color: gold;"></div></a>
         </div>
 
         <div id="main-menu" class="main-menu collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 <li id="dashboard-li">
-                    <a href="{{route('home')}}"> <i class="menu-icon fa fa-dashboard"></i>Dashboard </a>
+                    <a href="{{route('client.index')}}"> <i class="menu-icon fa fa-dashboard"></i>Dashboard </a>
                 </li>
 
                 <li id="brands-li">
-                    <a href="{{route('brands.index')}}"> <i class="menu-icon fa fa-first-order"></i>Brands </a>
+                    <a href="{{route('client.brand.index')}}"> <i class="menu-icon fa fa-first-order"></i>Brands </a>
                 </li>
 
                 <li id="resetpw-li">
-                    <a href="{{route('reset_password')}}"> <i class="menu-icon fa fa-key"></i>Reset Password </a>
+                    <a href="{{route('client.show_password_reset_form')}}"> <i class="menu-icon fa fa-key"></i>Reset Password </a>
                 </li>
 
             </ul>

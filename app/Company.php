@@ -13,6 +13,8 @@ class Company extends Model
         'ceo_email',
         'ceo_contact_number',
         'user_id',
+        'svat',
+        'nbt',
         'vat_registration_number',
     ];
 

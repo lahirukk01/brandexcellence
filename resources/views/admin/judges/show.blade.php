@@ -14,7 +14,7 @@
 @section('breadcrumbs_title', 'Judges')
 
 @section('breadcrumbs')
-    <li><a href="{{route('admin.judges.index')}}">Judges</a></li>
+    <li><a href="{{route('admin.judge.index')}}">Judges</a></li>
     <li class="active">Judge</li>
 @endsection
 
@@ -113,7 +113,7 @@
                 _token: '{{ csrf_token() }}'
             }
 
-            $.post('{{ route('judges.set_blocked') }}', data, function (result) {
+            $.post('{{ route('admin.judge.set_blocked') }}', data, function (result) {
 
                 if(result.success != undefined) {
                     alert(result.success)

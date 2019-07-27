@@ -5,7 +5,7 @@
 @section('breadcrumbs_title', 'Administrators')
 
 @section('breadcrumbs')
-    <li><a href="{{route('admins.index')}}">Administrators</a></li>
+    <li><a href="{{route('super.admin.index')}}">Administrators</a></li>
     <li class="active">Create Administrator</li>
 @endsection
 
@@ -29,7 +29,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <form id="create-brand-form" action="{{route('admins.store')}}" method="post" class="form-horizontal">
+                    <form id="create-brand-form" action="{{route('super.admin.store')}}" method="post" class="form-horizontal">
                         @csrf
                         <div class="card-header">
                             <h3 class="text-center">Create Administrator</h3>

@@ -6,7 +6,7 @@
 @section('breadcrumbs_title', 'Clients')
 
 @section('breadcrumbs')
-    <li><a href="{{route('clients.index')}}">Clients</a></li>
+    <li><a href="{{route('admin.client.index')}}">Clients</a></li>
     <li class="active">View Client</li>
 @endsection
 

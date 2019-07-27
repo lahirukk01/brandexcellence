@@ -17,6 +17,8 @@ class CreateCategoriesTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('code');
+            $table->integer('benchmark')->default(0);
+            $table->boolean('r1_finalized')->default(false);
             $table->timestamps();
         });
     }

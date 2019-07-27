@@ -6,7 +6,7 @@
 @section('breadcrumbs_title', 'Brands')
 
 @section('breadcrumbs')
-    <li><a href="{{route('brands.index')}}">Brands</a></li>
+    <li><a href="{{route('client.brand.index')}}">Brands</a></li>
     <li class="active">View Brand</li>
 @endsection
 
@@ -57,13 +57,17 @@
                         <hr>
 
                         <div class="row">
-                            <div class="col-sm-6">
-                                <a class="btn btn-primary" target="_blank" href="{{route('brands.show.entrykit', $brand->id)}}">Entry Kit</a>
+                            <div class="col-sm-4">
+                                <a class="btn btn-primary" target="_blank" href="{{route('client.brand.show_entry_kit', $brand->id)}}">Entry Kit</a>
                             </div>
-                            <div class="col-sm-6">
-{{--                                <a class="btn btn-info" target="_blank" href="{{route('brands.show.logo', $brand->id)}}">Logo</a>--}}
-                                <a href="{{url('/') . '/' . $brand->logo}}" class="btn btn-info" download>Logo</a>
+                            <div class="col-sm-4">
+                                <a href="{{ asset($brand->logo) }}" class="btn btn-info" download>Logo</a>
                             </div>
+                            @if($brand->supporting_material)
+                            <div class="col-sm-4">
+                                <a target="_blank"  href="{{ asset($brand->supporting_material) }}" class="btn btn-success">Supporting Material</a>
+                            </div>
+                            @endif
                         </div>
 
                     </div>

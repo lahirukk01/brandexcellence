@@ -5,7 +5,7 @@
 @section('styles')
 @endsection
 
-@section('breadcrumbs_title', 'Dashboard')
+@section('breadcrumbs_title', 'My Scores')
 
 @section('breadcrumbs')
     <li><a href="{{route('judge.my_scores')}}">My Scores</a></li>

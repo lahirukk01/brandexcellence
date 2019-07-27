@@ -59,9 +59,9 @@
                                     <td>{{ $b->category->name }}</td>
                                     <td>{{ $b->company->name }}</td>
                                     <td>
-                                        <a style="color: #0e6498;" href="{{route('admin.brands.show', $b->id)}}">View</a>
-                                        <a class="mx-2" style="color: green;" href="{{route('admin.brands.edit', $b->id)}}">Edit</a>
-                                        <form class="d-inline" action="{{route('admin.brands.destroy', $b->id)}}" method="post">
+                                        <a style="color: #0e6498;" href="{{route('admin.brand.show', $b->id)}}">View</a>
+                                        <a class="mx-2" style="color: green;" href="{{route('admin.brand.edit', $b->id)}}">Edit</a>
+                                        <form class="d-inline" action="{{route('admin.brand.destroy', $b->id)}}" method="post">
                                             @csrf
                                             @method('DELETE')
 
@@ -146,7 +146,7 @@
                 _token: '{{ csrf_token() }}'
             }
 
-            $.post('{{ route('admin.brands.set_options') }}', data, function (result) {
+            $.post('{{ route('admin.brand.set_options') }}', data, function (result) {
                 // console.log(result)
                 if(result.success != undefined) {
                     alert(result.success)

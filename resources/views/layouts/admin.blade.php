@@ -12,6 +12,7 @@
     <title>@yield('title', 'Brand Excellence Admin Panel')</title>
     <meta name="description" content="Brand Excellence">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <link rel="apple-touch-icon" href="apple-icon.png">
     <link rel="shortcut icon" href="{{asset('images/be_logo.png')}}">
@@ -44,7 +45,7 @@
                 <i class="fa fa-bars"></i>
             </button>
             <a class="navbar-brand" style="white-space: inherit; text-align: center; line-height: inherit;" href="#">{{Auth::user()->name}}</a>
-            <a class="navbar-brand" href="#"><h6>{{Auth::user()->role->name}}</h6></a>
+            <a class="navbar-brand" href="#"><h6>{{Auth::user()->is_super == 1 ? 'Super User' : 'Admin'}}</h6></a>
             <a class="navbar-brand hidden" href="#"><img src="{{ asset('images/be_logo.png') }}" alt="" class="img-fluid"></a>
         </div>
 
@@ -55,55 +56,79 @@
                 </li>
 
                 <li id="clients-li">
-                    <a href="{{route('clients.index')}}"> <i class="menu-icon fa fa-briefcase"></i>Clients </a>
+                    <a href="{{route('admin.client.index')}}"> <i class="menu-icon fa fa-briefcase"></i>Clients </a>
                 </li>
 
                 <li id="brands-li">
-                    <a href="{{route('admin.brands.index')}}"> <i class="menu-icon fa fa-first-order"></i>Brands </a>
+                    <a href="{{route('admin.brand.index')}}"> <i class="menu-icon fa fa-first-order"></i>Brands </a>
                 </li>
 
                 <li id="judges-li">
-                    <a href="{{route('admin.judges.index')}}"> <i class="menu-icon fa fa-gavel"></i>Judges </a>
+                    <a href="{{route('admin.judge.index')}}"> <i class="menu-icon fa fa-gavel"></i>Judges </a>
                 </li>
 
-                <li id="scores-li" class="menu-item-has-children dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-star"></i>Scores</a>
+                <li id="auditors-li">
+                    <a href="{{route('admin.auditor.index')}}"> <i class="menu-icon fa fa-search"></i>Auditors </a>
+                </li>
+
+                <li id="scores-li-1" class="menu-item-has-children dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false"> <i class="menu-icon fa fa-star"></i>Scores R1</a>
                     <ul class="sub-menu children dropdown-menu">
-                        <li id="judge-wise-li"><i class="fa fa-user"></i><a href="{{ route('scores.judgeWise') }}">Judge Wise</a></li>
-                        <li id="entry-wise-li"><i class="fa fa-list"></i><a href="{{ route('scores.entryWise') }}">Entry Wise</a></li>
+                        <li id="judge-wise-li"><i class="fa fa-user"></i><a href="{{ route('admin.score.judge_wise') }}">Judge Wise</a></li>
+                        <li id="entry-wise-li"><i class="fa fa-list"></i><a href="{{ route('admin.score.entry_wise') }}">Entry Wise</a></li>
                     </ul>
                 </li>
 
-                @if( Auth::check() && Auth::user()->role->name == 'super')
+                <li id="benchmarks-li">
+                    <a href="{{route('admin.benchmark.index')}}"> <i class="menu-icon fa fa-scissors"></i>Benchmarks </a>
+                </li>
+
+                @if($flags->current_round == 2)
+                <li id="scores-li-2" class="menu-item-has-children dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false"> <i class="menu-icon fa fa-star"></i>Scores R2</a>
+                    <ul class="sub-menu children dropdown-menu">
+                        <li id="judge-wise-li"><i class="fa fa-user"></i><a href="#">Judge Wise</a></li>
+                        <li id="entry-wise-li"><i class="fa fa-list"></i><a href="#">Entry Wise</a></li>
+                    </ul>
+                </li>
+                @endif
+
+                <li id="panels-li">
+                    <a href="{{route('admin.panel.index')}}"> <i class="menu-icon fa fa-columns"></i>Panels </a>
+                </li>
+
+                @if( Auth::check() && Auth::user()->is_super == 1)
 
                     <li id="categories-li">
-                        <a href="{{route('categories.index')}}"> <i class="menu-icon fa fa-snowflake-o"></i>Categories </a>
+                        <a href="{{route('super.category.index')}}"> <i class="menu-icon fa fa-snowflake-o"></i>Categories </a>
                     </li>
 
                     <li id="industry-categories-li">
-                        <a href="{{route('industry_categories.index')}}"> <i class="menu-icon fa fa-industry"></i>Industry Categories </a>
+                        <a href="{{route('super.industry_category.index')}}"> <i class="menu-icon fa fa-industry"></i>Industry Categories </a>
                     </li>
 
                     <li id="admins-li">
-                        <a href="{{route('admins.index')}}"> <i class="menu-icon fa fa-users"></i>Admins </a>
+                        <a href="{{route('super.admin.index')}}"> <i class="menu-icon fa fa-users"></i>Admins </a>
                     </li>
 
                 @endif
 
-                @if( Auth::check() && Auth::user()->role->name == 'admin')
+                @if( Auth::check() && Auth::user()->is_super == 0)
 
                     <li id="categories-li">
-                        <a href="{{route('categories.show_all')}}"> <i class="menu-icon fa fa-snowflake-o"></i>Categories </a>
+                        <a href="{{route('admin.categories')}}"> <i class="menu-icon fa fa-snowflake-o"></i>Categories </a>
                     </li>
 
                     <li id="industry-categories-li">
-                        <a href="{{route('industry_categories.show_all')}}"> <i class="menu-icon fa fa-industry"></i>Industry Categories </a>
+                        <a href="{{route('admin.industry_categories')}}"> <i class="menu-icon fa fa-industry"></i>Industry Categories </a>
                     </li>
 
                 @endif
 
                 <li id="resetpw-li">
-                    <a href="{{route('reset_password')}}"> <i class="menu-icon fa fa-key"></i>Reset Password </a>
+                    <a href="{{route('admin.show_password_reset_form')}}"> <i class="menu-icon fa fa-key"></i>Reset Password </a>
                 </li>
 
             </ul>

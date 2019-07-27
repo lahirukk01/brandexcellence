@@ -353,7 +353,7 @@
                                     <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 20px; padding-left: 20px; padding-top: 20px; padding-bottom: 20px; font-family: Arial, sans-serif"><![endif]-->
                                     <div style="color:#892C63;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;line-height:120%;padding-top:20px;padding-right:20px;padding-bottom:20px;padding-left:20px;">
                                         <div style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 12px; line-height: 14px; color: #892C63;">
-                                            <div style="line-height: 14px; font-size: 12px; text-align: center;"><span style="font-size: 24px; line-height: 28px;"><span style="line-height: 28px; font-size: 24px;">You have been registered as a judge for brand excellence<span id="autocomplete" style="font-size: 24px; line-height: 28px;"><span id="autocomplete-delimiter" style="font-size: 24px; line-height: 28px;">!</span><span id="autocomplete-searchtext" style="font-size: 24px; line-height: 28px;"><span style="font-size: 24px; line-height: 28px;">!!</span></span></span></span></span></div>
+                                            <div style="line-height: 14px; font-size: 12px; text-align: center;"><span style="font-size: 24px; line-height: 28px;"><span style="line-height: 28px; font-size: 24px;">You have been registered as a judge for <br>Brand Excellence 2019</span></span></div>
                                         </div>
                                     </div>
                                     <!--[if mso]></td></tr></table><![endif]-->
@@ -372,17 +372,13 @@
                                                     <td>{{ $judge['email'] }}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Contact Number</td>
-                                                    <td>{{ $judge['contact_number'] }}</td>
-                                                </tr>
-                                                <tr>
                                                     <td>Password</td>
                                                     <td>{{ $judge['password'] }}</td>
                                                 </tr>
 
                                                 </tbody>
                                             </table>
-
+                                            <h5>Please reset your password after logging</h5>
                                         </div>
                                     </div>
                                     <!--[if mso]></td></tr></table><![endif]-->
@@ -423,7 +419,6 @@
                                         </tr>
                                         </tbody>
                                     </table>
-                                    <h5>Please reset your password after logging</h5>
                                     <!--[if (!mso)&(!IE)]><!-->
                                 </div>
                                 <!--<![endif]-->

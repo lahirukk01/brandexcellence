@@ -46,7 +46,7 @@
                                     <td>{{ $b->industryCategory->name }}</td>
                                     <td>{{ $b->company->name }}</td>
                                     <td>
-                                        <a class="mx-2 btn btn-primary" href="{{route('judge.showScore', $b->id)}}">View</a>
+                                        <a class="mx-2 btn btn-primary" href="{{route('judge.show_score', $b->id)}}">View</a>
                                     </td>
                                 </tr>
                             @endforeach

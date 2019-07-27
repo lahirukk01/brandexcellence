@@ -498,7 +498,7 @@
                                     <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px; font-family: Arial, sans-serif"><![endif]-->
                                     <div style="color:#555555;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;line-height:120%;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
                                         <div style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 12px; line-height: 14px; color: #555555;">
-                                            <p style="font-size: 14px; line-height: 16px; margin: 0;">Thank you for your order</p>
+                                            <p style="font-size: 14px; line-height: 16px; margin: 0;">Thank you for your submission</p>
                                         </div>
                                     </div>
                                     <!--[if mso]></td></tr></table><![endif]-->
@@ -525,7 +525,7 @@
                                     <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px; font-family: Arial, sans-serif"><![endif]-->
                                     <div style="color:#555555;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;line-height:120%;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
                                         <div style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 12px; line-height: 14px; color: #555555;">
-                                            <p style="font-size: 14px; line-height: 24px; margin: 0;"><span style="font-size: 20px;">Name</span></p>
+                                            <p style="font-size: 14px; line-height: 24px; margin: 0;"><span style="font-size: 20px;">Name: {{ $data['clientName'] }}</span></p>
                                         </div>
                                     </div>
                                     <!--[if mso]></td></tr></table><![endif]-->
@@ -552,11 +552,13 @@
                                     <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px; font-family: Arial, sans-serif"><![endif]-->
                                     <div style="color:#555555;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;line-height:120%;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
                                         <div style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 12px; line-height: 14px; color: #555555;">
-                                            <p style="font-size: 14px; line-height: 16px; margin: 0;">Email</p>
-                                            <p style="font-size: 14px; line-height: 16px; margin: 0;">Contact Number</p>
-                                            <p style="font-size: 14px; line-height: 16px; margin: 0;">Company</p>
-                                            <p style="font-size: 14px; line-height: 16px; margin: 0;">Address</p>
-                                            <p style="font-size: 14px; line-height: 16px; margin: 0;">VAT Registration Number</p>
+                                            <p style="font-size: 14px; line-height: 16px; margin: 0;">Email: {{ $data['email'] }}</p>
+                                            <p style="font-size: 14px; line-height: 16px; margin: 0;">Contact Number: {{ $data['contactNumber'] }}</p>
+                                            <p style="font-size: 14px; line-height: 16px; margin: 0;">Company Name: {{ $data['companyName'] }}</p>
+                                            <p style="font-size: 14px; line-height: 16px; margin: 0;">Company Address: {{ $data['companyAddress'] }}</p>
+                                            @if($data['vatNumber'] != null)
+                                            <p style="font-size: 14px; line-height: 16px; margin: 0;">VAT Registration Number: {{ $data['vatNumber'] }}</p>
+                                            @endif
                                         </div>
                                     </div>
                                     <!--[if mso]></td></tr></table><![endif]-->
@@ -618,7 +620,7 @@
                                     <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px; font-family: Arial, sans-serif"><![endif]-->
                                     <div style="color:#555555;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;line-height:120%;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
                                         <div style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 12px; line-height: 14px; color: #555555;">
-                                            <p style="font-size: 14px; line-height: 16px; margin: 0;">Here is a summary of your order</p>
+                                            <p style="font-size: 14px; line-height: 16px; margin: 0;">Here is a summary of your submission</p>
                                         </div>
                                     </div>
                                     <!--[if mso]></td></tr></table><![endif]-->
@@ -645,7 +647,7 @@
                                     <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px; font-family: Arial, sans-serif"><![endif]-->
                                     <div style="color:#555555;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;line-height:120%;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
                                         <div style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 12px; line-height: 14px; color: #555555;">
-                                            <p style="font-size: 14px; line-height: 16px; margin: 0;">Order Information</p>
+                                            <p style="font-size: 14px; line-height: 16px; margin: 0;">Submission Information</p>
                                         </div>
                                     </div>
                                     <!--[if mso]></td></tr></table><![endif]-->
@@ -693,7 +695,7 @@
                                     <div style="color:#555555;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;line-height:120%;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
                                         <div style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 12px; line-height: 14px; color: #555555;">
                                             <p style="font-size: 14px; line-height: 19px; margin: 0;"><span style="font-size: 16px;"><strong>Status</strong></span></p>
-                                            <p style="font-size: 14px; line-height: 16px; margin: 0;"><span style="font-size: 14px; line-height: 16px;">Order success</span></p>
+                                            <p style="font-size: 14px; line-height: 16px; margin: 0;"><span style="font-size: 14px; line-height: 16px;">Submission success</span></p>
                                         </div>
                                     </div>
                                     <!--[if mso]></td></tr></table><![endif]-->
@@ -740,7 +742,7 @@
                                     <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px; font-family: Arial, sans-serif"><![endif]-->
                                     <div style="color:#555555;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;line-height:120%;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
                                         <div style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 12px; line-height: 14px; color: #555555;">
-                                            <p style="font-size: 14px; line-height: 16px; margin: 0;">Order Details</p>
+                                            <p style="font-size: 14px; line-height: 16px; margin: 0;">Submission Details</p>
 
                                             <table id="order-details-table" style="width: 100%;" class="table">
                                                 <thead>
@@ -777,27 +779,43 @@
                                                     <td>SUBTOTAL</td>
                                                     <td>Rs {{ $subTotal }}</td>
                                                 </tr>
+                                                @php
+                                                    if($data['svat'] != null){
+                                                        $tax = 0.15*$subTotal;
+                                                    }
+                                                    else {
+                                                        $tax = 0;
+                                                    }
+                                                @endphp
+                                                @if($data['svat'] != null)
                                                 <tr>
                                                     <td class="border-0"></td>
-                                                    <td>TAX 15%</td>
-                                                    @php
-                                                        $tax = 0.15*$subTotal;
-                                                    @endphp
+                                                    <td>VAT 15%</td>
                                                     <td>Rs {{ $tax }}</td>
                                                 </tr>
+                                                @endif
+
+                                                @php
+                                                    if($data['nbt'] != null){
+                                                        $nbt = 0.02*$subTotal;
+                                                    }
+                                                    else {
+                                                        $nbt = 0;
+                                                    }
+                                                @endphp
+                                                @if($data['nbt'] != null)
                                                 <tr>
                                                     <td class="border-0"></td>
                                                     <td>NBT 2%</td>
-                                                    @php
-                                                        $nbt = 0.02*$subTotal;
-                                                    @endphp
                                                     <td>Rs {{ $nbt }}</td>
                                                 </tr>
+                                                @endif
+
                                                 </tbody>
                                                 <tfoot>
                                                 <td class="border-0"></td>
-                                                <td class="border-0"><h5>Total</h5></td>
-                                                <td class="border-0"><h5>Rs {{ $subTotal + $tax + $nbt }}</h5></td>
+                                                <td class="border-0"><h3>Total</h3></td>
+                                                <td class="border-0"><h3>Rs {{ $subTotal + $tax + $nbt }}</h3></td>
                                                 </tfoot>
                                             </table>
 

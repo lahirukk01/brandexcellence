@@ -6,13 +6,20 @@
 @section('styles')
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/r-2.2.2/sl-1.3.0/datatables.css"/>
 
+    <style>
+        canvas {
+            width: 100%;
+            height: 400px;
+        }
+    </style>
+
 @endsection
 
 
 @section('breadcrumbs_title', 'Scores')
 
 @section('breadcrumbs')
-    <li><a href="{{route('scores.judgeWise')}}">Judge Wise</a></li>
+    <li><a href="{{route('admin.score.judge_wise')}}">Judge Wise</a></li>
     <li class="active">Judge Wise Entries</li>
 @endsection
 
@@ -47,7 +54,7 @@
                                     <td>{{ $b->industryCategory->name }}</td>
                                     <td>{{ $b->company->name }}</td>
                                     <td>
-                                        <a class="btn btn-primary" href="{{ route('scores.show', ['judge' =>$judge->id, 'brand' => $b->id, 'direction' => 'judgewise']) }}">View</a>
+                                        <a class="btn btn-primary" href="{{ route('admin.score.show', ['judge' =>$judge->id, 'brand' => $b->id, 'direction' => 'judgewise']) }}">View</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -61,6 +68,9 @@
                                 <td></td>
                             </tfoot>
                         </table>
+                    </div>
+                    <div class="card-footer">
+                        <canvas id="judge-wise-graph"></canvas>
                     </div>
                 </div>
             </div>
@@ -76,11 +86,37 @@
 @section('scripts')
 
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/r-2.2.2/sl-1.3.0/datatables.js"></script>
+<script src="{{ asset('vendors/chart.js/dist/Chart.bundle.min.js') }}"></script>
 
     <script>
-        $('#scores-li').addClass('active')
+        $('#scores-li-1').addClass('active')
         $('#judge-wise-li > i').css('color', 'white')
 
+        var ctx = document.getElementById( 'judge-wise-graph' );
+        var myChart = new Chart( ctx, {
+            type: 'bar',
+            data: {
+                labels: {!! $names !!},
+                datasets: [
+                    {
+                        label: "Judge Score Graph",
+                        data: {!! $scores !!},
+                        borderColor: "rgba(0, 123, 255, 0.9)",
+                        borderWidth: "0",
+                        backgroundColor: "rgba(0, 123, 255, 0.5)"
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    yAxes: [ {
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    } ]
+                }
+            }
+        } );
 
         $('#admin-brands-table').DataTable( {
             "columnDefs": [

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Admin;
 use App\Brand;
 use App\Category;
 use App\IndustryCategory;
@@ -57,6 +58,7 @@ class ClientBrandController extends Controller
             'industry_category_id' => ['required'],
             'entry_kit' => 'required|file|mimetypes:application/pdf',
             'logo' => 'required|file',
+            'supporting_material' => 'nullable|mimetypes:application/pdf'
         ]);
 
         if ($validator->fails()){
@@ -76,6 +78,12 @@ class ClientBrandController extends Controller
         $input['entry_kit'] = $fileName1;
         $input['logo'] = $fileName2;
 
+        if($file3 = $request->file('supporting_material')) {
+            $fileName3 = Carbon::now()->format('Y_m_d_H_i_s') . '_' . preg_replace('/\s/', '_', $file3->getClientOriginalName());
+            $file3->move('uploads', $fileName3);
+            $input['supporting_material'] = $fileName3;
+        }
+
         $categoryCode = Category::findOrFail($input['category_id'])->code;
         $count = Brand::where('category_id', $input['category_id'])->count();
         $count++;
@@ -88,7 +96,7 @@ class ClientBrandController extends Controller
 
         $email = Auth::user()->email;
 
-        $superUserEmail = User::where('role_id', 1)->first()->email;
+        $superUserEmail = Admin::whereIsSuper(1)->first()->email;
         Mail::to($email)->cc($superUserEmail)->send(new BrandRegistered($brand));
 
         if(!session()->exists('brands')) {
@@ -220,7 +228,7 @@ class ClientBrandController extends Controller
     {
         $brand->delete();
 
-        return redirect('client/brands')->with('status', 'Brand deleted successfully');
+        return redirect()->route('client.brand.index')->with('status', 'Brand deleted successfully');
     }
 
     public function sendInvoice()
@@ -228,7 +236,7 @@ class ClientBrandController extends Controller
         $user = Auth::user();
         $email = $user->email;
 
-        $superUserEmail = User::where('role_id', 1)->first()->email;
+        $superUserEmail = Admin::whereIsSuper(1)->first()->email;
 
         $data['brands'] = session()->pull('brands');
         $data['clientName'] = $user->name;
@@ -236,10 +244,17 @@ class ClientBrandController extends Controller
         $data['contactNumber'] = $user->contact_number;
         $data['companyName'] = $user->company->name;
         $data['companyAddress'] = $user->company->address;
+        $data['svat'] = $user->company->svat;
+        $data['nbt'] = $user->company->nbt;
         $data['vatNumber'] = $user->company->vat_registration_number;
 
         Mail::to($email)->cc($superUserEmail)->send(new ClientPayment($data));
 
         return response()->json(['success'=>'Invoice sent to your email address']);
+    }
+
+    public function getNumberOfEntries()
+    {
+        return count(session()->pull('brands'));
     }
 }

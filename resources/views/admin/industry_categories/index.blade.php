@@ -25,7 +25,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <a class="btn btn-primary" href="{{route('industry_categories.create')}}">Create Industry Category <i class="fa fa-plus"></i></a>
+                        <a class="btn btn-primary" href="{{route('super.industry_category.create')}}">Create Industry Category <i class="fa fa-plus"></i></a>
                     </div>
                     <div class="card-body">
                         <table class="table table-striped table-bordered">
@@ -42,7 +42,7 @@
                                     <td>{{$c->name}}</td>
                                     <td>{{$c->code}}</td>
                                     <td>
-                                        <a class="mx-2" style="color: green;" href="{{route('industry_categories.edit', $c->id)}}">Edit</a>
+                                        <a class="mx-2" style="color: green;" href="{{route('super.industry_category.edit', $c->id)}}">Edit</a>
 {{--                                        <form class="d-inline" action="{{route('industry_categories.destroy', $c->id)}}" method="post">--}}
 {{--                                            @csrf--}}
 {{--                                            @method('DELETE')--}}

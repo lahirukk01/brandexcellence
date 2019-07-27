@@ -5,7 +5,7 @@
 @section('breadcrumbs_title', 'Brands')
 
 @section('breadcrumbs')
-    <li><a href="{{route('brands.index')}}">Brands</a></li>
+    <li><a href="{{route('client.brand.index')}}">Brands</a></li>
     <li class="active">Edit Brand</li>
 @endsection
 
@@ -21,14 +21,14 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <form id="edit-brand-form" action="{{route('brands.update', $brand->id)}}" method="post" enctype="multipart/form-data" class="form-horizontal">
+                    <form id="edit-brand-form" action="{{route('client.brand.update', $brand->id)}}" method="post" enctype="multipart/form-data" class="form-horizontal">
                         @csrf
                         @method('PATCH')
                         <div class="card-header">
                             <h3 class="text-center">Edit Brand</h3>
                         </div>
                         <div class="card-body">
-                            <h6 class="mb-3" style="color: red;">All fields are required</h6>
+                            <h6 class="mb-3" style="color: red;">Only file upload fields are optional</h6>
                             <div class="row form-group">
                                 <div class="col col-md-3"><label for="name-input" class=" form-control-label">Name</label></div>
                                 <div class="col-12 col-md-9">
@@ -71,7 +71,8 @@
                                     <input type="file" id="" name="entry_kit"
                                            class="form-control-file" accept="application/pdf" value=""
                                            data-validation="mime"
-                                           data-validation-allowing="pdf" >
+                                           data-validation-allowing="pdf">
+                                    <label style="color: blue;" class="d-block" for="">Current File: {{ basename($brand->entry_kit) }}</label>
                                 </div>
                             </div>
 
@@ -80,6 +81,17 @@
                                 <div class="col-12 col-md-9">
                                     <input type="file" id="" name="logo" class="form-control-file" value=""
                                            accept="application/postscript" data-validation="ai_file">
+                                    <label style="color: blue;" class="d-block" for="">Current File: {{ basename($brand->logo) }}</label>
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <div class="col col-md-3"><label for="supporting-material-input" class=" form-control-label">Supporting Material (pdf file)</label></div>
+                                <div class="col-12 col-md-9">
+                                    <input type="file" id="" name="supporting_material" class="form-control-file" value=""
+                                           accept="application/pdf" data-validation="mime"
+                                           data-validation-allowing="pdf">
+                                    <label style="color: blue;" class="d-block" for="">Current File: {{ basename($brand->supporting_material) }}</label>
                                 </div>
                             </div>
 
@@ -175,7 +187,7 @@
                     bar.attr('aria-valuenow', '100')
                     bar.html(percentVal);
                     alert('Form updated successfully')
-                    window.location.assign('{{route('brands.index')}}')
+                    window.location.assign('{{route('client.brand.index')}}')
                 } else {
                     $.each(response.errors, function (key, val) {
                         $('.alert-danger').append(`<p>${val}</p>`)

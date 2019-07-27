@@ -7,7 +7,6 @@ use App\Category;
 use App\IndustryCategory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
@@ -63,6 +62,8 @@ class AdminBrandController extends Controller
             'description' => 'required|max:60',
             'category_id' => 'required',
             'industry_category_id' => 'required',
+            'entry_kit' => 'nullable|mimetypes:application/pdf',
+            'supporting_material' => 'nullable|mimetypes:application/pdf',
         ]);
 
         if ($validator->fails()) {
@@ -77,6 +78,10 @@ class AdminBrandController extends Controller
 
         if( empty($input['logo'])) {
             unset($input['logo']);
+        }
+
+        if( empty($input['supporting_material'])) {
+            unset($input['supporting_material']);
         }
 
         $oldEntryKit = $brand->entry_kit;
@@ -94,6 +99,13 @@ class AdminBrandController extends Controller
             $fileName2 = Carbon::now()->format('Y_m_d_H_i_s') . '_' . preg_replace('/\s/', '_', $file2->getClientOriginalName());
             $file2->move('uploads', $fileName2);
             $input['logo'] = $fileName2;
+        }
+
+        if( $request->file('supporting_material') != null && $request->file('supporting_material')->isValid() ) {
+            $file3 = $request->file('supporting_material');
+            $fileName3 = Carbon::now()->format('Y_m_d_H_i_s') . '_' . preg_replace('/\s/', '_', $file3->getClientOriginalName());
+            $file3->move('uploads', $fileName3);
+            $input['supporting_material'] = $fileName3;
         }
 
         $categoryCode = Category::findOrFail($input['category_id'])->code;
@@ -125,7 +137,7 @@ class AdminBrandController extends Controller
     {
         $brand->delete();
 
-        return redirect()->route('admin.brands.index')->with('status', 'Brand deleted successfully');
+        return redirect()->route('admin.brand.index')->with('status', 'Brand deleted successfully');
     }
 
     public function setOptions(Request $request)

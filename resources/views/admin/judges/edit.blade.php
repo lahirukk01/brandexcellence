@@ -6,7 +6,7 @@
 @section('breadcrumbs_title', 'Judges')
 
 @section('breadcrumbs')
-    <li><a href="{{route('admin.judges.index')}}">Judges</a></li>
+    <li><a href="{{route('admin.judge.index')}}">Judges</a></li>
     <li class="active">Edit Judge</li>
 @endsection
 
@@ -34,7 +34,7 @@
                         <h3 class="text-center">Edit Judge</h3>
                     </div>
                     <div class="card-body">
-                        <form id="edit-judge-form" action="{{route('admin.judges.update', $judge->id)}}" method="post" class="form-horizontal">
+                        <form id="edit-judge-form" action="{{route('admin.judge.update', $judge->id)}}" method="post" class="form-horizontal">
                             @csrf
                             @method('PATCH')
                             <h6 class="mb-3" style="color: red;">Only telephone field is optional</h6>
@@ -55,13 +55,13 @@
                                 </div>
                             </div>
 
-                            <div class="row form-group">
-                                <div class="col col-md-3"><label for="telephone-input" class=" form-control-label">Telephone (10 digit)</label></div>
-                                <div class="col-12 col-md-9">
-                                    <input type="text" id="judge-telephone-input" name="contact_number"
-                                           class="form-control" value="{{ $judge->contact_number }}">
-                                </div>
-                            </div>
+{{--                            <div class="row form-group">--}}
+{{--                                <div class="col col-md-3"><label for="telephone-input" class=" form-control-label">Telephone (10 digit)</label></div>--}}
+{{--                                <div class="col-12 col-md-9">--}}
+{{--                                    <input type="text" id="judge-telephone-input" name="contact_number"--}}
+{{--                                           class="form-control" value="{{ $judge->contact_number }}">--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
 
                             <div class="row form-group">
                                 <div class="col col-md-3"><label for="" class="form-control-label">Select Industry Categories of Judge</label></div>
@@ -89,7 +89,7 @@
                     </div>
 
                     <div class="card-footer">
-                        <form id="update-judge-password-form" action="{{route('judges.update.password', $judge->id)}}" method="post" class="form-horizontal">
+                        <form id="update-judge-password-form" action="{{route('admin.judge.update_password', $judge->id)}}" method="post" class="form-horizontal">
                             @csrf
                             @method('PATCH')
                             <div class="row form-group">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Admin;
 use App\Company;
 use App\Mail\ClientRegistered;
 use App\User;
@@ -63,7 +64,7 @@ class RegisterController extends Controller
             'ceo_name' => ['required', 'string', 'max:100'],
             'ceo_email' => ['required', 'string', 'email', 'max:100'],
             'ceo_contact_number' => ['required', 'string', 'digits:10'],
-            'vat_registration_number' => ['nullable', 'regex:/[0-9\-]{5,15}/g'],
+            'vat_registration_number' => ['nullable', 'regex:/[0-9\-]{5,15}/i'],
 
             'password' => ['required', 'string', 'min:3', 'max:15', 'alpha_num', 'confirmed'],
         ]);
@@ -105,7 +106,7 @@ class RegisterController extends Controller
         unset($data['password']);
         unset($data['password_confirmation']);
 
-        $superUserEmail = User::where('role_id', 1)->first()->email;
+        $superUserEmail = Admin::whereIsSuper(1)->first()->email;
         Mail::to($user->email)->cc($superUserEmail)->send(new ClientRegistered($data));
     }
 }

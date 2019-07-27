@@ -9,7 +9,7 @@ class Brand extends Model
 {
     protected $fillable = [
         'name', 'description',
-        'entry_kit', 'logo',
+        'entry_kit', 'logo', 'supporting_material',
         'id_string', 'company_id',
         'category_id', 'industry_category_id'
     ];
@@ -36,11 +36,11 @@ class Brand extends Model
         return $this->belongsTo('App\IndustryCategory');
     }
 
-    public function users()
+    public function judges()
     {
-        return $this->belongsToMany('App\User')->as('score')
+        return $this->belongsToMany('App\Judge')->as('score')
             ->withPivot('intent', 'content', 'process', 'health', 'performance', 'total',
-                'good', 'bad', 'improvement')->withTimestamps();
+                'good', 'bad', 'improvement', 'round')->withTimestamps();
     }
 
     public function getEntryKitAttribute($value)
@@ -51,6 +51,11 @@ class Brand extends Model
     public function getLogoAttribute($value)
     {
         return 'uploads/' . $value;
+    }
+
+    public function getSupportingMaterialAttribute($value)
+    {
+        return $value ? ('uploads/' . $value) : null;
     }
 
 }

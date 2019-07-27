@@ -18,8 +18,11 @@ class CreateJudgesTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
+            $table->boolean('allowed')->default(true);
+            $table->enum('online_status', ['Online', 'Offline'])->nullable();
             $table->string('password');
             $table->boolean('finalized')->default(false);
+            $table->boolean('finalized_r2')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

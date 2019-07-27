@@ -13,9 +13,14 @@ return [
     |
     */
 
+//    'defaults' => [
+//        'guard' => 'web',
+//        'passwords' => 'users',
+//    ],
+
     'defaults' => [
-        'guard' => 'web',
-        'passwords' => 'users',
+        'guard' => 'client',
+        'passwords' => 'clients',
     ],
 
     /*
@@ -46,6 +51,27 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admins',
+        ],
+
+        'judge' => [
+            'driver' => 'session',
+            'provider' => 'judges',
+        ],
+
+        'auditor' => [
+            'driver' => 'session',
+            'provider' => 'auditors',
+        ],
+
+        'client' => [
+            'driver' => 'session',
+            'provider' => 'clients',
+        ],
+
     ],
 
     /*
@@ -67,6 +93,26 @@ return [
 
     'providers' => [
         'users' => [
+            'driver' => 'eloquent',
+            'model' => App\User::class,
+        ],
+
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Admin::class,
+        ],
+
+        'judges' => [
+            'driver' => 'eloquent',
+            'model' => App\Judge::class,
+        ],
+
+        'auditors' => [
+            'driver' => 'eloquent',
+            'model' => App\Auditor::class,
+        ],
+
+        'clients' => [
             'driver' => 'eloquent',
             'model' => App\User::class,
         ],
@@ -93,8 +139,33 @@ return [
     */
 
     'passwords' => [
+
         'users' => [
             'provider' => 'users',
+            'table' => 'password_resets',
+            'expire' => 60,
+        ],
+
+        'admins' => [
+            'provider' => 'admins',
+            'table' => 'password_resets',
+            'expire' => 60,
+        ],
+
+        'judges' => [
+            'provider' => 'judges',
+            'table' => 'password_resets',
+            'expire' => 60,
+        ],
+
+        'auditors' => [
+            'provider' => 'auditors',
+            'table' => 'password_resets',
+            'expire' => 60,
+        ],
+
+        'clients' => [
+            'provider' => 'clients',
             'table' => 'password_resets',
             'expire' => 60,
         ],

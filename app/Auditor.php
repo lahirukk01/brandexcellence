@@ -19,7 +19,7 @@ class Auditor extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'contact_number',
     ];
 
     /**
@@ -39,6 +39,11 @@ class Auditor extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function panels()
+    {
+        return $this->hasMany('App\Panel');
+    }
 
     public function sendPasswordResetNotification($token)
     {

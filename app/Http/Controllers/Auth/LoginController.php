@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Brand;
 use App\Http\Controllers\Controller;
+use App\Rules\AllowedToLogin;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
@@ -40,9 +41,17 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    protected function validateLogin(Request $request)
+    {
+        $request->validate([
+            $this->username() => ['required', 'string',],
+            'password' => 'required|string',
+        ]);
+    }
+
     public function logout(Request $request)
     {
-        if(Auth::user()->role == 'client' && session('brands')) {
+        if(Auth::guard('client')->check() && session('brands')) {
             $brands = session('brands');
 
             foreach ($brands as $b) {
@@ -50,10 +59,24 @@ class LoginController extends Controller
             }
         }
 
+        if(Auth::guard('judge')->check()) {
+            $judge = Auth::guard('judge')->user();
+            $judge->online_status = 'Offline';
+            $judge->save();
+        }
+
         $this->guard()->logout();
 
         $request->session()->invalidate();
 
         return $this->loggedOut($request) ?: redirect('/');
+    }
+
+    protected function authenticated(Request $request, $user)
+    {
+        if($user->allowed == false) {
+            Auth::guard('client')->logout();
+            return redirect()->route('login')->with('userBlocked', 'You have been blocked out');
+        }
     }
 }

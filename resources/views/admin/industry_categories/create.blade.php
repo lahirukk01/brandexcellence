@@ -38,7 +38,7 @@
                             <h6 class="mb-3" style="color: red;">All fields are required</h6>
 
                             <div class="row form-group">
-                                <div class="col col-md-3"><label for="name-input" class=" form-control-label">Name</label></div>
+                                <div class="col col-md-3"><label for="name-input" class=" form-control-label">Name <sup style="color: red;">*</sup></label></div>
                                 <div class="col-12 col-md-9">
                                     <input type="text" id="category-name-input" name="name"
                                            class="form-control" value="{{old('name')}}" data-validation="required">
@@ -46,7 +46,7 @@
                             </div>
 
                             <div class="row form-group">
-                                <div class="col col-md-3"><label for="code-input" class=" form-control-label">Code</label></div>
+                                <div class="col col-md-3"><label for="code-input" class=" form-control-label">Code <sup style="color: red;">*</sup></label></div>
                                 <div class="col-12 col-md-9">
                                     <input type="text" id="category-code-input" name="code"
                                            class="form-control" value="{{old('code')}}" data-validation="required">

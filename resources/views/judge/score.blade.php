@@ -12,6 +12,11 @@
             width: 100%;
             height: 500px;
         }
+
+        div.ndfHFb-c4YZDc-Wrql6b[role="toolbar"] {
+            display: none !important;
+        }
+
     </style>
 @endsection
 
@@ -48,14 +53,7 @@
                 <div class="card">
                     <form action="{{ route('judge.store', $brand->id) }}" method="post">
                         @csrf
-                        <div class="card-header">
-                            <h3 class="text-center">Score Entry</h3>
-                        </div>
                         <div class="card-body">
-{{--                            <a href="{{ asset($brand->entry_kit) }}" class="embed">View Entry Kit</a>--}}
-                            <a href="http://www.africau.edu/images/default/sample.pdf" class="embed"></a>
-                            <a class="btn btn-primary" href="{{ asset($brand->logo) }}" download>Download Brand Logo</a>
-                            <hr>
                             <div class="row">
                                 <div class="col-md-3">Judge Name: {{ Auth::user()->name }}</div>
                                 <div class="col-md-2">Entry ID: {{ $brand->id_string }}</div>
@@ -63,8 +61,15 @@
                                 <div class="col-md-2">Round 1</div>
                                 <div class="col-md-3">Entry Category: {{ $brand->category->name }}</div>
                             </div>
+                            <hr>
 
-                            <div class="row mt-5">
+                            @if($brand->supporting_material)
+                            <a class="btn btn-primary" target="_blank" href="{{ asset($brand->supporting_material) }}">Supporting Material</a>
+                            @endif
+{{--                            <a href="{{ asset($brand->entry_kit) }}" class="embed"></a>--}}
+                            <a href="http://www.africau.edu/images/default/sample.pdf" class="embed"></a>
+
+                            <div class="row">
                                 <div class="col-md-12">
                                     <div class="table-responsive">
                                         <table class="table table-bordered">
@@ -133,7 +138,7 @@
                                                 </tr>
                                             </tbody>
                                             <tfoot>
-                                                <td colspan="3">Login Time: {{ \Carbon\Carbon::now() }}</td>
+                                                <td colspan="3">Login Time: {{ $scoringStart }}</td>
                                                 <td colspan="3">Duration: <span id="duration"></span></td>
                                             </tfoot>
                                         </table>
@@ -166,8 +171,17 @@
 
         $(document).ready(function () {
 
-            $('a.embed').gdocsViewer();
-            
+            $('a.embed').gdocsViewer()
+
+            $('body').addClass('open')
+
+                // let iframe = document.querySelector('.gdocsviewer iframe');
+                // // let innerDoc = (iframe.contentDocument) ? iframe.contentDocument : iframe.contentWindow.document;
+                // let innerDoc =
+                // innerDoc.querySelector('div[role="toolbar"]').style.display = 'none'
+                // console.log(innerDoc.querySelector('body'))
+
+
             $('.score-input').keyup(function () {
                 let total = 0
                 

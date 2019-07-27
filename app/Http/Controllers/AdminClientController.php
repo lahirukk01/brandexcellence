@@ -16,7 +16,7 @@ class AdminClientController extends Controller
      */
     public function index()
     {
-        $clients = User::where('role_id', 4)->get();
+        $clients = User::all();
 
         return view('admin.clients.index', compact('clients'));
     }
@@ -84,7 +84,7 @@ class AdminClientController extends Controller
         $data['name'] = $data['company_name'];
         $client->company->update($data);
 
-        return redirect()->route('clients.index')->with('status', 'Profile updated successfully');
+        return redirect()->route('admin.client.index')->with('status', 'Profile updated successfully');
     }
 
     public function updatePassword(Request $request, User $client)
@@ -100,7 +100,7 @@ class AdminClientController extends Controller
             'password' => Hash::make($password)
         ]);
 
-        return redirect()->route('clients.index')->with('status', 'Client password updated successfully');
+        return redirect()->route('admin.client.index')->with('status', 'Client password updated successfully');
     }
 
     /**
@@ -113,6 +113,19 @@ class AdminClientController extends Controller
     {
         $client->delete();
 
-        return redirect('admin/clients')->with('status', 'Client deleted successfully');
+        return redirect()->route('admin.client.index')->with('status', 'Client deleted successfully');
+    }
+
+    public function toggleStatus(User $client)
+    {
+        if($client->allowed == true) {
+            $client->allowed = false;
+        } else {
+            $client->allowed = true;
+        }
+
+        $client->save();
+
+        return redirect()->back();
     }
 }

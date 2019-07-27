@@ -46,7 +46,7 @@
                                     <td>{{ $b->industryCategory->name }}</td>
                                     <td>{{ $b->company->name }}</td>
                                     <td>
-                                        <a class="btn btn-primary" href="{{route('scores.entryWiseJudges', $b->id)}}">View</a>
+                                        <a class="btn btn-primary" href="{{route('admin.score.entry_wise_judges', $b->id)}}">View</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -61,6 +61,7 @@
                             </tfoot>
                         </table>
                     </div>
+
                 </div>
             </div>
 
@@ -77,9 +78,8 @@
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/r-2.2.2/sl-1.3.0/datatables.js"></script>
 
     <script>
-        $('#scores-li').addClass('active')
+        $('#scores-li-1').addClass('active')
         $('#entry-wise-li > i').css('color', 'white')
-
 
         $('#admin-brands-table').DataTable( {
             "columnDefs": [

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\BlockedEntry;
 use App\Brand;
 use App\IndustryCategory;
+use App\Judge;
 use App\Mail\JudgeRegistered;
 use App\User;
 use Illuminate\Http\Request;
@@ -20,7 +21,7 @@ class AdminJudgeController extends Controller
      */
     public function index()
     {
-        $judges = User::where('role_id', 3)->get();
+        $judges = Judge::all();
 
         return view('admin.judges.index', compact('judges'));
     }
@@ -45,22 +46,21 @@ class AdminJudgeController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|max:100|unique:users',
-            'email' => 'required|max:100|unique:users',
-            'contact_number' => 'max:15|digits:10|unique:users',
+            'name' => 'required|max:100',
+            'email' => 'required|max:100|unique:judges',
+//            'contact_number' => 'max:15|digits:10|unique:users',
             'password' => 'required|min:3|max:15|confirmed',
         ]);
 
         $data = $request->all();
 
-        $judge = User::create([
+        $judge = Judge::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'contact_number' => $data['contact_number'],
+//            'contact_number' => $data['contact_number'],
             'password' => Hash::make($data['password']),
         ]);
 
-        $judge->role_id = 3;
         $judge->save();
 
         foreach ($data['industry_categories'] as $ic) {
@@ -68,7 +68,8 @@ class AdminJudgeController extends Controller
         }
 
         Mail::to($judge->email)->send(new JudgeRegistered($data));
-        return redirect()->route('admin.judges.index')->with('status', 'Judge created successfully');
+//        $judge->sendEmailVerificationNotification();
+        return redirect()->route('admin.judge.index')->with('status', 'Judge created successfully');
     }
 
     /**
@@ -77,13 +78,13 @@ class AdminJudgeController extends Controller
      * @param  \App\User  $judge
      * @return \Illuminate\Http\Response
      */
-    public function show(User $judge)
+    public function show(Judge $judge)
     {
         $industryCategories = $judge->industryCategories->pluck('id')->toArray();
 
         $brands = Brand::whereIn('industry_category_id', $industryCategories)->get();
 
-        $blocked = BlockedEntry::where('user_id', $judge->id)->get()->pluck('brand_id')->toArray();
+        $blocked = BlockedEntry::where('judge_id', $judge->id)->get()->pluck('brand_id')->toArray();
 
         return view('admin.judges.show', compact('brands','judge', 'blocked'));
     }
@@ -94,7 +95,7 @@ class AdminJudgeController extends Controller
      * @param  \App\User  $judge
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $judge)
+    public function edit(Judge $judge)
     {
         $industryCategories = IndustryCategory::all();
         $selectedIndustryCategories = $judge->industryCategories->pluck('id')->toArray();
@@ -110,12 +111,12 @@ class AdminJudgeController extends Controller
      * @param  \App\User  $judge
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $judge)
+    public function update(Request $request, Judge $judge)
     {
         $request->validate([
-            'name' => 'required|max:100|unique:users,name,' . $judge->id,
-            'email' => 'required|max:100|unique:users,email,' . $judge->id,
-            'contact_number' => 'max:15|digits:10|unique:users,contact_number,' . $judge->id,
+            'name' => 'required|max:100',
+            'email' => 'required|max:100|unique:judges,email,' . $judge->id,
+//            'contact_number' => 'max:15|digits:10|unique:users,contact_number,' . $judge->id,
         ]);
 
         $data = $request->all();
@@ -150,19 +151,20 @@ class AdminJudgeController extends Controller
             }
         }
 
-        return redirect()->route('admin.judges.index')->with('status', 'Judge details updated successfully');
+        return redirect()->route('admin.judge.index')->with('status', 'Judge details updated successfully');
     }
 
 
-    public function updatePassword(Request $request, User $judge)
+    public function updatePassword(Request $request, Judge $judge)
     {
         $request->validate([
             'password' => 'required|min:3|max:15|alpha_num|confirmed',
         ]);
 
         $judge->password = Hash::make($request->get('password'));
+        $judge->save();
 
-        return redirect()->route('admin.judges.index')->with('status', 'Judge details updated successfully');
+        return redirect()->route('admin.judge.index')->with('status', 'Judge details updated successfully');
     }
 
     /**
@@ -171,11 +173,11 @@ class AdminJudgeController extends Controller
      * @param  \App\User  $judge
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $judge)
+    public function destroy(Judge $judge)
     {
         $judge->delete();
 
-        return redirect()->route('admin.judges.index')->with('status', 'Judge deleted successfully');
+        return redirect()->route('admin.judge.index')->with('status', 'Judge deleted successfully');
     }
 
     public function setBlocked(Request $request)
@@ -184,15 +186,48 @@ class AdminJudgeController extends Controller
 
         $judgeId = $request->get('judgeId');
 
-        BlockedEntry::where('user_id', $judgeId)->delete();
+        BlockedEntry::where('judge_id', $judgeId)->delete();
 
         foreach ($ids as $i) {
             BlockedEntry::create([
-                'user_id' => $judgeId,
+                'judge_id' => $judgeId,
                 'brand_id' => $i,
             ]);
         }
 
         return response()->json(['success'=>'Blocked entries for the judge set successfully']);
+    }
+
+    public function unlock(Request $request)
+    {
+        $request->validate([
+            '_token' => 'required',
+            'judgeId' => 'required|numeric'
+        ]);
+
+        $judgeId = $request->get('judgeId');
+
+        $judge = Judge::findOrFail($judgeId);
+
+        $judge->finalized = false;
+
+        if($judge->save()) {
+            return 'success';
+        } else {
+            return 'failure';
+        }
+    }
+
+    public function toggleStatus(Judge $judge)
+    {
+        if($judge->allowed == true) {
+            $judge->allowed = false;
+        } else {
+            $judge->allowed = true;
+        }
+
+        $judge->save();
+
+        return redirect()->back();
     }
 }

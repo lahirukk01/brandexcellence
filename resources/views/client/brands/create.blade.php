@@ -5,7 +5,7 @@
 @section('breadcrumbs_title', 'Brands')
 
 @section('breadcrumbs')
-    <li><a href="{{route('brands.index')}}">Brands</a></li>
+    <li><a href="{{route('client.brand.index')}}">Brands</a></li>
     <li class="active">Create Brand</li>
 @endsection
 
@@ -21,13 +21,13 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <form id="create-brand-form" action="{{route('brands.store')}}" method="post" enctype="multipart/form-data" class="form-horizontal">
+                    <form id="create-brand-form" action="{{route('client.brand.store')}}" method="post" enctype="multipart/form-data" class="form-horizontal">
                         @csrf
                         <div class="card-header">
                             <h3 class="text-center">Create Brand</h3>
                         </div>
                         <div class="card-body">
-                            <h6 class="mb-3" style="color: red;">All fields are required</h6>
+                            <h6 class="mb-3" style="color: red;">All fields except supporting material are required</h6>
                             <div class="row form-group">
                                 <div class="col col-md-3"><label for="name-input" class=" form-control-label">Name</label></div>
                                 <div class="col-12 col-md-9">
@@ -70,7 +70,7 @@
                                     <input type="file" id="" name="entry_kit"
                                      class="form-control-file" required accept="application/pdf" value="{{old('entry_kit')}}"
                                            data-validation="mime"
-                                           data-validation-allowing="pdf" >
+                                           data-validation-allowing="pdf">
                                 </div>
                             </div>
 
@@ -82,13 +82,22 @@
                                 </div>
                             </div>
 
+                            <div class="row form-group">
+                                <div class="col col-md-3"><label for="supporting-material-input" class=" form-control-label">Supporting Material (pdf file)</label></div>
+                                <div class="col-12 col-md-9">
+                                    <input type="file" id="" name="supporting_material" class="form-control-file" value="{{old('supporting_material')}}"
+                                           accept="application/pdf" data-validation="mime"
+                                           data-validation-allowing="pdf">
+                                </div>
+                            </div>
+
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
 
                         </div>
                         <div class="card-footer">
-                            <button type="submit" class="btn btn-primary btn-sm mb-3">
+                            <button id="submit-button" type="submit" class="btn btn-primary btn-sm mb-3">
                                 <i class="fa fa-dot-circle-o"></i> Submit
                             </button>
                         </div>
@@ -117,7 +126,7 @@
                 <div class="modal-footer">
 {{--                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>--}}
 {{--                    <button type="button" class="btn btn-primary">Save changes</button>--}}
-                    <a href="{{ route('brands.create') }}" class="btn btn-primary">Yes</a>
+                    <a href="{{ route('client.brand.create') }}" class="btn btn-primary">Yes</a>
                     <button id="goToPaymentChoice" class="btn btn-success">No</button>
                 </div>
             </div>
@@ -136,7 +145,7 @@
                     How would you like to pay?
                 </div>
                 <div class="modal-footer">
-                    <a href="#" class="btn btn-primary">Pay Online</a>
+                    <a id="pay-online-link" href="#" class="btn btn-primary">Pay Online</a>
                     <button id="payOffline" class="btn btn-success">Pay Offline</button>
                 </div>
             </div>
@@ -154,16 +163,34 @@
     <script>
         $('#brands-li').addClass('active')
 
+        $('#pay-online-link').click(function (e) {
+            e.preventDefault()
+
+            const url = '{{ route('client.brand.get_number_of_entries') }}'
+
+            const data = {
+                _token: '{{ csrf_token() }}'
+            }
+
+            $.post(url, data, function (result) {
+                window.location.assign(`https://slim.lk/brand_excellence?entriesCount=${result}`)
+            })
+        })
+
         $('#payOffline').click(function () {
-            $.get('{{ route('client.send_invoice') }}', {}, function (result) {
+
+            $('#payOffline').prop('disabled', true)
+
+            $.get('{{ route('client.brand.send_invoice') }}', {}, function (result) {
                 // result = JSON.parse(result)
                 // console.log(result.success)
                 if(result.success != undefined) {
                     alert(result.success)
                     $('#choiceOfPayment').modal('hide')
-                    window.location.assign('{{ route('brands.index') }}')
+                    window.location.assign('{{ route('client.brand.index') }}')
                 } else {
                     alert('Failed to send invoice. Pay online at slim')
+                    $('#payOffline').prop('disabled', false)
                 }
             })
         })
@@ -219,6 +246,7 @@
             },
 
             beforeSend: function () {
+                $('#submit-button').attr("disabled", true)
                 const value = 0
                 const percentValue = value + '%'
                 bar.attr('aria-valuenow', value)
@@ -244,7 +272,11 @@
                     bar.width('100%')
                     bar.attr('aria-valuenow', '100')
                     bar.html(percentVal);
-                    alert('Form submitted successfully')
+
+                    setTimeout(function() {
+                        alert('Form submitted successfully')
+                    }, 100)
+
                     {{--window.location.assign('{{route('brands.index')}}')--}}
                     $('#nextStepModal').modal({
                         backdrop: 'static',
@@ -260,6 +292,7 @@
                     alert('Failed to submit form')
                 }
 
+                $('#submit-button').attr("disabled", false)
                 // console.log(xhr)
                 // console.log(textStatus)
             },

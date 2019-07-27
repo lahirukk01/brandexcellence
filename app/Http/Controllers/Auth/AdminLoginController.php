@@ -32,15 +32,6 @@ class AdminLoginController extends Controller
         return view('auth.admin_login');
     }
 
-//    public function login(Request $request)
-//    {
-//        $request->validate([
-//            'email' => 'required|email|max:50',
-//            'password' => 'required|min:3|max:15',
-//        ]);
-//        return true;
-//    }
-
     protected function guard()
     {
         return Auth::guard('admin');

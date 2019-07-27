@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Rules\AllowedToLogin;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -32,15 +33,6 @@ class JudgeLoginController extends Controller
         return view('auth.judge_login');
     }
 
-//    public function login(Request $request)
-//    {
-//        $request->validate([
-//            'email' => 'required|email|max:50',
-//            'password' => 'required|min:3|max:15',
-//        ]);
-//        return true;
-//    }
-
     protected function guard()
     {
         return Auth::guard('judge');
@@ -49,9 +41,20 @@ class JudgeLoginController extends Controller
     protected function validateLogin(Request $request)
     {
         $request->validate([
-            $this->username() => 'required|string',
+            $this->username() => ['required', 'string'],
             'password' => 'required|string|min:3|max:15',
         ]);
+    }
+
+    protected function authenticated(Request $request, $user)
+    {
+        if($user->allowed == false) {
+            Auth::guard('judge')->logout();
+            return redirect()->route('judge.login')->with('userBlocked', 'You have been blocked out');
+        }
+
+        $user->online_status = 'Online';
+        $user->save();
     }
 
 }

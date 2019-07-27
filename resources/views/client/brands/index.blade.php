@@ -25,7 +25,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <a class="btn btn-primary" href="{{route('brands.create')}}">Create Brand <i class="fa fa-plus"></i></a>
+                        <a class="btn btn-primary" href="{{route('client.brand.create')}}">Create Brand <i class="fa fa-plus"></i></a>
                     </div>
                     <div class="card-body">
                         <table class="table table-striped table-bordered">
@@ -44,11 +44,11 @@
                                         <td>{{$b->category->name}}</td>
                                         <td>{{$b->id_string}}</td>
                                         <td>
-                                            <a style="color: #0e6498;" href="{{route('brands.show', $b->id)}}">View</a>
+                                            <a style="color: #0e6498;" href="{{route('client.brand.show', $b->id)}}">View</a>
 
                                             @if ($b->show_options == 1)
-                                            <a class="mx-2" style="color: green;" href="{{route('brands.edit', $b->id)}}">Edit</a>
-                                            <form class="d-inline" action="{{route('brands.destroy', $b->id)}}" method="post">
+                                            <a class="mx-2" style="color: green;" href="{{route('client.brand.edit', $b->id)}}">Edit</a>
+                                            <form class="d-inline" action="{{route('client.brand.destroy', $b->id)}}" method="post">
                                                 @csrf
                                                 @method('DELETE')
 

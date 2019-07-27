@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Category;
 use Illuminate\Http\Request;
 
-class SuperUserCategoryController extends Controller
+class SuCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -39,6 +39,7 @@ class SuperUserCategoryController extends Controller
         $request->validate([
             'name' => 'required|max:255|unique:categories',
             'code' => 'required|max:10|unique:categories',
+            'benchmark' => 'required|numeric|min:0|max:99'
         ]);
 
         $data = $request->all();
@@ -46,9 +47,10 @@ class SuperUserCategoryController extends Controller
         Category::create([
             'name' => $data['name'],
             'code' => $data['code'],
+            'benchmark' => $data['benchmark'],
         ]);
 
-        return redirect()->route('categories.index')->with('status', 'Category created successfully');
+        return redirect()->route('super.category.index')->with('status', 'Category created successfully');
     }
 
     /**
@@ -72,8 +74,9 @@ class SuperUserCategoryController extends Controller
     public function update(Request $request, Category $category)
     {
         $request->validate([
-            'name' => 'required|max:255|unique:categories',
-            'code' => 'required|max:10|unique:categories',
+            'name' => 'required|max:255|unique:categories,name,' . $category->id,
+            'code' => 'required|max:10|unique:categories,code,' . $category->id,
+            'benchmark' => 'required|numeric|min:0|max:99',
         ]);
 
         $data = $request->all();
@@ -81,9 +84,10 @@ class SuperUserCategoryController extends Controller
         $category->update([
             'name' => $data['name'],
             'code' => $data['code'],
+            'benchmark' => $data['benchmark'],
         ]);
 
-        return redirect()->route('categories.index')->with('status', 'Category updated successfully');
+        return redirect()->route('super.category.index')->with('status', 'Category updated successfully');
     }
 
     /**
@@ -102,6 +106,6 @@ class SuperUserCategoryController extends Controller
 
         $category->delete();
 
-        return redirect()->route('categories.index')->with('status', 'Category deleted successfully');
+        return redirect()->route('super.category.index')->with('status', 'Category deleted successfully');
     }
 }

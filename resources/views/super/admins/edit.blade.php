@@ -6,7 +6,7 @@
 @section('breadcrumbs_title', 'Administrators')
 
 @section('breadcrumbs')
-    <li><a href="{{route('admins.index')}}">Administrators</a></li>
+    <li><a href="{{route('super.admin.index')}}">Administrators</a></li>
     <li class="active">Edit Administrator</li>
 @endsection
 
@@ -45,7 +45,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <form method="POST" action="{{ route('admins.update', $admin->id) }}">
+                                <form method="POST" action="{{ route('super.admin.update', $admin->id) }}">
                                     @csrf
                                     @method('PATCH')
                                     <div class="form-group row">
@@ -127,7 +127,7 @@
                         <div class="row">
                             <div class="col-md-12">
 
-                                <form action="{{route('admins.update.password', $admin->id)}}" method="post">
+                                <form action="{{route('super.admin.update_password', $admin->id)}}" method="post">
                                     @csrf
                                     @method('PATCH')
 

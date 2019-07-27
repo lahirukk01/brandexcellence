@@ -6,7 +6,7 @@
 @section('breadcrumbs_title', 'Industry Categories')
 
 @section('breadcrumbs')
-    <li><a href="{{route('categories.index')}}">Industry Categories</a></li>
+    <li><a href="{{route('super.category.index')}}">Industry Categories</a></li>
     <li class="active">Edit Industry Category</li>
 @endsection
 
@@ -35,7 +35,7 @@
                         <h3 class="text-center">Category Details</h3>
                     </div>
 
-                    <form method="POST" action="{{ route('industry_categories.update', $industryCategory->id) }}">
+                    <form method="POST" action="{{ route('super.industry_category.update', $industryCategory->id) }}">
                         @csrf
                         @method('PATCH')
                         <div class="card-body">
@@ -43,7 +43,7 @@
                                 <div class="col-md-12">
 
                                     <div class="form-group row">
-                                        <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
+                                        <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }} <sup style="color: red;">*</sup></label>
 
                                         <div class="col-md-6">
                                             <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ $industryCategory->name }}" required autocomplete="name" autofocus>
@@ -57,7 +57,7 @@
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="code" class="col-md-4 col-form-label text-md-right">{{ __('Code') }}</label>
+                                        <label for="code" class="col-md-4 col-form-label text-md-right">{{ __('Code') }} <sup style="color: red;">*</sup></label>
 
                                         <div class="col-md-6">
                                             <input id="code" type="text" class="form-control @error('code') is-invalid @enderror" name="code" value="{{ $industryCategory->code }}" required autocomplete="code">

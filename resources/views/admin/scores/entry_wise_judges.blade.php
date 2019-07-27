@@ -2,10 +2,21 @@
 
 @section('title', 'Brand Excellence Entry Wise Judges')
 
+@section('styles')
+
+    <style>
+        canvas {
+            width: 100%;
+            height: 400px;
+        }
+    </style>
+
+@endsection
+
 @section('breadcrumbs_title', 'Scores')
 
 @section('breadcrumbs')
-    <li><a href="{{route('scores.entryWise')}}">Entry Wise</a></li>
+    <li><a href="{{route('admin.score.entry_wise')}}">Entry Wise</a></li>
     <li class="active">Entry Wise Judges</li>
 @endsection
 
@@ -36,7 +47,7 @@
                                     <td>{{ $j->email }}</td>
                                     <td>{{ $j->telephone }}</td>
                                     <td>
-                                        <a class="btn btn-primary" href="{{ route('scores.show', ['judge' =>$j->id, 'brand' => $brand->id, 'direction' => 'entrywise']) }}">View</a>
+                                        <a class="btn btn-primary" href="{{ route('admin.score.show', ['judge' =>$j->id, 'brand' => $brand->id, 'direction' => 'entrywise']) }}">View</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -44,7 +55,7 @@
                         </table>
                     </div>
                     <div class="card-footer">
-
+                        <canvas id="entry-wise-graph"></canvas>
                     </div>
                 </div>
             </div>
@@ -58,10 +69,37 @@
 
 
 @section('scripts')
+    <script src="{{ asset('vendors/chart.js/dist/Chart.bundle.min.js') }}"></script>
 
     <script>
-        $('#scores-li').addClass('active')
+        $('#scores-li-1').addClass('active')
         $('#entry-wise-li > i').css('color', 'white')
+
+        var ctx = document.getElementById( 'entry-wise-graph' );
+        var myChart = new Chart( ctx, {
+            type: 'bar',
+            data: {
+                labels: {!! $names !!},
+                datasets: [
+                    {
+                        label: "Entry Score Graph",
+                        data: {!! $scores !!},
+                        borderColor: "rgba(0, 123, 255, 0.9)",
+                        borderWidth: "0",
+                        backgroundColor: "rgba(0, 123, 255, 0.5)"
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    yAxes: [ {
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    } ]
+                }
+            }
+        } );
 
     </script>
 
