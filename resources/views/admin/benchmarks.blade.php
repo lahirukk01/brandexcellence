@@ -1,7 +1,7 @@
 
 @extends('layouts.admin')
 
-@section('title', 'Brand Excellence Admin Categories')
+@section('title', 'Brand Excellence Admin Benchmarks')
 
 @section('breadcrumbs_title', 'Benchmarks')
 
@@ -171,7 +171,9 @@
                 if(response == null) {
                     alert('No data found')
                 } else {
-                    tableData = response
+                    tableData = response.brands
+                    let categoryCode = response.categoryCode
+                    response = response.brands
 
                     let allRows = $('table tbody tr')
                     if(allRows) {
@@ -182,7 +184,7 @@
                         let newRow = `<tr>
                             <td>${response[i].brand.name}</td>
                             <td>${response[i].average}</td>
-                            <td><button table_data_index="${i}" class="btn btn-info view-score-btn">View Detail</button></td>
+                            <td><button category_code="${categoryCode}" table_data_index="${i}" class="btn btn-info view-score-btn">View Detail</button></td>
                             <td><input entry_id="${response[i].brand.id}" type="checkbox" class="d-block mx-auto pass-entry-to-r2"></td>
                         </tr>`
                         tbody.append(newRow)
@@ -193,6 +195,7 @@
 
         tbody.on('click', 'button', function () {
             let tableDataIndex = $(this).attr('table_data_index')
+            const categoryCode = $(this).attr('category_code')
 
             const scoreData = tableData[tableDataIndex].scoreData;
 
@@ -200,8 +203,58 @@
 
             for( let i = 0; i < scoreData.length; i++) {
                 let temp = scoreData[i]
-                console.log(scoreData[i])
-                let newRow = `
+
+                if(categoryCode === 'CSR') {
+                    let newRow = `
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h4>Judge Name: ${temp.judge.name}</h4>
+                                    <ul>
+                                        <li>Brand and CSR Intent: ${temp.score.intent}</li>
+                                        <li>Brand TG and CSR Recipient: ${temp.score.recipient}</li>
+                                        <li>Brand Purpose and CSR Purpose: ${temp.score.purpose}</li>
+                                        <li>Brand Vision: ${temp.score.vision}</li>
+                                        <li>Brand Mission: ${temp.score.mission}</li>
+                                        <li>Brand Identity: ${temp.score.identity}</li>
+                                        <li>Strategic Intent to Brand Intent: ${temp.score.strategic}</li>
+                                        <li>Key Activities and Link to CSR Strategy: ${temp.score.activities}</li>
+                                        <li>Communication of CSR to Brand TG: ${temp.score.communication}</li>
+                                        <li>Internal Communication to generate employee engagement: ${temp.score.internal}</li>
+                                        <li>Total: ${temp.score.total}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    What is good?
+                                </div>
+                                <div class="col-sm-9">
+                                    <p>${temp.score.good}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    What is bad?
+                                </div>
+                                <div class="col-sm-9">
+                                    <p>${temp.score.bad}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    What needs to be improved?
+                                </div>
+                                <div class="col-sm-9">
+                                    <p>${temp.score.improvement}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+                } else {
+                    let newRow = `
                     <div class="row mb-3">
                         <div class="col-md-12">
                             <div class="row">
@@ -244,6 +297,7 @@
                         </div>
                     </div>
                 `
+                }
 
                 $('#entry-score-modal .container-fluid').append(newRow)
             }

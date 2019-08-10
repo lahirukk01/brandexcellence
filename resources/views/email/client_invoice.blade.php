@@ -779,13 +779,31 @@
                                                     <td>SUBTOTAL</td>
                                                     <td>Rs {{ $subTotal }}</td>
                                                 </tr>
+
                                                 @php
-                                                    if($data['svat'] != null){
-                                                        $tax = 0.15*$subTotal;
-                                                    }
-                                                    else {
-                                                        $tax = 0;
-                                                    }
+                                                if($data['nbt'] != null){
+                                                    $nbt = 0.02*$subTotal;
+                                                }
+                                                else {
+                                                    $nbt = 0;
+                                                }
+                                                $subTotal += $nbt;
+                                                @endphp
+                                                @if($data['nbt'] != null)
+                                                    <tr>
+                                                        <td class="border-0"></td>
+                                                        <td>NBT 2%</td>
+                                                        <td>Rs {{ $nbt }}</td>
+                                                    </tr>
+                                                @endif
+
+                                                @php
+                                                if($data['svat'] != null){
+                                                    $tax = 0.15*$subTotal;
+                                                }
+                                                else {
+                                                    $tax = 0;
+                                                }
                                                 @endphp
                                                 @if($data['svat'] != null)
                                                 <tr>
@@ -795,27 +813,11 @@
                                                 </tr>
                                                 @endif
 
-                                                @php
-                                                    if($data['nbt'] != null){
-                                                        $nbt = 0.02*$subTotal;
-                                                    }
-                                                    else {
-                                                        $nbt = 0;
-                                                    }
-                                                @endphp
-                                                @if($data['nbt'] != null)
-                                                <tr>
-                                                    <td class="border-0"></td>
-                                                    <td>NBT 2%</td>
-                                                    <td>Rs {{ $nbt }}</td>
-                                                </tr>
-                                                @endif
-
                                                 </tbody>
                                                 <tfoot>
-                                                <td class="border-0"></td>
-                                                <td class="border-0"><h3>Total</h3></td>
-                                                <td class="border-0"><h3>Rs {{ $subTotal + $tax + $nbt }}</h3></td>
+                                                    <td class="border-0"></td>
+                                                    <td class="border-0"><h3>Total</h3></td>
+                                                    <td class="border-0"><h3>Rs {{ $subTotal + $tax }}</h3></td>
                                                 </tfoot>
                                             </table>
 

@@ -8,6 +8,7 @@ use App\Rules\AllowedToLogin;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class LoginController extends Controller
 {
@@ -61,8 +62,7 @@ class LoginController extends Controller
 
         if(Auth::guard('judge')->check()) {
             $judge = Auth::guard('judge')->user();
-            $judge->online_status = 'Offline';
-            $judge->save();
+            Cache::forget('judge_is_online' . $judge->id);
         }
 
         $this->guard()->logout();

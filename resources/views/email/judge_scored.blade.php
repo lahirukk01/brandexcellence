@@ -360,6 +360,7 @@
                                     <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 20px; padding-left: 20px; padding-top: 0px; padding-bottom: 0px; font-family: Arial, sans-serif"><![endif]-->
                                     <div style="color:#555555;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;line-height:180%;padding-top:0px;padding-right:20px;padding-bottom:0px;padding-left:20px;">
                                         <div style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 12px; line-height: 21px; color: #555555;">
+                                            <p style="font-size: 16px; line-height: 28px; margin: 0;"><span style="font-size: 16px;">Round: </span> {{ $data['round'] }}</p>
                                             <p style="font-size: 16px; line-height: 28px; margin: 0;"><span style="font-size: 16px;">Judge Name: </span> {{ $data['judgeName'] }}</p>
                                             <p style="font-size: 16px; line-height: 28px; margin: 0;"><span style="font-size: 16px;">Entry ID: </span> {{ $data['entryId'] }}</p>
                                             <p style="font-size: 16px; line-height: 28px; margin: 0;"><span style="font-size: 16px;">Start Time: </span> {{ $data['start'] }}</p>

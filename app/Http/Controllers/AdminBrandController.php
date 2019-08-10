@@ -43,7 +43,7 @@ class AdminBrandController extends Controller
      */
     public function edit(Brand $brand)
     {
-        $categories = Category::all();
+        $categories = Category::where('code', '!=', 'SME')->get();
         $industryCategories = IndustryCategory::all();
         return view('admin.brands.edit', compact('brand', 'categories', 'industryCategories'));
     }
@@ -148,7 +148,6 @@ class AdminBrandController extends Controller
             Brand::where('id', $i[0])->update(['show_options' => $i[1]]);
         }
 
-//        return response()->json(['success'=> $ids[0][0]]);
         return response()->json(['success'=>'Brand access levels for clients set successfully']);
     }
 }

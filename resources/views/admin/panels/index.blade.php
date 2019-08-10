@@ -1,6 +1,11 @@
 @extends('layouts.admin')
 
-@section('title', 'Brand Excellence Admin Judges')
+@section('title', 'Brand Excellence Admin Panels')
+
+@section('styles')
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/r-2.2.2/datatables.css"/>
+
+@endsection
 
 @section('breadcrumbs_title', 'Panels')
 
@@ -27,7 +32,7 @@
                         <a class="btn btn-primary" href="{{route('admin.panel.create')}}">Create Panel <i class="fa fa-plus"></i></a>
                     </div>
                     <div class="card-body">
-                        <table class="table table-striped table-bordered">
+                        <table id="panels-table" class="table table-striped table-bordered">
                             <thead>
                             <tr>
                                 <th>Name</th>
@@ -74,6 +79,10 @@
 
 @section('scripts')
 
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/r-2.2.2/datatables.js"></script>
+
     <script>
         $('#panels-li').addClass('active')
 
@@ -85,6 +94,15 @@
 
             $(this).closest('form').submit()
         })
+
+        $(document).ready(function() {
+            $('#panels-table').DataTable( {
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+            } );
+        } );
 
     </script>
 

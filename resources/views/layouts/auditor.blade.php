@@ -44,40 +44,18 @@
                 <i class="fa fa-bars"></i>
             </button>
             <a class="navbar-brand" style="white-space: inherit; text-align: center; line-height: inherit;" href="#">{{Auth::user()->name}}</a>
-            <a class="navbar-brand" href="#"><h6>Judge</h6></a>
+            <a class="navbar-brand" href="#"><h6>Auditor</h6></a>
             <a class="navbar-brand hidden" href="#"><img src="{{ asset('images/be_logo.png') }}" alt="" class="img-fluid"></a>
         </div>
 
         <div id="main-menu" class="main-menu collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 <li id="dashboard-li">
-                    <a href="{{route('judge.index')}}"> <i class="menu-icon fa fa-ravelry"></i>Entries R1 </a>
+                    <a href="{{route('auditor.index')}}"> <i class="menu-icon fa fa-ravelry"></i>Entries </a>
                 </li>
-
-                <li id="my-scores-li">
-                    <a href="{{route('judge.my_scores')}}"> <i class="menu-icon fa fa-star"></i>My Scores R1</a>
-                </li>
-
-                <li id="score-pattern-li">
-                    <a href="{{route('judge.score_pattern')}}"> <i class="menu-icon fa fa-bar-chart"></i>Score Pattern R1</a>
-                </li>
-
-                @if($flags->current_round == 1)
-                <li id="entries-r2-li">
-                    <a href="{{route('judge.index2')}}"> <i class="menu-icon fa fa-ravelry"></i>Entries R2 </a>
-                </li>
-
-                <li id="my-scores-r2-li">
-                    <a href="{{route('judge.my_scores2')}}"> <i class="menu-icon fa fa-star"></i>My Scores R2</a>
-                </li>
-
-                <li id="score-pattern-r2-li">
-                    <a href="{{route('judge.score_pattern2')}}"> <i class="menu-icon fa fa-bar-chart"></i>Score Pattern R2</a>
-                </li>
-                @endif
 
                 <li id="resetpw-li">
-                    <a href="{{route('judge.show_password_reset_form')}}"> <i class="menu-icon fa fa-key"></i>Reset Password </a>
+                    <a href="{{route('auditor.show_password_reset_form')}}"> <i class="menu-icon fa fa-key"></i>Reset Password </a>
                 </li>
 
             </ul>

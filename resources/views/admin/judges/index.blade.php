@@ -2,6 +2,11 @@
 
 @section('title', 'Brand Excellence Admin Judges')
 
+@section('styles')
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/r-2.2.2/datatables.css"/>
+
+@endsection
+
 @section('breadcrumbs_title', 'Judges')
 
 @section('breadcrumbs')
@@ -27,7 +32,7 @@
                         <a class="btn btn-primary" href="{{route('admin.judge.create')}}">Create Judge <i class="fa fa-plus"></i></a>
                     </div>
                     <div class="card-body">
-                        <table class="table table-striped table-bordered">
+                        <table id="judges-table" class="table table-striped table-bordered">
                             <thead>
                             <tr>
                                 <th>Name</th>
@@ -63,7 +68,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @if($j->online_status == 'Online')
+                                        @if($j->isOnline())
                                             <span class="text-success">Online</span>
                                         @else
                                             <span class="text-danger">Offline</span>
@@ -75,7 +80,12 @@
                         </table>
                     </div>
                     <div class="card-footer">
-
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <a href="{{ route('admin.judge.allow_all_judges') }}" class="btn btn-primary d-inline-block">Allow All</a>
+                                <a href="{{ route('admin.judge.block_all_judges') }}" class="btn btn-danger d-inline-block">Block All</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -89,8 +99,16 @@
 
 @section('scripts')
 
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/r-2.2.2/datatables.js"></script>
+
     <script>
         $('#judges-li').addClass('active')
+
+        setInterval(function() {
+            location.reload()
+        }, 60000)
 
         $('.unlock-btn').click(function () {
             const judgeId = $(this).prop('id')
@@ -103,7 +121,7 @@
             }
 
             $.post(url, data, function (result) {
-                console.log(result)
+                // console.log(result)
                 if(result === 'success') {
                     location.reload()
                 } else {
@@ -120,6 +138,15 @@
 
             $(this).closest('form').submit()
         })
+
+        $(document).ready(function() {
+            $('#judges-table').DataTable( {
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+            } );
+        } );
 
     </script>
 

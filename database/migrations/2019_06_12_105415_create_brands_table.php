@@ -26,11 +26,18 @@ class CreateBrandsTable extends Migration
             $table->bigInteger('category_id')->unsigned();
             $table->bigInteger('industry_category_id')->unsigned();
             $table->boolean('r2_selected')->default(false);
+            $table->bigInteger('auditor_id')->unsigned()->nullable();
+            $table->enum('medal', ['Gold', 'Silver', 'Bronze', 'Merit'])->nullable();
             $table->timestamps();
 
-            $table->foreign('company_id')->references('id')->on('companies');
-            $table->foreign('category_id')->references('id')->on('categories');
-            $table->foreign('industry_category_id')->references('id')->on('industry_categories');
+            $table->foreign('company_id')->references('id')->on('companies')
+                ->onDelete('cascade');
+            $table->foreign('category_id')->references('id')->on('categories')
+                ->onDelete('set null');
+            $table->foreign('industry_category_id')->references('id')
+                ->on('industry_categories')->onDelete('set null');
+            $table->foreign('auditor_id')->references('id')
+                ->on('auditors')->onDelete('restrict');
         });
     }
 

@@ -1,11 +1,19 @@
 @extends('layouts.admin')
 
-@section('title', 'Brand Excellence Admin Judge Wise Scores')
+@section('title', 'Brand Excellence Admin Judge Wise Scores R2')
 
-@section('breadcrumbs_title', 'Scores')
+@section('styles')
+    <style>
+        #judge-wise-r2-li > a {
+            color: white !important;
+        }
+    </style>
+@endsection
+
+@section('breadcrumbs_title', 'Scores R2')
 
 @section('breadcrumbs')
-    <li class="active">Judge Wise</li>
+    <li class="active">Judge Wise R2</li>
 @endsection
 
 
@@ -16,7 +24,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="text-center">Judge Wise Scores</h3>
+                        <h3 class="text-center">Judge Wise Scores R2</h3>
                     </div>
                     <div class="card-body">
                         <table class="table table-striped table-bordered">
@@ -24,6 +32,7 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Email</th>
+                                <th>Average</th>
                                 <th>View Scores</th>
                             </tr>
                             </thead>
@@ -32,8 +41,9 @@
                                 <tr>
                                     <td>{{ $j->name }}</td>
                                     <td>{{ $j->email }}</td>
+                                    <td>{{ $j->average }}</td>
                                     <td>
-                                        <a class="btn btn-primary" href="{{route('admin.score.judge_wise_entries', $j->id)}}">View</a>
+                                        <a class="btn btn-primary" href="{{route('admin.score.judge_wise_entries2', $j->id)}}">View</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -57,8 +67,8 @@
 @section('scripts')
 
     <script>
-        $('#scores-li-1').addClass('active')
-        $('#judge-wise-li > i').css('color', 'white')
+        $('#scores-r2-li').addClass('active')
+        $('#judge-wise-r2-li > i').css('color', 'white')
 
     </script>
 

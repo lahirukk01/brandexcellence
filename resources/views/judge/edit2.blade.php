@@ -7,11 +7,6 @@
         .score-input {
             width: 100%;
         }
-
-        iframe {
-            width: 100%;
-            height: 500px;
-        }
     </style>
 @endsection
 
@@ -49,20 +44,27 @@
                     <form action="{{ route('judge.update2', $brand->id) }}" method="post">
                         @csrf
                         @method('PATCH')
-                        <div class="row">
-                            <div class="col-md-3">Judge Name: {{ Auth::user()->name }}</div>
-                            <div class="col-md-2">Entry ID: {{ $brand->id_string }}</div>
-                            <div class="col-md-2">Brand: {{ $brand->name }}</div>
-                            <div class="col-md-2">Round 2</div>
-                            <div class="col-md-3">Entry Category: {{ $brand->category->name }}</div>
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-3">Judge Name: {{ Auth::user()->name }}</div>
+                                <div class="col-md-2">Entry ID: {{ $brand->id_string }}</div>
+                                <div class="col-md-2">Brand: {{ $brand->name }}</div>
+                                <div class="col-md-2">Round 2</div>
+                                <div class="col-md-3">Entry Category: {{ $brand->category->name }}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p>{{ $brand->description }}</p>
+                                </div>
+                            </div>
                         </div>
                         <hr>
                         <div class="card-body">
                             @if($brand->supporting_material)
                             <a class="btn btn-primary" target="_blank" href="{{ asset($brand->supporting_material) }}">Supporting Material</a>
                             @endif
-{{--                            <a href="{{ asset($brand->entry_kit) }}" class="embed"></a>--}}
-                            <a href="http://www.africau.edu/images/default/sample.pdf" class="embed"></a>
+
+                            <embed src="{{ asset($brand->entry_kit) }}#toolbar=0" width="100%" height="400">
 
                             <div class="row">
                                 <div class="col-md-12">
@@ -82,24 +84,28 @@
                                                 <tr>
                                                     <td>
                                                         <input class="score-input" type="number" name="intent" id=""
-                                                               min="0" max="15" required data-validation="required number"
-                                                               data-validation-allowing="range[0;15]" value="{{ $score->intent }}">
+                                                               min="0" max="15" required data-validation="required number" step="0.01"
+                                                               data-validation-allowing="float range[0;15]" value="{{ $score->intent }}">
                                                     </td>
                                                     <td>
-                                                        <input class="score-input" type="number" name="content" id="" min="0" max="15" required data-validation="required number"
-                                                               data-validation-allowing="range[0;15]" value="{{ $score->content }}">
+                                                        <input class="score-input" type="number" name="content" id="" min="0" max="15"
+                                                               required data-validation="required number" step="0.01"
+                                                               data-validation-allowing="float range[0;15]" value="{{ $score->content }}">
                                                     </td>
                                                     <td>
-                                                        <input class="score-input" type="number" name="process" id="" min="0" max="40" required data-validation="required number"
-                                                               data-validation-allowing="range[0;40]" value="{{ $score->process }}">
+                                                        <input class="score-input" type="number" name="process" id="" min="0" max="40"
+                                                               required data-validation="required number" step="0.01"
+                                                               data-validation-allowing="float range[0;40]" value="{{ $score->process }}">
                                                     </td>
                                                     <td>
-                                                        <input class="score-input" type="number" name="health" id="" min="0" max="18" required data-validation="required number"
-                                                               data-validation-allowing="range[0;18]" value="{{ $score->health }}">
+                                                        <input class="score-input" type="number" name="health" id="" min="0" max="18"
+                                                               required data-validation="required number" step="0.01"
+                                                               data-validation-allowing="float range[0;18]" value="{{ $score->health }}">
                                                     </td>
                                                     <td>
-                                                        <input class="score-input" type="number" name="performance" id="" min="0" max="12" required data-validation="required number"
-                                                               data-validation-allowing="range[0;12]" value="{{ $score->performance }}">
+                                                        <input class="score-input" type="number" name="performance" id="" min="0" max="12"
+                                                               required data-validation="required number" step="0.01"
+                                                               data-validation-allowing="float range[0;12]" value="{{ $score->performance }}">
                                                     </td>
                                                     <td class="text-center">
                                                         <span id="total-score"></span>
@@ -161,14 +167,11 @@
 
 @section('scripts')
     <script src="{{asset('vendors/form/src/jquery.form.js')}}"></script>
-    <script src="{{ asset('vendors/jquery.gdocviewer/jquery.gdocsviewer.min.js') }}"></script>
 
     <script>
         $('#entries-r2-li').addClass('active')
 
         $(document).ready(function () {
-
-            $('a.embed').gdocsViewer();
 
             $('body').addClass('open')
 
@@ -186,15 +189,16 @@
                     let val = $(element).val()
 
                     if(val !== '') {
-                        val = parseInt(val)
+                        val = parseFloat(val)
                     } else {
                         val = 0
                     }
                     total += val
                 })
 
-                $('#total-score').text(total)
-                $('#total-score-input').val(total)
+                let temp = total.toFixed(2)
+                $('#total-score').text(temp)
+                $('#total-score-input').val(temp)
             }
 
             //////////////////// Set stop watch interval ////////////////////

@@ -6,6 +6,8 @@ use App\Admin;
 use App\BlockedEntry;
 use App\Brand;
 //use App\Judge;
+use App\BrandJudge;
+use App\CsrScore;
 use App\Mail\JudgeEditedScore;
 use App\Mail\JudgeFinalized;
 use App\Mail\JudgeScored;
@@ -32,13 +34,69 @@ class JudgeController extends Controller
         $brands = Brand::whereIn('industry_category_id', $industryCategories)
             ->whereNotIn('id', $blockedEntries)->get();
 
-        return view('judge.entries', compact('brands'));
+        $numberOfScoredEntries = 0;
+        $brandsToBeFinalized = [];
+
+        foreach ($brands as $b) {
+            if($b->category->code == 'CSR') {
+                if(CsrScore::whereBrandId($b->id)->whereJudgeId($judge->id)->whereRound(1)
+                        ->whereJudgeFinalized(true)->count() != 0) {
+                    $b->judge_has_finalized = true;
+                }else {
+                    $b->judge_has_finalized = false;
+                    $brandsToBeFinalized[] = $b->id;
+                }
+
+                if(CsrScore::whereBrandId($b->id)->whereJudgeId($judge->id)->whereRound(1)
+                        ->count() != 0) {
+                    $b->judge_has_scored = true;
+                    $numberOfScoredEntries++;
+                } else {
+                    $b->judge_has_scored = false;
+                }
+
+            } else {
+                if(BrandJudge::whereBrandId($b->id)->whereJudgeId($judge->id)->whereRound(1)
+                        ->whereJudgeFinalized(true)->count() != 0) {
+                    $b->judge_has_finalized = true;
+                } else {
+                    $b->judge_has_finalized = false;
+                    $brandsToBeFinalized[] = $b->id;
+                }
+
+                if($b->judges()->whereJudgeId($judge->id)->whereRound(1)->count() != 0) {
+                    $b->judge_has_scored = true;
+                    $numberOfScoredEntries++;
+                } else {
+                    $b->judge_has_scored = false;
+                }
+            }
+        }
+
+        if($numberOfScoredEntries === $brands->count()) {
+            $judgeHasScoredAll = true;
+        } else {
+            $judgeHasScoredAll = false;
+        }
+
+        if(count($brandsToBeFinalized) == 0) {
+            $brandsToBeFinalized = '[]';
+        } else {
+            $brandsToBeFinalized = json_encode($brandsToBeFinalized);
+        }
+
+        return view('judge.entries', compact('brands', 'judgeHasScoredAll',
+            'brandsToBeFinalized'));
     }
 
     public function myScores()
     {
         $judge = Auth::user();
-        $brands = $judge->brands()->where('r2_selected', 0)->get();
+        $brands = $judge->brands()->get();
+
+        $csrBrandIds = CsrScore::whereJudgeId($judge->id)->whereRound(1)->pluck('brand_id');
+
+        $brands = $brands->concat(Brand::find($csrBrandIds));
 
         return view('judge.my_scores', compact('brands'));
     }
@@ -52,7 +110,13 @@ class JudgeController extends Controller
     {
         $scoringStart = Carbon::now();
         session(['scoringStart' => $scoringStart]);
-        return view('judge.score', compact('brand', 'scoringStart'));
+
+        if($brand->category->code == 'CSR') {
+            $view = 'judge.csr.score';
+        } else {
+            $view = 'judge.score';
+        }
+        return view($view, compact('brand', 'scoringStart'));
     }
 
     /**
@@ -69,6 +133,43 @@ class JudgeController extends Controller
             'process' => 'required|min:0|max:40',
             'health' => 'required|min:0|max:18',
             'performance' => 'required|min:0|max:12',
+            'total' => 'required|min:0|max:100|unique:brand_judge',
+            'good' => 'required',
+            'bad' => 'required',
+            'improvement' => 'required',
+        ]);
+
+        $data = $request->except('_token');
+        $data['round'] = 1;
+
+        Auth::user()->brands()->attach($brand->id, $data);
+
+        $emailData['start'] = session()->pull('scoringStart');
+        $emailData['end'] = Carbon::now();
+        $emailData['entryId'] = $brand->id_string;
+        $emailData['judgeName'] = Auth::user()->name;
+        $emailData['round'] = 1;
+
+        $superUserEmail = Admin::whereIsSuper(1)->first()->email;
+        Mail::to($superUserEmail)->send(new JudgeScored($emailData));
+
+        return redirect()->route('judge.index')->with('status', 'Score entered successfully');
+    }
+
+    public function storeCsr(Request $request, Brand $brand)
+    {
+        $request->validate([
+            'intent' => 'required|min:0|max:10',
+            'recipient' => 'required|min:0|max:5',
+            'purpose' => 'required|min:0|max:10',
+            'vision' => 'required|min:0|max:5',
+            'mission' => 'required|min:0|max:5',
+            'identity' => 'required|min:0|max:10',
+            'strategic' => 'required|min:0|max:25',
+            'activities' => 'required|min:0|max:15',
+            'communication' => 'required|min:0|max:7',
+            'internal' => 'required|min:0|max:8',
+            'total' => 'required|min:0|max:100|unique:csr_scores',
             'good' => 'required',
             'bad' => 'required',
             'improvement' => 'required',
@@ -79,7 +180,11 @@ class JudgeController extends Controller
 
         unset($data['_token']);
 
-        Auth::user()->brands()->attach($brand->id, $data);
+        $data['brand_id'] = $brand->id;
+        $data['judge_id'] = Auth::user()->id;
+        $data['round'] = 1;
+
+        CsrScore::create($data);
 
         $emailData['start'] = session()->pull('scoringStart');
         $emailData['end'] = Carbon::now();
@@ -101,9 +206,14 @@ class JudgeController extends Controller
      */
     public function showScore(Brand $brand)
     {
-        $score = Auth::user()->brands()->whereBrandId($brand->id)->first()->score;
-
-        return view('judge.show', compact('score', 'brand'));
+        if($brand->category->code == 'CSR') {
+            $csrScore = CsrScore::whereBrandId($brand->id)->whereJudgeId(Auth::user()->id)
+                ->whereRound(1)->first();
+            return view('judge.csr.show', compact('csrScore', 'brand'));
+        } else {
+            $score = Auth::user()->brands()->whereBrandId($brand->id)->first()->score;
+            return view('judge.show', compact('score', 'brand'));
+        }
     }
 
     /**
@@ -114,12 +224,18 @@ class JudgeController extends Controller
      */
     public function edit(Brand $brand)
     {
-        $score = Auth::user()->brands()->whereBrandId($brand->id)->first()->score;
-
         $startEditing = Carbon::now();
         session(['startEditing' => $startEditing]);
 
-        return view('judge.edit', compact('brand', 'score', 'startEditing'));
+        if($brand->category->code == 'CSR') {
+            $csrScore = CsrScore::whereJudgeId(Auth::user()->id)->whereBrandId($brand->id)
+                ->whereRound(1)->first();
+
+            return view('judge.csr.edit', compact('brand', 'csrScore', 'startEditing'));
+        } else {
+            $score = Auth::user()->brands()->whereBrandId($brand->id)->first()->score;
+            return view('judge.edit', compact('brand', 'score', 'startEditing'));
+        }
     }
 
     /**
@@ -131,12 +247,15 @@ class JudgeController extends Controller
      */
     public function update(Request $request, Brand $brand)
     {
+        $id = BrandJudge::whereJudgeId(Auth::user()->id)->whereBrandId($brand->id)->whereRound(1)->pluck('id')[0];
+
         $request->validate([
             'intent' => 'required|min:0|max:15',
             'content' => 'required|min:0|max:15',
             'process' => 'required|min:0|max:40',
             'health' => 'required|min:0|max:18',
             'performance' => 'required|min:0|max:12',
+            'total' => 'required|min:0|max:12|unique:brand_judge,total,' . $id,
             'good' => 'required',
             'bad' => 'required',
             'improvement' => 'required',
@@ -152,6 +271,47 @@ class JudgeController extends Controller
         $emailData['end'] = Carbon::now();
         $emailData['entryId'] = $brand->id_string;
         $emailData['judgeName'] = Auth::user()->name;
+        $emailData['round'] = 1;
+
+        $superUserEmail = Admin::whereIsSuper(1)->first()->email;
+        Mail::to($superUserEmail)->send(new JudgeEditedScore($emailData));
+
+        return redirect()->route('judge.index')->with('status', 'Score edited successfully');
+    }
+
+    public function updateCsr(Request $request, Brand $brand)
+    {
+        $csrScore = CsrScore::whereBrandId($brand->id)->whereJudgeId(Auth::user()->id)
+            ->whereRound(1)->first();
+
+        $request->validate([
+            'intent' => 'required|min:0|max:10',
+            'recipient' => 'required|min:0|max:5',
+            'purpose' => 'required|min:0|max:10',
+            'vision' => 'required|min:0|max:5',
+            'mission' => 'required|min:0|max:5',
+            'identity' => 'required|min:0|max:10',
+            'strategic' => 'required|min:0|max:25',
+            'activities' => 'required|min:0|max:15',
+            'communication' => 'required|min:0|max:7',
+            'internal' => 'required|min:0|max:8',
+            'total' => 'required|min:0|max:100|unique:csr_scores,total,' . $csrScore->id,
+            'good' => 'required',
+            'bad' => 'required',
+            'improvement' => 'required',
+        ]);
+
+        $data = $request->all();
+
+        unset($data['_token'], $data['_method']);
+
+        $csrScore->update($data);
+
+        $emailData['start'] = session()->pull('startEditing');
+        $emailData['end'] = Carbon::now();
+        $emailData['entryId'] = $brand->id_string;
+        $emailData['judgeName'] = Auth::user()->name;
+        $emailData['round'] = 1;
 
         $superUserEmail = Admin::whereIsSuper(1)->first()->email;
         Mail::to($superUserEmail)->send(new JudgeEditedScore($emailData));
@@ -162,19 +322,22 @@ class JudgeController extends Controller
     public function finalize(Request $request)
     {
         $judge = Auth::user();
-        $judge->finalized = true;
 
-        $data['number'] = $request->get('numberOfEntriesFinalized');
+        $brandsToBeFinalized = $request->brandsToBeFinalized;
+
+        BrandJudge::whereJudgeId($judge->id)->whereIn('brand_id', $brandsToBeFinalized)->where('round', 1)
+            ->update(['judge_finalized' => true]);
+
+        CsrScore::whereJudgeId($judge->id)->whereIn('brand_id', $brandsToBeFinalized)->where('round', 1)
+            ->update(['judge_finalized' => true]);
+
+        $data['number'] = count($brandsToBeFinalized);
         $data['name'] = $judge->name;
         $data['round'] = 1;
 
-        if($judge->save()) {
-            $superUserEmail = Admin::whereIsSuper(1)->first()->email;
-            Mail::to($superUserEmail)->send(new JudgeFinalized($data));
-            return 'success';
-        } else {
-            return 'failure';
-        }
+        $superUserEmail = Admin::whereIsSuper(1)->first()->email;
+        Mail::to($superUserEmail)->send(new JudgeFinalized($data));
+        return response()->json('success');
     }
 
     public function scorePattern()
@@ -188,6 +351,13 @@ class JudgeController extends Controller
         foreach ($brands as $b) {
             $names[] = $b->name;
             $scores[] = $b->score->total;
+        }
+
+        $csrBrands = CsrScore::whereJudgeId($judge->id)->whereRound(1)->get();
+
+        foreach ($csrBrands as $b) {
+            $names[] = $b->brand->name;
+            $scores[] = $b->total;
         }
 
         $names = json_encode($names);

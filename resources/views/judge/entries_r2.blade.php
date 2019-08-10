@@ -46,10 +46,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            @php
-                            $numberOfScoredEntries = 0;
-                            @endphp
-
                             @foreach ($brands as $b)
                                 <tr>
                                     <td>{{ $b->id_string }}</td>
@@ -57,16 +53,14 @@
                                     <td>{{ $b->category->name }}</td>
                                     <td>{{ $b->industryCategory->name }}</td>
                                     <td>{{ $b->company->name }}</td>
-
-
                                     <td>
-                                    @if( $judge->finalized_r2 == false)
-                                        @if ($b->judges()->whereJudgeId($judge->id)->count() == 2)
-                                        <a class="mx-2 btn btn-success" href="{{route('judge.edit2', $b->id)}}">Edit</a>
-                                        @else
-                                        <a class="btn btn-primary" href="{{route('judge.score2', $b->id)}}">Score</a>
+                                        @if( !$b->judge_has_finalized )
+                                            @if ($b->judge_has_scored)
+                                                <a class="mx-2 btn btn-success" href="{{route('judge.edit2', $b->id)}}">Edit</a>
+                                            @else
+                                                <a class="btn btn-primary" href="{{route('judge.score2', $b->id)}}">Score</a>
+                                            @endif
                                         @endif
-                                    @endif
                                     </td>
                                 </tr>
                             @endforeach
@@ -82,8 +76,8 @@
                         </table>
                     </div>
                     <div class="card-footer">
-                        @if ($numberOfScoredEntries == $brands->count() && $judge->finalized_r2 == false)
-                            <button id="finalize" num-entries="{{ $numberOfScoredEntries }}" class="btn btn-primary">Finalize R2</button>
+                        @if ($judgeHasScoredAll)
+                            <button id="finalize" brands-to-be-finalized="{{ $brandsToBeFinalized }}" class="btn btn-primary">Finalize</button>
                         @endif
                     </div>
                 </div>
@@ -104,21 +98,34 @@
         $('#entries-r2-li').addClass('active')
 
         $('#finalize').click(function () {
-            if(!confirm('Are you sure you want to finalize round 2 scoring?')) {
+
+            let str = $(this).attr('brands-to-be-finalized')
+
+            if( str === '[]') {
+                alert('There are no entries to be finalized')
                 return false
             }
 
-            const numberOfEntriesFinalized = $(this).attr('num-entries')
+            if(!confirm('Are you sure you want to finalize scoring?')) {
+                return false
+            }
+
+            let finalize = $(this)
+
+            $(this).prop('disabled', true)
+
+            const brandsToBeFinalized = JSON.parse(str)
+
             const url = '{{ route('judge.finalize2') }}'
             const data = {
                 _token: '{{ csrf_token() }}',
-                numberOfEntriesFinalized
+                brandsToBeFinalized
             }
 
             $.post(url, data, function (result) {
-                // console.log(result)
+                finalize.prop('disabled', false)
                 if(result === 'success') {
-                    location.reload()
+                    alert('success')
                 } else {
                     alert('Failed to finalize')
                 }

@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\BlockedEntry;
 use App\Brand;
+use App\BrandJudge;
+use App\CsrScore;
+use App\Flag;
 use App\IndustryCategory;
 use App\Judge;
 use App\Mail\JudgeRegistered;
@@ -184,18 +187,20 @@ class AdminJudgeController extends Controller
     {
         $ids = $request->get('ids');
 
-        $judgeId = $request->get('judgeId');
+        $judgeId = $request->judgeId;
 
         BlockedEntry::where('judge_id', $judgeId)->delete();
 
-        foreach ($ids as $i) {
-            BlockedEntry::create([
-                'judge_id' => $judgeId,
-                'brand_id' => $i,
-            ]);
+        if($ids) {
+            foreach ($ids as $i) {
+                BlockedEntry::create([
+                    'judge_id' => $judgeId,
+                    'brand_id' => $i,
+                ]);
+            }
         }
 
-        return response()->json(['success'=>'Blocked entries for the judge set successfully']);
+        return response()->json('success');
     }
 
     public function unlock(Request $request)
@@ -207,15 +212,15 @@ class AdminJudgeController extends Controller
 
         $judgeId = $request->get('judgeId');
 
-        $judge = Judge::findOrFail($judgeId);
-
-        $judge->finalized = false;
-
-        if($judge->save()) {
-            return 'success';
+        if(Flag::first()->current_round == 1) {
+            BrandJudge::whereJudgeId($judgeId)->whereRound(1)->update(['judge_finalized' => false]);
+            CsrScore::whereJudgeId($judgeId)->whereRound(1)->update(['judge_finalized' => false]);
         } else {
-            return 'failure';
+            BrandJudge::whereJudgeId($judgeId)->whereRound(2)->update(['judge_finalized' => false]);
+            CsrScore::whereJudgeId($judgeId)->whereRound(2)->update(['judge_finalized' => false]);
         }
+
+        return response()->json('success');
     }
 
     public function toggleStatus(Judge $judge)
@@ -227,6 +232,30 @@ class AdminJudgeController extends Controller
         }
 
         $judge->save();
+
+        return redirect()->back();
+    }
+
+    public function blockAllJudges()
+    {
+        $judges = Judge::all();
+
+        foreach ($judges as $j) {
+            $j->allowed = false;
+            $j->save();
+        }
+
+        return redirect()->back();
+    }
+
+    public function allowAllJudges()
+    {
+        $judges = Judge::all();
+
+        foreach ($judges as $j) {
+            $j->allowed = true;
+            $j->save();
+        }
 
         return redirect()->back();
     }

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="455beadd-ee28-4af2-bd7b-fc008b2cbc74" name="SLIM Hostgator" url="http://50.87.151.233">
+        <fileTransfer host="50.87.151.233" port="2222" privateKey="$USER_HOME$/.ssh/id_rsa" rootFolder="/home2/slim/" accessType="SFTP" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="2222" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

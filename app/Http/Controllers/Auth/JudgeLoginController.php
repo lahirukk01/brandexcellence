@@ -52,9 +52,6 @@ class JudgeLoginController extends Controller
             Auth::guard('judge')->logout();
             return redirect()->route('judge.login')->with('userBlocked', 'You have been blocked out');
         }
-
-        $user->online_status = 'Online';
-        $user->save();
     }
 
 }

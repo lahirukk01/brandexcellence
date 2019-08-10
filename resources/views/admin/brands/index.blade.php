@@ -5,7 +5,7 @@
 
 
 @section('styles')
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/r-2.2.2/sl-1.3.0/datatables.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/r-2.2.2/datatables.css"/>
 
 @endsection
 
@@ -43,7 +43,7 @@
                                 <th>Category</th>
                                 <th>Company</th>
                                 <th>Action</th>
-                                <th>Show/Hide <br>Options
+                                <th>Client Edit/Del
 {{--                                    <div class="form-check form-check-inline">--}}
 {{--                                        <input class="form-check-input" type="checkbox" id="select-all-entries" value="">--}}
 {{--                                    </div>--}}
@@ -107,7 +107,9 @@
 
 @section('scripts')
 
-<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/r-2.2.2/sl-1.3.0/datatables.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/r-2.2.2/datatables.js"></script>
 
     <script>
         $('#brands-li').addClass('active')
@@ -170,6 +172,10 @@
         $('#admin-brands-table').DataTable( {
             "columnDefs": [
                 { "orderable": false, "targets": 5 }
+            ],
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
             ],
             initComplete: function () {
                 this.api().columns().every( function () {

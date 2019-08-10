@@ -50,30 +50,94 @@
 
         <div id="main-menu" class="main-menu collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li id="dashboard-li">
-                    <a href="{{route('judge.index')}}"> <i class="menu-icon fa fa-ravelry"></i>Entries R1 </a>
+
+                <li id="round1-li" class="menu-item-has-children dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false"> <i class="menu-icon fa fa-star"></i>Round 1</a>
+                    <ul class="sub-menu children dropdown-menu">
+                        <li id="entries-r1-li"><i class="fa fa-ravelry"></i>
+                            <a href="{{ route('judge.index') }}">Entries </a>
+                        </li>
+                        <li id="my-scores-r1-li"><i class="fa fa-list"></i>
+                            <a href="{{ route('judge.my_scores') }}">My Scores </a>
+                        </li>
+                        <li id="score-pattern-r1-li"><i class="fa fa-bar-chart"></i>
+                            <a href="{{ route('judge.score_pattern') }}">Score Pattern</a>
+                        </li>
+                    </ul>
                 </li>
 
-                <li id="my-scores-li">
-                    <a href="{{route('judge.my_scores')}}"> <i class="menu-icon fa fa-star"></i>My Scores R1</a>
+                @if(\App\SmeJudge::whereJudgeId(Auth::user()->id)->count() != 0)
+                <li id="round1-sme-li" class="menu-item-has-children dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false"> <i class="menu-icon fa fa-star"></i>Round 1 SME</a>
+                    <ul class="sub-menu children dropdown-menu">
+
+                        <li id="entries-sme-r1-li"><i class="fa fa-ravelry"></i>
+                            <a href="{{ route('judge.sme.index_r1') }}">SME Entries </a>
+                        </li>
+                        <li id="my-scores-sme-r1-li"><i class="fa fa-list"></i>
+                            <a href="{{ route('judge.sme.my_scores_r1') }}">My SME Scores </a>
+                        </li>
+                        <li id="score-pattern-sme-r1-li"><i class="fa fa-bar-chart"></i>
+                            <a href="{{ route('judge.sme.score_pattern_r1') }}">SME Score Pattern</a>
+                        </li>
+                    </ul>
+                </li>
+                @endif
+
+                @if($flags->current_round == 2)
+                <li id="round2-li" class="menu-item-has-children dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false"> <i class="menu-icon fa fa-star"></i>Round 2</a>
+                    <ul class="sub-menu children dropdown-menu">
+                        <li id="entries-r1-li"><i class="fa fa-ravelry"></i>
+                            <a href="{{ route('judge.index2') }}">Entries </a>
+                        </li>
+                        <li id="my-scores-r1-li"><i class="fa fa-star"></i>
+                            <a href="{{ route('judge.my_scores2') }}">My Scores </a>
+                        </li>
+                        <li id="score-pattern-r2-li"><i class="fa fa-bar-chart"></i>
+                            <a href="{{ route('judge.score_pattern2') }}">Score Pattern</a>
+                        </li>
+                    </ul>
                 </li>
 
-                <li id="score-pattern-li">
-                    <a href="{{route('judge.score_pattern')}}"> <i class="menu-icon fa fa-bar-chart"></i>Score Pattern R1</a>
-                </li>
+                @php
+                $judge = \Illuminate\Support\Facades\Auth::user();
+                $judgePanels = $judge->panels;
+                $hasSME = false;
 
-                @if($flags->current_round == 1)
-                <li id="entries-r2-li">
-                    <a href="{{route('judge.index2')}}"> <i class="menu-icon fa fa-ravelry"></i>Entries R2 </a>
-                </li>
+                foreach ($judgePanels as $p) {
+                    $categories = $p->categories;
+                    if($categories->count() == 1) {
+                        foreach ($categories as $c) {
+                            if($c->code == 'SME') {
+                                $hasSME = true;
+                            }
+                        }
+                    }
+                }
+                @endphp
 
-                <li id="my-scores-r2-li">
-                    <a href="{{route('judge.my_scores2')}}"> <i class="menu-icon fa fa-star"></i>My Scores R2</a>
-                </li>
+                @if($hasSME)
+                <li id="round2-sme-li" class="menu-item-has-children dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false"> <i class="menu-icon fa fa-star"></i>Round 2 SME</a>
+                    <ul class="sub-menu children dropdown-menu">
 
-                <li id="score-pattern-r2-li">
-                    <a href="{{route('judge.score_pattern2')}}"> <i class="menu-icon fa fa-bar-chart"></i>Score Pattern R2</a>
+                        <li id="entries-sme-r2-li"><i class="fa fa-ravelry"></i>
+                            <a href="{{ route('judge.sme.index_r2') }}">SME Entries </a>
+                        </li>
+                        <li id="my-scores-sme-r2-li"><i class="fa fa-list"></i>
+                            <a href="{{ route('judge.sme.my_scores_r2') }}">My SME Scores </a>
+                        </li>
+                        <li id="score-pattern-sme-r2-li"><i class="fa fa-bar-chart"></i>
+                            <a href="{{ route('judge.sme.score_pattern_r2') }}">SME Score Pattern</a>
+                        </li>
+                    </ul>
                 </li>
+                @endif
                 @endif
 
                 <li id="resetpw-li">
@@ -134,15 +198,6 @@
     </div>
 
     <div class="content mt-3">
-
-{{--        <div class="col-sm-12">--}}
-{{--            <div class="alert  alert-success alert-dismissible fade show" role="alert">--}}
-{{--                <span class="badge badge-pill badge-success">Success</span> You successfully read this important alert message.--}}
-{{--                <button type="button" class="close" data-dismiss="alert" aria-label="Close">--}}
-{{--                    <span aria-hidden="true">&times;</span>--}}
-{{--                </button>--}}
-{{--            </div>--}}
-{{--        </div>--}}
 
         @yield('content')
 

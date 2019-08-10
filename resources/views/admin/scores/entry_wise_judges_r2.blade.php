@@ -1,10 +1,14 @@
 @extends('layouts.admin')
 
-@section('title', 'Brand Excellence Entry Wise Judges')
+@section('title', 'Brand Excellence Entry Wise Judges R2')
 
 @section('styles')
 
     <style>
+        #entry-wise-r2-li > a {
+            color: white !important;
+        }
+
         canvas {
             width: 100%;
             height: 400px;
@@ -13,10 +17,10 @@
 
 @endsection
 
-@section('breadcrumbs_title', 'Scores')
+@section('breadcrumbs_title', 'Scores R2')
 
 @section('breadcrumbs')
-    <li><a href="{{route('admin.score.entry_wise')}}">Entry Wise</a></li>
+    <li><a href="{{route('admin.score.entry_wise')}}">Entry Wise R2</a></li>
     <li class="active">Entry Wise Judges</li>
 @endsection
 
@@ -28,7 +32,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="text-center">Entry Wise Scores</h3>
+                        <h3 class="text-center">Entry Wise Scores R2</h3>
                     </div>
                     <div class="card-body">
                         <table class="table table-striped table-bordered">
@@ -47,7 +51,7 @@
                                     <td>{{ $j->email }}</td>
                                     <td>{{ $j->telephone }}</td>
                                     <td>
-                                        <a class="btn btn-primary" href="{{ route('admin.score.show', ['judge' =>$j->id, 'brand' => $brand->id, 'direction' => 'entrywise']) }}">View</a>
+                                        <a class="btn btn-primary" href="{{ route('admin.score.show2', ['judge' =>$j->id, 'brand' => $brand->id, 'direction' => 'entrywise']) }}">View</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -72,8 +76,8 @@
     <script src="{{ asset('vendors/chart.js/dist/Chart.bundle.min.js') }}"></script>
 
     <script>
-        $('#scores-r1-li').addClass('active')
-        $('#entry-wise-r1-li > i').css('color', 'white')
+        $('#scores-r2-li').addClass('active')
+        $('#entry-wise-r2-li > i').css('color', 'white')
 
         var ctx = document.getElementById( 'entry-wise-graph' );
         var myChart = new Chart( ctx, {

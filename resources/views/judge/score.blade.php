@@ -54,21 +54,27 @@
                     <form action="{{ route('judge.store', $brand->id) }}" method="post">
                         @csrf
                         <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-3">Judge Name: {{ Auth::user()->name }}</div>
-                                <div class="col-md-2">Entry ID: {{ $brand->id_string }}</div>
-                                <div class="col-md-2">Brand: {{ $brand->name }}</div>
-                                <div class="col-md-2">Round 1</div>
-                                <div class="col-md-3">Entry Category: {{ $brand->category->name }}</div>
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-3">Judge Name: {{ Auth::user()->name }}</div>
+                                    <div class="col-md-2">Entry ID: {{ $brand->id_string }}</div>
+                                    <div class="col-md-2">Brand: {{ $brand->name }}</div>
+                                    <div class="col-md-2">Round 1</div>
+                                    <div class="col-md-3">Entry Category: {{ $brand->category->name }}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <p>{{ $brand->description }}</p>
+                                    </div>
+                                </div>
                             </div>
                             <hr>
 
                             @if($brand->supporting_material)
                             <a class="btn btn-primary" target="_blank" href="{{ asset($brand->supporting_material) }}">Supporting Material</a>
                             @endif
-{{--                            <a href="{{ asset($brand->entry_kit) }}" class="embed"></a>--}}
-                            <a href="http://www.africau.edu/images/default/sample.pdf" class="embed"></a>
 
+                            <embed src="{{ asset($brand->entry_kit) }}#toolbar=0" width="100%" height="400">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="table-responsive">
@@ -87,23 +93,27 @@
                                                 <tr>
                                                     <td>
                                                         <input class="score-input" type="number" name="intent" id=""
-                                                               min="0" max="15" required data-validation="required number"
-                                                               data-validation-allowing="range[0;15]">
+                                                               min="0" max="15" required data-validation="required number" step="0.01"
+                                                               data-validation-allowing="float range[0;15]">
                                                     </td>
                                                     <td>
-                                                        <input class="score-input" type="number" name="content" id="" min="0" max="15" required data-validation="required number"
-                                                               data-validation-allowing="range[0;15]">
+                                                        <input class="score-input" type="number" name="content" id="" min="0" max="15"
+                                                               required data-validation="required number" step="0.01"
+                                                               data-validation-allowing="float range[0;15]">
                                                     </td>
                                                     <td>
-                                                        <input class="score-input" type="number" name="process" id="" min="0" max="40" required data-validation="required number"
-                                                               data-validation-allowing="range[0;40]">
+                                                        <input class="score-input" type="number" name="process" id="" min="0" max="40"
+                                                               required data-validation="required number" step="0.01"
+                                                               data-validation-allowing="float range[0;40]">
                                                     </td>
                                                     <td>
-                                                        <input class="score-input" type="number" name="health" id="" min="0" max="18" required data-validation="required number"
-                                                               data-validation-allowing="range[0;18]">
+                                                        <input class="score-input" type="number" name="health" id="" min="0" max="18"
+                                                               required data-validation="required number" step="0.01"
+                                                               data-validation-allowing="float range[0;18]">
                                                     </td>
-                                                    <td><input class="score-input" type="number" name="performance" id="" min="0" max="12" required data-validation="required number"
-                                                               data-validation-allowing="range[0;12]"></td>
+                                                    <td><input class="score-input" type="number" name="performance" id="" min="0" max="12"
+                                                               required data-validation="required number" step="0.01"
+                                                               data-validation-allowing="float range[0;12]"></td>
                                                     <td class="text-center">
                                                         <span id="total-score"></span>
                                                         <input type="hidden" name="total" id="total-score-input">
@@ -164,41 +174,32 @@
 
 @section('scripts')
     <script src="{{asset('vendors/form/src/jquery.form.js')}}"></script>
-    <script src="{{ asset('vendors/jquery.gdocviewer/jquery.gdocsviewer.min.js') }}"></script>
 
     <script>
-        $('#dashboard-li').addClass('active')
+        $('#entries-r1-li').addClass('active')
 
         $(document).ready(function () {
 
-            $('a.embed').gdocsViewer()
-
             $('body').addClass('open')
-
-                // let iframe = document.querySelector('.gdocsviewer iframe');
-                // // let innerDoc = (iframe.contentDocument) ? iframe.contentDocument : iframe.contentWindow.document;
-                // let innerDoc =
-                // innerDoc.querySelector('div[role="toolbar"]').style.display = 'none'
-                // console.log(innerDoc.querySelector('body'))
-
 
             $('.score-input').keyup(function () {
                 let total = 0
-                
+
                 $('.score-input').each(function (index, element) {
                     let val = $(element).val()
                     if(val !== '') {
-                        val = parseInt(val)
+                        val = parseFloat(val)
                     } else {
                         val = 0
                     }
                     total += val
                 })
 
-                $('#total-score').text(total)
-                $('#total-score-input').val(total)
+                let temp = total.toFixed(2)
+                $('#total-score').text(temp)
+                $('#total-score-input').val(temp)
             })
-            
+
             let elapsedSeconds = 0
 
             setInterval(function () {

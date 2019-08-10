@@ -6,6 +6,12 @@
 
 @section('styles')
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/r-2.2.2/sl-1.3.0/datatables.css"/>
+
+    <style>
+        #my-scores-r1-li.active > i {
+            color: white !important;
+        }
+    </style>
 @endsection
 
 
@@ -76,7 +82,8 @@
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/r-2.2.2/sl-1.3.0/datatables.js"></script>
 
     <script>
-        $('#my-scores-li').addClass('active')
+        $('#my-scores-r1-li').addClass('active')
+        $('#round1-li').addClass('active')
 
         $('#judge-scored-entries-table').DataTable( {
             "columnDefs": [

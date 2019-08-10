@@ -71,12 +71,16 @@
                     <a href="{{route('admin.auditor.index')}}"> <i class="menu-icon fa fa-search"></i>Auditors </a>
                 </li>
 
-                <li id="scores-li-1" class="menu-item-has-children dropdown">
+                <li id="smes-li">
+                    <a href="{{route('admin.sme.index')}}"> <i class="menu-icon fa fa-grav"></i>SME </a>
+                </li>
+
+                <li id="scores-r1-li" class="menu-item-has-children dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                        aria-expanded="false"> <i class="menu-icon fa fa-star"></i>Scores R1</a>
                     <ul class="sub-menu children dropdown-menu">
-                        <li id="judge-wise-li"><i class="fa fa-user"></i><a href="{{ route('admin.score.judge_wise') }}">Judge Wise</a></li>
-                        <li id="entry-wise-li"><i class="fa fa-list"></i><a href="{{ route('admin.score.entry_wise') }}">Entry Wise</a></li>
+                        <li id="judge-wise-r1-li"><i class="fa fa-user"></i><a href="{{ route('admin.score.judge_wise') }}">Judge Wise</a></li>
+                        <li id="entry-wise-r1-li"><i class="fa fa-list"></i><a href="{{ route('admin.score.entry_wise') }}">Entry Wise</a></li>
                     </ul>
                 </li>
 
@@ -84,19 +88,25 @@
                     <a href="{{route('admin.benchmark.index')}}"> <i class="menu-icon fa fa-scissors"></i>Benchmarks </a>
                 </li>
 
-                @if($flags->current_round == 2)
-                <li id="scores-li-2" class="menu-item-has-children dropdown">
+                <li id="panels-li">
+                    <a href="{{route('admin.panel.index')}}"> <i class="menu-icon fa fa-columns"></i>Panels </a>
+                </li>
+
+                <li id="scores-r2-li" class="menu-item-has-children dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                        aria-expanded="false"> <i class="menu-icon fa fa-star"></i>Scores R2</a>
                     <ul class="sub-menu children dropdown-menu">
-                        <li id="judge-wise-li"><i class="fa fa-user"></i><a href="#">Judge Wise</a></li>
-                        <li id="entry-wise-li"><i class="fa fa-list"></i><a href="#">Entry Wise</a></li>
+                        <li id="judge-wise-r2-li"><i class="fa fa-user"></i>
+                            <a href="{{ route('admin.score.judge_wise2') }}">Judge Wise</a>
+                        </li>
+                        <li id="entry-wise-r2-li"><i class="fa fa-list"></i>
+                            <a href="{{ route('admin.score.entry_wise2') }}">Entry Wise</a>
+                        </li>
                     </ul>
                 </li>
-                @endif
 
-                <li id="panels-li">
-                    <a href="{{route('admin.panel.index')}}"> <i class="menu-icon fa fa-columns"></i>Panels </a>
+                <li id="winners-li">
+                    <a href="{{route('admin.winner.index')}}"> <i class="menu-icon fa fa-trophy"></i>Winners </a>
                 </li>
 
                 @if( Auth::check() && Auth::user()->is_super == 1)

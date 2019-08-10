@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Brand;
 use App\IndustryCategory;
 use App\Auditor;
 use App\Mail\AuditorRegistered;
@@ -62,18 +63,6 @@ class AdminAuditorController extends Controller
         return redirect()->route('admin.auditor.index')->with('status', 'Auditor created successfully');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\User  $auditor
-     * @return \Illuminate\Http\Response
-     */
-//    public function show(Auditor $auditor)
-//    {
-//
-//
-//        return view('admin.auditors.show', compact('brands','auditor', 'blocked'));
-//    }
 
     /**
      * Show the form for editing the specified resource.
@@ -145,5 +134,14 @@ class AdminAuditorController extends Controller
         $auditor->save();
 
         return redirect()->back();
+    }
+
+    public function getEntries(Request $request)
+    {
+        $auditorId = $request->auditorId;
+
+        $brandNames = Brand::whereAuditorId($auditorId)->pluck('name');
+
+        return response()->json($brandNames);
     }
 }

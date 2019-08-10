@@ -39,7 +39,7 @@ class ClientBrandController extends Controller
     public function create()
     {
         $industryCategories = IndustryCategory::all();
-        $categories = Category::all();
+        $categories = Category::where('code', '!=', 'SME')->get();
         return view('client.brands.create', compact('categories', 'industryCategories'));
     }
 
@@ -84,11 +84,14 @@ class ClientBrandController extends Controller
             $input['supporting_material'] = $fileName3;
         }
 
-        $categoryCode = Category::findOrFail($input['category_id'])->code;
-        $count = Brand::where('category_id', $input['category_id'])->count();
+        $category = Category::find($input['category_id']);
+        $categoryCode = $category->code;
+        $count = $category->entries_count;
         $count++;
         $count = sprintf('%03d', $count);
         $input['id_string'] = "2019|$categoryCode|$count";
+        $category->entries_count = $count;
+        $category->save();
 
 
         $company = Auth::user()->company;
@@ -139,7 +142,7 @@ class ClientBrandController extends Controller
      */
     public function edit(Brand $brand)
     {
-        $categories = Category::all();
+        $categories = Category::where('code', '!=', 'SME')->get();
         $industryCategories = IndustryCategory::all();
         return view('client.brands.edit', compact('brand', 'categories', 'industryCategories'));
     }
@@ -191,11 +194,27 @@ class ClientBrandController extends Controller
             $input['logo'] = $fileName2;
         }
 
-        $categoryCode = Category::findOrFail($input['category_id'])->code;
-        $count = Brand::where('category_id', $input['category_id'])->count();
-        $count++;
-        $count = sprintf('%03d', $count);
-        $input['id_string'] = "2019|$categoryCode|$count";
+        if($request->file('supporting_material') != null && $request->file('supporting_material')->isValid()) {
+            $file3 = $request->file('supporting_material');
+            $fileName3 = Carbon::now()->format('Y_m_d_H_i_s') . '_' . preg_replace('/\s/', '_', $file3->getClientOriginalName());
+            $file3->move('uploads', $fileName3);
+            $input['supporting_material'] = $fileName3;
+        }
+
+        if($input['category_id'] != $brand->category->id) {
+            $category = Category::findOrFail($input['category_id']);
+            $categoryCode = $category->code;
+            $count = $category->entries_count;
+            $count++;
+            $count = sprintf('%03d', $count);
+            $input['id_string'] = "2019|$categoryCode|$count";
+            $category->entries_count = $count;
+            $category->save();
+        } else {
+            $input['id_string'] = $brand->id_string;
+        }
+
+
 
 //        $company = Auth::user()->company;
 //        $brand = $company->brands()->create($input);

@@ -38,7 +38,7 @@ class Brand extends Model
 
     public function judges()
     {
-        return $this->belongsToMany('App\Judge')->as('score')
+        return $this->belongsToMany('App\Judge')->as('score')->using('App\BrandJudge')
             ->withPivot('intent', 'content', 'process', 'health', 'performance', 'total',
                 'good', 'bad', 'improvement', 'round')->withTimestamps();
     }

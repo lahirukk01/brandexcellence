@@ -19,7 +19,11 @@ class CreateCategoriesTable extends Migration
             $table->string('code');
             $table->integer('benchmark')->default(0);
             $table->boolean('r1_finalized')->default(false);
+            $table->bigInteger('panel_id')->nullable();
             $table->timestamps();
+
+            $table->foreign('panel_id')->references('id')
+                ->on('panels')->onDelete('null');
         });
     }
 

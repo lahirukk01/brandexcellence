@@ -131,11 +131,16 @@
                     <div class="card-footer">
                         @if($currentRound == 1)
                         <h3 class="my-3">Current Round: 1</h3>
-                            @if(Auth::check() && Auth::user()->is_super == true)
-                            <a class="btn btn-primary" href="{{ route('admin.go_to_round_two') }}">Go to round 2</a>
+                            @if(Auth::user()->is_super)
+                            <a onclick="confirm('Are you sure you want to go to round 2?')" class="btn btn-primary"
+                               href="{{ route('super.go_to_round_two') }}">Go to round 2</a>
                             @endif
                         @else
                         <h3 class="my-3">Current Round: 2</h3>
+                            @if(Auth::user()->is_super)
+                            <a class="btn btn-primary" onclick="confirm('Are you sure you want to go back to round 1?')"
+                               href="{{ route('super.go_back_to_round_one') }}">Go to back to round 1</a>
+                            @endif
                         @endif
                     </div>
                 </div>

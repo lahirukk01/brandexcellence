@@ -61,14 +61,23 @@
                             <div class="row form-group">
                                 <div class="col col-md-3"><label for="" class="form-control-label">Select categories for the panel</label></div>
                                 <div class="col-12 col-md-9">
-                                    <div class="form-control" style="height: 400px; overflow-y: scroll;">
+                                    <div class="form-control" style="height: 430px; overflow-y: scroll;">
                                         @foreach($categories as $c)
-                                            <div class="checkbox">
+                                            @if($c->code == 'SME')
+                                            <div class="checkbox bg-flat-color-1">
                                                 <label>
-                                                    <input class="mr-2" type="checkbox" name="categories[]"
+                                                    <input class="mr-2 sme" type="checkbox" name="categories[]"
                                                            value="{{ $c->id }}" @if( $panelCategories->contains($c->id)) checked @endif>{{ $c->name }}
                                                 </label>
                                             </div>
+                                            @else
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input class="mr-2 other-categories" type="checkbox" name="categories[]"
+                                                           value="{{ $c->id }}" @if( $panelCategories->contains($c->id)) checked @endif>{{ $c->name }}
+                                                </label>
+                                            </div>
+                                            @endif
                                         @endforeach
                                     </div>
                                 </div>
@@ -111,6 +120,18 @@
         $('#panels-li').addClass('active')
 
         $.validate()
+
+        $('.sme').change(function () {
+            if($(this).prop('checked') == true) {
+                $('.other-categories').prop('checked', false)
+            }
+        })
+
+        $('.other-categories').change(function () {
+            if($(this).prop('checked') == true) {
+                $('.sme').prop('checked', false)
+            }
+        })
 
     </script>
 @endsection

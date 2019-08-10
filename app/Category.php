@@ -6,15 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
-    protected $fillable = ['name', 'code', 'benchmark'];
+    protected $fillable = ['name', 'code', 'benchmark', 'panel_id'];
 
     public function brands()
     {
         return $this->hasMany('App\Brand');
     }
 
-    public function panels()
+    public function panel()
     {
-        return $this->belongsToMany('App\Panel');
+        return $this->belongsTo('App\Panel');
     }
 }

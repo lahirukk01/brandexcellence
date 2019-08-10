@@ -6,6 +6,13 @@
 
 @section('styles')
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/r-2.2.2/sl-1.3.0/datatables.css"/>
+
+    <style>
+        #entries-r1-li.active > i {
+            color: white !important;
+        }
+
+    </style>
 @endsection
 
 
@@ -46,10 +53,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            @php
-                            $numberOfScoredEntries = 0;
-                            @endphp
-
                             @foreach ($brands as $b)
                                 <tr>
                                     <td>{{ $b->id_string }}</td>
@@ -57,24 +60,13 @@
                                     <td>{{ $b->category->name }}</td>
                                     <td>{{ $b->industryCategory->name }}</td>
                                     <td>{{ $b->company->name }}</td>
-
-
                                     <td>
-                                        @if( Auth::user()->finalized == false)
-                                            @php
-                                                if($b->judges->contains(Auth::user())) {
-                                                    $hasScored = true;
-                                                    $numberOfScoredEntries++;
-                                                } else {
-                                                    $hasScored = false;
-                                                }
-                                            @endphp
-                                            @if ($hasScored)
+                                        @if( !$b->judge_has_finalized )
+                                            @if ($b->judge_has_scored)
                                                 <a class="mx-2 btn btn-success" href="{{route('judge.edit', $b->id)}}">Edit</a>
                                             @else
                                                 <a class="btn btn-primary" href="{{route('judge.score', $b->id)}}">Score</a>
                                             @endif
-
                                         @endif
                                     </td>
                                 </tr>
@@ -91,8 +83,8 @@
                         </table>
                     </div>
                     <div class="card-footer">
-                        @if ($numberOfScoredEntries == $brands->count() && Auth::user()->finalized == false)
-                            <button id="finalize" num-entries="{{ $numberOfScoredEntries }}" class="btn btn-primary">Finalize</button>
+                        @if ($judgeHasScoredAll)
+                            <button id="finalize" brands-to-be-finalized="{{ $brandsToBeFinalized }}" class="btn btn-primary">Finalize</button>
                         @endif
                     </div>
                 </div>
@@ -110,24 +102,38 @@
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/r-2.2.2/sl-1.3.0/datatables.js"></script>
 
     <script>
-        $('#dashboard-li').addClass('active')
+        $('#entries-r1-li').addClass('active')
+        $('#round1-li').addClass('active')
 
         $('#finalize').click(function () {
+
+            let str = $(this).attr('brands-to-be-finalized')
+
+            if( str === '[]') {
+                alert('There are no entries to be finalized')
+                return false
+            }
+
             if(!confirm('Are you sure you want to finalize scoring?')) {
                 return false
             }
 
-            const numberOfEntriesFinalized = $(this).attr('num-entries')
+            let finalize = $(this)
+
+            $(this).prop('disabled', true)
+
+            const brandsToBeFinalized = JSON.parse(str)
+
             const url = '{{ route('judge.finalize') }}'
             const data = {
                 _token: '{{ csrf_token() }}',
-                numberOfEntriesFinalized
+                brandsToBeFinalized
             }
 
             $.post(url, data, function (result) {
-                // console.log(result)
+                finalize.prop('disabled', false)
                 if(result === 'success') {
-                    location.reload()
+                    alert('success')
                 } else {
                     alert('Failed to finalize')
                 }

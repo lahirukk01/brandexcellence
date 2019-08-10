@@ -5,15 +5,15 @@
 @section('styles')
 @endsection
 
-@section('breadcrumbs_title', 'Scores')
+@section('breadcrumbs_title', 'Scores R2')
 
 @section('breadcrumbs')
     @if($direction == 'entrywise')
-    <li><a href="{{route('admin.score.entry_wise')}}">Entry Wise</a></li>
-    <li><a href="{{route('admin.score.entry_wise_judges', $brand->id)}}">Entry Wise Judges</a></li>
+    <li><a href="{{route('admin.score.entry_wise2')}}">Entry Wise R2</a></li>
+    <li><a href="{{route('admin.score.entry_wise_judges2', $brand->id)}}">Entry Wise Judges R2</a></li>
     @else
-    <li><a href="{{route('admin.score.judge_wise')}}">Judge Wise</a></li>
-    <li><a href="{{route('admin.score.judge_wise_entries', $judge->id)}}">Judge Wise Entries</a></li>
+    <li><a href="{{route('admin.score.judge_wise2')}}">Judge Wise R2</a></li>
+    <li><a href="{{route('admin.score.judge_wise_entries2', $judge->id)}}">Judge Wise Entries R2</a></li>
     @endif
     <li class="active">View Score</li>
 @endsection
@@ -28,7 +28,7 @@
                 <div id="result-message"></div>
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="text-center">View Score R1</h3>
+                        <h3 class="text-center">View Score R2</h3>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -105,7 +105,7 @@
 @section('scripts')
 
     <script>
-        $('#scores-r1-li').addClass('active')
+        $('#scores-r2-li').addClass('active')
 
     </script>
 

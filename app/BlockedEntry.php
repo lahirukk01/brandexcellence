@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class BlockedEntry extends Model
 {
-    protected $fillable = ['user_id', 'brand_id'];
+    protected $fillable = ['judge_id', 'brand_id'];
 }

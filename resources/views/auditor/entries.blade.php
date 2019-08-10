@@ -1,5 +1,5 @@
 
-@extends('layouts.judge')
+@extends('layouts.auditor')
 
 @section('title', 'Brand Excellence Judge Dashboard')
 
@@ -32,9 +32,10 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="text-center">Entries</h3>
+                        <h6>Panels: {{ $panelNames }}</h6>
                     </div>
                     <div class="card-body">
-                        <table id="judge-entries-table" class="table table-striped table-bordered">
+                        <table id="auditor-entries-table" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
                                     <th>Entry ID</th>
@@ -42,39 +43,34 @@
                                     <th>Category</th>
                                     <th>Industry Category</th>
                                     <th>Company</th>
-                                    <th>Action</th>
+                                    <th>Average</th>
+                                    <th>Summary</th>
+                                    <th>
+                                        Audited
+                                        <input class="d-block mx-auto" type="checkbox" name="" id="select-all-checkbox">
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
-                            @php
-                            $numberOfScoredEntries = 0;
-                            @endphp
-
-                            @foreach ($brands as $b)
+                            @foreach ($data as $d)
+                                @php
+                                $b = $d['brand'];
+                                @endphp
                                 <tr>
                                     <td>{{ $b->id_string }}</td>
                                     <td>{{ $b->name }}</td>
                                     <td>{{ $b->category->name }}</td>
                                     <td>{{ $b->industryCategory->name }}</td>
                                     <td>{{ $b->company->name }}</td>
-
-
+                                    <td>{{ $d['average'] }}</td>
                                     <td>
-                                        @if( Auth::user()->finalized == false)
-                                            @php
-                                                if($b->judges->contains(Auth::user())) {
-                                                    $hasScored = true;
-                                                    $numberOfScoredEntries++;
-                                                } else {
-                                                    $hasScored = false;
-                                                }
-                                            @endphp
-                                            @if ($hasScored)
-                                                <a class="mx-2 btn btn-success" href="{{route('judge.edit', $b->id)}}">Edit</a>
-                                            @else
-                                                <a class="btn btn-primary" href="{{route('judge.score', $b->id)}}">Score</a>
-                                            @endif
-
+                                        <button brand_id="{{ $b->id }}" judges='{!! $d['judgeIds'] !!}' class="btn btn-primary view-summary">View</button>
+                                    </td>
+                                    <td>
+                                        @if( $b->auditor_id == null)
+                                            <input brand_id="{{ $b->id }}" class="select-audited d-block mx-auto" type="checkbox" name="" id="">
+                                        @else
+                                            <span class="text-success">Audited</span>
                                         @endif
                                     </td>
                                 </tr>
@@ -87,13 +83,13 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
+                                <td></td>
+                                <td></td>
                             </tfoot>
                         </table>
                     </div>
                     <div class="card-footer">
-                        @if ($numberOfScoredEntries == $brands->count() && Auth::user()->finalized == false)
-                            <button id="finalize" num-entries="{{ $numberOfScoredEntries }}" class="btn btn-primary">Finalize</button>
-                        @endif
+                        <button id="approve-selected-btn" class="btn btn-primary">Approve Selected</button>
                     </div>
                 </div>
             </div>
@@ -101,6 +97,26 @@
 
         </div>
     </div><!-- .animated -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="entry-score-modal" tabindex="-1" role="dialog" aria-labelledby="entryScoreModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Entry Score History</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="score-history-container" class="container-fluid"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 @endsection
 
@@ -111,6 +127,93 @@
 
     <script>
         $('#dashboard-li').addClass('active')
+
+        $('#select-all-checkbox').change(function () {
+            if($(this).is(':checked')) {
+                $('.select-audited').each(function (index) {
+                    $(this).prop('checked', true)
+                })
+            }
+        })
+
+        $('.select-audited').change(function () {
+            $(this).each(function (index, el) {
+                if(!$(el).is(':checked')) {
+                    $('#select-all-checkbox').prop('checked', false)
+                }
+            })
+        })
+
+        $('#approve-selected-btn').click(function () {
+            let brandIds = []
+
+            $('.select-audited:checked').each(function (index) {
+                brandIds.push($(this).attr('brand_id'))
+            })
+
+            if(brandIds.length === 0) {
+                return false
+            }
+
+            const data = {
+                brandIds,
+                _token: '{{ csrf_token() }}'
+            }
+
+            const url = '{{ route('auditor.finalize_selected_entries') }}'
+
+            $.post(url, data, function (response) {
+                if(response === 'success') {
+                    alert('Successfully audited selected entries')
+                    location.reload()
+                } else {
+                    alert('Failed to finalize selected entries')
+                }
+            })
+        })
+
+        let contentBox = $('#entry-score-modal #score-history-container')
+
+        $('.view-summary').click(function () {
+            const judgeIds = JSON.parse($(this).attr('judges'))
+            const brandId = $(this).attr('brand_id')
+            const url = '{{ route('auditor.get_summary') }}'
+            const data = {
+                judgeIds,
+                brandId
+            }
+
+            contentBox.children().remove()
+
+            $.get(url, data, function (response) {
+
+                for(let i = 0; i < response.length; i++) {
+                    let temp = response[i]
+                    let newRow = `
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h4>Judge Name: ${temp.name}</h4>
+                                        <ul>
+                                            <li>Brand Intent: ${temp.intent}</li>
+                                            <li>Brand Content: ${temp.content}</li>
+                                            <li>Brand Process: ${temp.process}</li>
+                                            <li>Brand Health KPI'S: ${temp.health}</li>
+                                            <li>Financial Performance: ${temp.performance}</li>
+                                            <li>Total: ${temp.total}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                    contentBox.append(newRow)
+                }
+
+                $('#entry-score-modal').modal()
+            })
+        })
 
         $('#finalize').click(function () {
             if(!confirm('Are you sure you want to finalize scoring?')) {
@@ -134,7 +237,7 @@
             })
         })
 
-        $('#judge-entries-table').DataTable( {
+        $('#auditor-entries-table').DataTable( {
             "columnDefs": [
                 { "orderable": false, "targets": 5 }
             ],

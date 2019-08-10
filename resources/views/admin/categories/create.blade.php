@@ -56,8 +56,10 @@
                             <div class="row form-group">
                                 <div class="col col-md-3"><label for="benchmark-input" class=" form-control-label">Benchmark</label></div>
                                 <div class="col-12 col-md-9">
-                                    <input type="text" id="category-benchmark-input" name="benchmark"
-                                           class="form-control" value="{{old('benchmark')}}" data-validation="required number">
+                                    <input type="number" id="category-benchmark-input" name="benchmark"
+                                           min="0" max="100" step="0.01"
+                                           class="form-control" value="{{old('benchmark')}}" data-validation="required number"
+                                           data-validation-allowing="float range[0;100]">
                                 </div>
                             </div>
 

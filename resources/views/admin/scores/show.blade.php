@@ -28,7 +28,7 @@
                 <div id="result-message"></div>
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="text-center">View Score</h3>
+                        <h3 class="text-center">View Score R1</h3>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -105,7 +105,7 @@
 @section('scripts')
 
     <script>
-        $('#scores-li-1').addClass('active')
+        $('#scores-r1-li').addClass('active')
 
     </script>
 

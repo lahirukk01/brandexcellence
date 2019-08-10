@@ -6,6 +6,7 @@ use App\Notifications\JudgeResetPasswordNotification;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Cache;
 
 class Judge extends Authenticatable
 {
@@ -57,7 +58,7 @@ class Judge extends Authenticatable
 
     public function brands()
     {
-        return $this->belongsToMany('App\Brand')->as('score')
+        return $this->belongsToMany('App\Brand')->as('score')->using('App\BrandJudge')
             ->withPivot('intent', 'content', 'process', 'health', 'performance', 'total',
                 'good', 'bad', 'improvement', 'round')->withTimestamps();
     }
@@ -65,5 +66,10 @@ class Judge extends Authenticatable
     public function panels()
     {
         return $this->belongsToMany('App\Panel');
+    }
+
+    public function isOnline()
+    {
+        return Cache::has('judge_is_online' . $this->id);
     }
 }

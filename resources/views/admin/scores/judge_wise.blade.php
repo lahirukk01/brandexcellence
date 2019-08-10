@@ -4,6 +4,14 @@
 
 @section('breadcrumbs_title', 'Scores')
 
+@section('styles')
+    <style>
+        #judge-wise-r1-li > a {
+            color: white !important;
+        }
+    </style>
+@endsection
+
 @section('breadcrumbs')
     <li class="active">Judge Wise</li>
 @endsection
@@ -24,6 +32,7 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Email</th>
+                                <th>Average</th>
                                 <th>View Scores</th>
                             </tr>
                             </thead>
@@ -32,6 +41,7 @@
                                 <tr>
                                     <td>{{ $j->name }}</td>
                                     <td>{{ $j->email }}</td>
+                                    <td>{{ $j->average }}</td>
                                     <td>
                                         <a class="btn btn-primary" href="{{route('admin.score.judge_wise_entries', $j->id)}}">View</a>
                                     </td>
@@ -57,8 +67,8 @@
 @section('scripts')
 
     <script>
-        $('#scores-li-1').addClass('active')
-        $('#judge-wise-li > i').css('color', 'white')
+        $('#scores-r1-li').addClass('active')
+        $('#judge-wise-r1-li > i').css('color', 'white')
 
     </script>
 

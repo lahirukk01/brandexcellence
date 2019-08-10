@@ -39,6 +39,7 @@
                                 <th>Applicant Name</th>
                                 <th>Email</th>
                                 <th>Contact Number</th>
+                                <th>#Entries</th>
                                 <th>Action</th>
                                 <th>Allowed/<br>Blocked</th>
                             </tr>
@@ -50,6 +51,7 @@
                                     <td>{{$c->name}}</td>
                                     <td>{{$c->email}}</td>
                                     <td>{{ $c->contact_number }}</td>
+                                    <td>{{ $c->company->brands->count() }}</td>
                                     <td>
                                         <a style="color: #0e6498;" href="{{route('admin.client.show', $c->id)}}">View</a>
                                         <a style="color: green;" href="{{route('admin.client.edit', $c->id)}}">Edit</a>

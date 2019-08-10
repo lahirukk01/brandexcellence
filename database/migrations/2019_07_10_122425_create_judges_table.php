@@ -21,8 +21,6 @@ class CreateJudgesTable extends Migration
             $table->boolean('allowed')->default(true);
             $table->enum('online_status', ['Online', 'Offline'])->nullable();
             $table->string('password');
-            $table->boolean('finalized')->default(false);
-            $table->boolean('finalized_r2')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

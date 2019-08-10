@@ -1,12 +1,17 @@
 @extends('layouts.admin')
 
-@section('title', 'Brand Excellence Judge Wise Entries')
+@section('title', 'Brand Excellence Judge Wise Entries R2')
 
 
 @section('styles')
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/r-2.2.2/sl-1.3.0/datatables.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/r-2.2.2/datatables.css"/>
 
     <style>
+
+        #judge-wise-r2-li > a {
+            color: white !important;
+        }
+
         canvas {
             width: 100%;
             height: 400px;
@@ -19,8 +24,8 @@
 @section('breadcrumbs_title', 'Scores')
 
 @section('breadcrumbs')
-    <li><a href="{{route('admin.score.judge_wise')}}">Judge Wise</a></li>
-    <li class="active">Judge Wise Entries</li>
+    <li><a href="{{route('admin.score.judge_wise')}}">Judge Wise R2</a></li>
+    <li class="active">Judge Wise Entries R2</li>
 @endsection
 
 
@@ -31,7 +36,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="text-center">Judge Wise Scores R1</h3>
+                        <h3 class="text-center">Judge Wise Scores R2</h3>
                     </div>
                     <div class="card-body">
                         <table id="admin-brands-table" class="table table-striped table-bordered">
@@ -54,7 +59,7 @@
                                     <td>{{ $b->industryCategory->name }}</td>
                                     <td>{{ $b->company->name }}</td>
                                     <td>
-                                        <a class="btn btn-primary" href="{{ route('admin.score.show', ['judge' =>$judge->id, 'brand' => $b->id, 'direction' => 'judgewise']) }}">View</a>
+                                        <a class="btn btn-primary" href="{{ route('admin.score.show2', ['judge' =>$judge->id, 'brand' => $b->id, 'direction' => 'judgewise']) }}">View</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -85,12 +90,15 @@
 
 @section('scripts')
 
-<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/r-2.2.2/sl-1.3.0/datatables.js"></script>
-<script src="{{ asset('vendors/chart.js/dist/Chart.bundle.min.js') }}"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/r-2.2.2/datatables.js"></script>
+
+    <script src="{{ asset('vendors/chart.js/dist/Chart.bundle.min.js') }}"></script>
 
     <script>
-        $('#scores-r1-li').addClass('active')
-        $('#judge-wise-r1-li > i').css('color', 'white')
+        $('#scores-r2-li').addClass('active')
+        $('#judge-wise-r2-li > i').css('color', 'white')
 
         var ctx = document.getElementById( 'judge-wise-graph' );
         var myChart = new Chart( ctx, {
@@ -121,6 +129,10 @@
         $('#admin-brands-table').DataTable( {
             "columnDefs": [
                 { "orderable": false, "targets": 5 }
+            ],
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
             ],
             initComplete: function () {
                 this.api().columns().every( function () {

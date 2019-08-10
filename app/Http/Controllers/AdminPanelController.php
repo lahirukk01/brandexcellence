@@ -28,7 +28,7 @@ class AdminPanelController extends Controller
      */
     public function create()
     {
-        $categories = Category::all();
+        $categories = Category::wherePanelId(null)->get();
         $judges = Judge::all();
         $auditors = Auditor::all();
 
@@ -47,7 +47,14 @@ class AdminPanelController extends Controller
             'name' => 'required|unique:panels',
             'auditor' => 'required',
             'judges' => 'required',
-            'categories' => 'required',
+            'categories' => ['required',
+                function($attribute, $value, $fail) {
+                    $smeCategoryId = Category::whereCode('SME')->pluck('id')[0];
+                    if(is_array($value) && in_array($smeCategoryId, $value) && count($value) > 1) {
+                        $fail('SME category should be selected separately');
+                    }
+                },
+            ],
         ]);
 
         $data['name'] = $request->name;
@@ -55,7 +62,10 @@ class AdminPanelController extends Controller
 
         $panel = Panel::create($data);
 
-        $panel->categories()->attach($request->categories);
+        $categoryIds = $request->categories;
+
+        Category::whereIn('id', $categoryIds)->update(['panel_id' => $panel->id]);
+
         $panel->judges()->attach($request->judges);
 
         return redirect()->route('admin.panel.index')->with('status', 'Panel created successfully');
@@ -81,7 +91,7 @@ class AdminPanelController extends Controller
     public function edit(Panel $panel)
     {
         $auditors = Auditor::all();
-        $categories = Category::all();
+        $categories = Category::where('panel_id', $panel->id)->orWhere('panel_id', null)->get();
         $judges = Judge::all();
 
         $panelJudges = $panel->judges->pluck('id');
@@ -105,7 +115,14 @@ class AdminPanelController extends Controller
             'name' => 'required|unique:panels,name,' . $panel->id,
             'auditor' => 'required',
             'judges' => 'required',
-            'categories' => 'required',
+            'categories' => ['required',
+                function($attribute, $value, $fail) {
+                    $smeCategoryId = Category::whereCode('SME')->pluck('id')[0];
+                    if(is_array($value) && in_array($smeCategoryId, $value) && count($value) > 1) {
+                        $fail('SME category should be selected separately');
+                    }
+                },
+            ],
         ]);
 
         $data['name'] = $request->name;
@@ -113,8 +130,11 @@ class AdminPanelController extends Controller
 
         $panel->update($data);
 
-        $panel->categories()->detach();
-        $panel->categories()->attach($request->categories);
+        $panel->categories()->update(['panel_id' => null]);
+
+        $categoryIds = $request->categories;
+
+        Category::whereIn('id', $categoryIds)->update(['panel_id' => $panel->id]);
 
         $panel->judges()->detach();
         $panel->judges()->attach($request->judges);

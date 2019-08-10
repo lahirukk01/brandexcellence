@@ -16,8 +16,6 @@ class Allowed
      */
     public function handle($request, Closure $next)
     {
-//        return $next($request);
-
         if(Auth::guard('admin')->check()) {
             return $next($request);
         }
@@ -26,19 +24,22 @@ class Allowed
             if(Auth::user()->allowed) {
                 return $next($request);
             } else {
-                return redirect()->action('Auth\LoginController@logout')->with('error', 'You have been blocked by admin');
+                Auth::logout();
+                return redirect()->action('Auth\JudgeLoginController@showLoginForm')->with('userBlocked', 'You have been blocked by admin');
             }
         } else if(Auth::guard('auditor')->check()) {
             if(Auth::user()->allowed) {
                 return $next($request);
             } else {
-                return redirect()->action('Auth\LoginController@logout')->with('error', 'You have been blocked by admin');
+                Auth::logout();
+                return redirect()->action('Auth\AuditorLoginController@showLoginForm')->with('userBlocked', 'You have been blocked by admin');
             }
         } else if(Auth::guard('client')->check()) {
             if(Auth::user()->allowed) {
                 return $next($request);
             } else {
-                return redirect()->action('Auth\LoginController@logout')->with('error', 'You have been blocked by admin');
+                Auth::logout();
+                return redirect()->action('Auth\LoginController@showLoginForm')->with('userBlocked', 'You have been blocked by admin');
             }
         } else {
             die('Invalid login type');

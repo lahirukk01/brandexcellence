@@ -103,7 +103,7 @@
 @section('scripts')
 
     <script>
-        $('#my-scores-li').addClass('active')
+        $('#my-scores-r1-li').addClass('active')
     </script>
 
 @endsection

@@ -1,6 +1,6 @@
-@extends('layouts.judge')
+@extends('layouts.auditor')
 
-@section('title', 'Brand Excellence Judge Reset Password')
+@section('title', 'Brand Excellence Auditor Reset Password')
 
 @section('breadcrumbs_title', 'Reset Password')
 
@@ -46,7 +46,7 @@
 
             <div class="col-md-12">
                 <div class="card">
-                    <form id="create-brand-form" action="{{route('judge.self_update_password')}}" method="post" enctype="multipart/form-data" class="form-horizontal">
+                    <form id="create-brand-form" action="{{route('auditor.self_update_password')}}" method="post" enctype="multipart/form-data" class="form-horizontal">
                         @csrf
                         @method('PATCH')
                         <div class="card-header">
@@ -100,7 +100,6 @@
         $('#resetpw-li').addClass('active')
 
         $.validate()
-
 
     </script>
 @endsection

@@ -70,14 +70,4 @@ class AdminController extends Controller
         return view('admin.reset_password');
     }
 
-    public function goToRoundTwo()
-    {
-        if(Auth::user()->is_super == true) {
-            $flag = Flag::whereId(1)->first();
-            $flag->current_round = 2;
-            $flag->save();
-        }
-
-        return redirect()->route('admin.index');
-    }
 }

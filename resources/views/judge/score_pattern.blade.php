@@ -9,6 +9,10 @@
             width: 100%;
             height: 400px;
         }
+
+        #score-pattern-r1-li.active > i {
+            color: white !important;
+        }
     </style>
 @endsection
 
@@ -53,7 +57,8 @@
     <script src="{{ asset('vendors/chart.js/dist/Chart.bundle.min.js') }}"></script>
 
     <script>
-        $('#score-pattern-li').addClass('active')
+        $('#score-pattern-r1-li').addClass('active')
+        $('#round1-li').addClass('active')
 
         // single bar chart
         var ctx = document.getElementById( "score-pattern" );

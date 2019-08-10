@@ -78,9 +78,11 @@
                                         <label for="code" class="col-md-4 col-form-label text-md-right">{{ __('Benchmark') }}</label>
 
                                         <div class="col-md-6">
-                                            <input id="benchmark" type="text" class="form-control @error('benchmark') is-invalid @enderror"
+                                            <input id="benchmark" type="number" class="form-control @error('benchmark') is-invalid @enderror"
                                                    name="benchmark" value="{{ $category->benchmark }}" required autocomplete="benchmark"
-                                                   data-validation="required number">
+                                                   min="0" max="100" step="0.01"
+                                                   data-validation="required number"
+                                                   data-validation-allowing="float range[0;100]">
 
                                             @error('benchmark')
                                             <span class="invalid-feedback" role="alert">

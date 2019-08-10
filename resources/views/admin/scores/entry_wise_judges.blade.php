@@ -5,6 +5,10 @@
 @section('styles')
 
     <style>
+        #entry-wise-r1-li > a {
+            color: white !important;
+        }
+
         canvas {
             width: 100%;
             height: 400px;
@@ -72,8 +76,8 @@
     <script src="{{ asset('vendors/chart.js/dist/Chart.bundle.min.js') }}"></script>
 
     <script>
-        $('#scores-li-1').addClass('active')
-        $('#entry-wise-li > i').css('color', 'white')
+        $('#scores-r1-li').addClass('active')
+        $('#entry-wise-r1-li > i').css('color', 'white')
 
         var ctx = document.getElementById( 'entry-wise-graph' );
         var myChart = new Chart( ctx, {

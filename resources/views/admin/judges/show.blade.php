@@ -101,6 +101,10 @@
         $('#judges-li').addClass('active')
 
         $('#submit-changes').click(function () {
+
+            let submitBtn = $(this)
+            submitBtn.prop('disabled', true)
+
             let ids = []
 
             $('.allow-block-entry:checked').each(function (index) {
@@ -114,23 +118,15 @@
             }
 
             $.post('{{ route('admin.judge.set_blocked') }}', data, function (result) {
-
-                if(result.success != undefined) {
-                    alert(result.success)
+                if(result === 'success') {
+                    alert('Blocked entries for the judge set successfully')
+                    location.reload()
                 } else {
                     alert('Failed to set blocked entries for this judge')
                 }
+                submitBtn.prop('disabled', false)
             })
         })
-
-        // $('.delete-brand').click(function (e) {
-        //     e.preventDefault()
-        //     if(! confirm('Are you sure you want to delete this brand?')) {
-        //         return false
-        //     }
-        //
-        //     $(this).closest('form').submit()
-        // })
 
 
         $('#admin-brands-table').DataTable( {
