@@ -18,7 +18,12 @@ class CreateSmesTable extends Migration
             $table->string('brand_name');
             $table->string('company');
             $table->boolean('r2_selected')->default(false);
+            $table->bigInteger('auditor_id')->unsigned()->nullable();
+            $table->enum('medal', ['Gold', 'Silver', 'Bronze', 'Merit'])->nullable();
             $table->timestamps();
+
+            $table->foreign('auditor_id')->references('id')
+                ->on('auditors')->onDelete('set null');
         });
     }
 

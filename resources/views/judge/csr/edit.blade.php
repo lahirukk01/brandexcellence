@@ -13,7 +13,7 @@
 @section('breadcrumbs_title', 'Dashboard')
 
 @section('breadcrumbs')
-    <li><a href="{{route('judge.index')}}">Entries</a></li>
+    <li><a href="{{route('judge.index')}}">Entries R1</a></li>
     <li class="active">Edit Score</li>
 @endsection
 
@@ -254,6 +254,10 @@
             function getQuotient(number, divider) {
                 return Math.floor(number/divider)
             }
+
+            $(document).bind("contextmenu",function(e){
+                return false;
+            });
         })
 
         $.validate()

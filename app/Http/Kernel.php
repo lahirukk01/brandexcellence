@@ -63,6 +63,7 @@ class Kernel extends HttpKernel
         'allowed' => \App\Http\Middleware\Allowed::class,
         'is_super' => \App\Http\Middleware\IsSuper::class,
         'judge_status' => \App\Http\Middleware\JudgeOnlineStatus::class,
+        'judge_first_pw_reset' => \App\Http\Middleware\JudgeFirstTimePwReset::class,
     ];
 
     /**
@@ -80,5 +81,7 @@ class Kernel extends HttpKernel
         \Illuminate\Routing\Middleware\SubstituteBindings::class,
         \Illuminate\Auth\Middleware\Authorize::class,
         \App\Http\Middleware\Allowed::class,
+        \App\Http\Middleware\JudgeFirstTimePwReset::class,
+        \App\Http\Middleware\JudgeOnlineStatus::class,
     ];
 }

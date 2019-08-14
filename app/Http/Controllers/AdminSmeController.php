@@ -60,16 +60,6 @@ class AdminSmeController extends Controller
         return redirect()->route('admin.sme.index')->with('status', 'SME created successfully');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Sme  $sme
-     * @return \Illuminate\Http\Response
-     */
-//    public function show(Sme $sme)
-//    {
-//        //
-//    }
 
     /**
      * Show the form for editing the specified resource.

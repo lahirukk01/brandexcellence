@@ -143,11 +143,11 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td colspan="6">Comments:</td>
+                                                    <td colspan="11">Comments:</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>What is good?</td>
-                                                    <td colspan="5">
+                                                    <td colspan="2">What is good?</td>
+                                                    <td colspan="9">
                                                         <div class="form-group">
                                                             <textarea name="good" id="" cols="30" rows="4" class="form-control"
                                                                       data-validation="required"></textarea>
@@ -155,8 +155,8 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td>What is bad?</td>
-                                                    <td colspan="5">
+                                                    <td colspan="2">What is bad?</td>
+                                                    <td colspan="9">
                                                         <div class="form-group">
                                                             <textarea name="bad" id="" cols="30" rows="4" class="form-control"
                                                                       data-validation="required"></textarea>
@@ -164,8 +164,8 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td>What needs to be improved?</td>
-                                                    <td colspan="5">
+                                                    <td colspan="2">What needs to be improved?</td>
+                                                    <td colspan="9">
                                                         <div class="form-group">
                                                             <textarea name="improvement" id="" cols="30" rows="4" class="form-control"
                                                                       data-validation="required"></textarea>
@@ -174,8 +174,8 @@
                                                 </tr>
                                             </tbody>
                                             <tfoot>
-                                                <td colspan="3">Login Time: {{ $scoringStart }}</td>
-                                                <td colspan="3">Duration: <span id="duration"></span></td>
+                                                <td colspan="6">Login Time: {{ $scoringStart }}</td>
+                                                <td colspan="5">Duration: <span id="duration"></span></td>
                                             </tfoot>
                                         </table>
                                     </div>
@@ -248,6 +248,10 @@
             function getQuotient(number, divider) {
                 return Math.floor(number/divider)
             }
+
+            $(document).bind("contextmenu",function(e){
+                return false;
+            });
         })
 
         $.validate()

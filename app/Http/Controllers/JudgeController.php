@@ -39,41 +39,46 @@ class JudgeController extends Controller
 
         foreach ($brands as $b) {
             if($b->category->code == 'CSR') {
-                if(CsrScore::whereBrandId($b->id)->whereJudgeId($judge->id)->whereRound(1)
-                        ->whereJudgeFinalized(true)->count() != 0) {
-                    $b->judge_has_finalized = true;
-                }else {
-                    $b->judge_has_finalized = false;
-                    $brandsToBeFinalized[] = $b->id;
-                }
 
                 if(CsrScore::whereBrandId($b->id)->whereJudgeId($judge->id)->whereRound(1)
                         ->count() != 0) {
                     $b->judge_has_scored = true;
                     $numberOfScoredEntries++;
+
+                    if(CsrScore::whereBrandId($b->id)->whereJudgeId($judge->id)->whereRound(1)
+                            ->whereJudgeFinalized(true)->count() != 0) {
+                        $b->judge_has_finalized = true;
+                    }else {
+                        $b->judge_has_finalized = false;
+                        $brandsToBeFinalized[] = $b->id;
+                    }
+
                 } else {
                     $b->judge_has_scored = false;
                 }
 
             } else {
-                if(BrandJudge::whereBrandId($b->id)->whereJudgeId($judge->id)->whereRound(1)
-                        ->whereJudgeFinalized(true)->count() != 0) {
-                    $b->judge_has_finalized = true;
-                } else {
-                    $b->judge_has_finalized = false;
-                    $brandsToBeFinalized[] = $b->id;
-                }
 
-                if($b->judges()->whereJudgeId($judge->id)->whereRound(1)->count() != 0) {
+                if(BrandJudge::whereJudgeId($judge->id)->whereBrandId($b->id)->whereRound(1)
+                        ->count() != 0) {
                     $b->judge_has_scored = true;
                     $numberOfScoredEntries++;
+
+                    if(BrandJudge::whereBrandId($b->id)->whereJudgeId($judge->id)->whereRound(1)
+                            ->whereJudgeFinalized(true)->count() != 0) {
+                        $b->judge_has_finalized = true;
+                    } else {
+                        $b->judge_has_finalized = false;
+                        $brandsToBeFinalized[] = $b->id;
+                    }
+
                 } else {
                     $b->judge_has_scored = false;
                 }
             }
         }
 
-        if($numberOfScoredEntries === $brands->count()) {
+        if($numberOfScoredEntries == $brands->count()) {
             $judgeHasScoredAll = true;
         } else {
             $judgeHasScoredAll = false;
@@ -81,12 +86,14 @@ class JudgeController extends Controller
 
         if(count($brandsToBeFinalized) == 0) {
             $brandsToBeFinalized = '[]';
+            $brandsToBeFinalizedExist = false;
         } else {
             $brandsToBeFinalized = json_encode($brandsToBeFinalized);
+            $brandsToBeFinalizedExist = true;
         }
 
         return view('judge.entries', compact('brands', 'judgeHasScoredAll',
-            'brandsToBeFinalized'));
+            'brandsToBeFinalized', 'brandsToBeFinalizedExist'));
     }
 
     public function myScores()
@@ -133,16 +140,22 @@ class JudgeController extends Controller
             'process' => 'required|min:0|max:40',
             'health' => 'required|min:0|max:18',
             'performance' => 'required|min:0|max:12',
-            'total' => 'required|min:0|max:100|unique:brand_judge',
+            'total' => 'required|min:0|max:100',
             'good' => 'required',
             'bad' => 'required',
             'improvement' => 'required',
         ]);
 
         $data = $request->except('_token');
-        $data['round'] = 1;
 
-        Auth::user()->brands()->attach($brand->id, $data);
+        $data['round'] = 1;
+        $data['brand_id'] = $brand->id;
+        $data['judge_id'] = Auth::user()->id;
+
+//        Auth::user()->brands()->attach($brand->id, $data);
+        BrandJudge::create($data);
+//        dd($data);
+
 
         $emailData['start'] = session()->pull('scoringStart');
         $emailData['end'] = Carbon::now();
@@ -169,7 +182,7 @@ class JudgeController extends Controller
             'activities' => 'required|min:0|max:15',
             'communication' => 'required|min:0|max:7',
             'internal' => 'required|min:0|max:8',
-            'total' => 'required|min:0|max:100|unique:csr_scores',
+            'total' => 'required|min:0|max:100',
             'good' => 'required',
             'bad' => 'required',
             'improvement' => 'required',
@@ -255,7 +268,7 @@ class JudgeController extends Controller
             'process' => 'required|min:0|max:40',
             'health' => 'required|min:0|max:18',
             'performance' => 'required|min:0|max:12',
-            'total' => 'required|min:0|max:12|unique:brand_judge,total,' . $id,
+            'total' => 'required|min:0|max:100',
             'good' => 'required',
             'bad' => 'required',
             'improvement' => 'required',
@@ -295,7 +308,7 @@ class JudgeController extends Controller
             'activities' => 'required|min:0|max:15',
             'communication' => 'required|min:0|max:7',
             'internal' => 'required|min:0|max:8',
-            'total' => 'required|min:0|max:100|unique:csr_scores,total,' . $csrScore->id,
+            'total' => 'required|min:0|max:100',
             'good' => 'required',
             'bad' => 'required',
             'improvement' => 'required',
@@ -350,14 +363,14 @@ class JudgeController extends Controller
 
         foreach ($brands as $b) {
             $names[] = $b->name;
-            $scores[] = $b->score->total;
+            $scores[] = round($b->score->total, 1);
         }
 
         $csrBrands = CsrScore::whereJudgeId($judge->id)->whereRound(1)->get();
 
         foreach ($csrBrands as $b) {
             $names[] = $b->brand->name;
-            $scores[] = $b->total;
+            $scores[] = round($b->total, 1);
         }
 
         $names = json_encode($names);
@@ -388,6 +401,11 @@ class JudgeController extends Controller
         $user->update([
             'password' => Hash::make($password)
         ]);
+
+        if(!$user->first_time_password_reset) {
+            $user->first_time_password_reset = true;
+            $user->save();
+        }
 
         return redirect('judge')->with('status', 'Password updated successfully');
     }

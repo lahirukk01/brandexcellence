@@ -215,6 +215,10 @@
             function getQuotient(number, divider) {
                 return Math.floor(number/divider)
             }
+
+            $(document).bind("contextmenu",function(e){
+                return false;
+            });
         })
 
         $.validate()

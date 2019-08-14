@@ -49,7 +49,62 @@
         </div>
 
         <div id="main-menu" class="main-menu collapse navbar-collapse">
+            @if(Auth::user()->first_time_password_reset)
             <ul class="nav navbar-nav">
+
+                @if($flags->current_round == 2)
+                <li id="round2-li" class="menu-item-has-children dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false"> <i class="menu-icon fa fa-star"></i>Round 2</a>
+                    <ul class="sub-menu children dropdown-menu">
+                        <li id="entries-r1-li"><i class="fa fa-ravelry"></i>
+                            <a href="{{ route('judge.index2') }}">Entries </a>
+                        </li>
+                        <li id="my-scores-r1-li"><i class="fa fa-star"></i>
+                            <a href="{{ route('judge.my_scores2') }}">My Scores </a>
+                        </li>
+                        <li id="score-pattern-r2-li"><i class="fa fa-bar-chart"></i>
+                            <a href="{{ route('judge.score_pattern2') }}">Score Pattern</a>
+                        </li>
+                    </ul>
+                </li>
+
+                    @php
+                        $judge = \Illuminate\Support\Facades\Auth::user();
+                        $judgePanels = $judge->panels;
+                        $hasSME = false;
+
+                        foreach ($judgePanels as $p) {
+                            $categories = $p->categories;
+                            if($categories->count() == 1) {
+                                foreach ($categories as $c) {
+                                    if($c->code == 'SME') {
+                                        $hasSME = true;
+                                    }
+                                }
+                            }
+                        }
+                    @endphp
+
+                    @if($hasSME)
+                <li id="round2-sme-li" class="menu-item-has-children dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false"> <i class="menu-icon fa fa-star"></i>Round 2 SME</a>
+                    <ul class="sub-menu children dropdown-menu">
+
+                        <li id="entries-sme-r2-li"><i class="fa fa-ravelry"></i>
+                            <a href="{{ route('judge.sme.index_r2') }}">SME Entries </a>
+                        </li>
+                        <li id="my-scores-sme-r2-li"><i class="fa fa-list"></i>
+                            <a href="{{ route('judge.sme.my_scores_r2') }}">My SME Scores </a>
+                        </li>
+                        <li id="score-pattern-sme-r2-li"><i class="fa fa-bar-chart"></i>
+                            <a href="{{ route('judge.sme.score_pattern_r2') }}">SME Score Pattern</a>
+                        </li>
+                    </ul>
+                </li>
+                    @endif
+                @endif
 
                 <li id="round1-li" class="menu-item-has-children dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
@@ -86,65 +141,12 @@
                 </li>
                 @endif
 
-                @if($flags->current_round == 2)
-                <li id="round2-li" class="menu-item-has-children dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                       aria-expanded="false"> <i class="menu-icon fa fa-star"></i>Round 2</a>
-                    <ul class="sub-menu children dropdown-menu">
-                        <li id="entries-r1-li"><i class="fa fa-ravelry"></i>
-                            <a href="{{ route('judge.index2') }}">Entries </a>
-                        </li>
-                        <li id="my-scores-r1-li"><i class="fa fa-star"></i>
-                            <a href="{{ route('judge.my_scores2') }}">My Scores </a>
-                        </li>
-                        <li id="score-pattern-r2-li"><i class="fa fa-bar-chart"></i>
-                            <a href="{{ route('judge.score_pattern2') }}">Score Pattern</a>
-                        </li>
-                    </ul>
-                </li>
-
-                @php
-                $judge = \Illuminate\Support\Facades\Auth::user();
-                $judgePanels = $judge->panels;
-                $hasSME = false;
-
-                foreach ($judgePanels as $p) {
-                    $categories = $p->categories;
-                    if($categories->count() == 1) {
-                        foreach ($categories as $c) {
-                            if($c->code == 'SME') {
-                                $hasSME = true;
-                            }
-                        }
-                    }
-                }
-                @endphp
-
-                @if($hasSME)
-                <li id="round2-sme-li" class="menu-item-has-children dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                       aria-expanded="false"> <i class="menu-icon fa fa-star"></i>Round 2 SME</a>
-                    <ul class="sub-menu children dropdown-menu">
-
-                        <li id="entries-sme-r2-li"><i class="fa fa-ravelry"></i>
-                            <a href="{{ route('judge.sme.index_r2') }}">SME Entries </a>
-                        </li>
-                        <li id="my-scores-sme-r2-li"><i class="fa fa-list"></i>
-                            <a href="{{ route('judge.sme.my_scores_r2') }}">My SME Scores </a>
-                        </li>
-                        <li id="score-pattern-sme-r2-li"><i class="fa fa-bar-chart"></i>
-                            <a href="{{ route('judge.sme.score_pattern_r2') }}">SME Score Pattern</a>
-                        </li>
-                    </ul>
-                </li>
-                @endif
-                @endif
-
                 <li id="resetpw-li">
                     <a href="{{route('judge.show_password_reset_form')}}"> <i class="menu-icon fa fa-key"></i>Reset Password </a>
                 </li>
 
             </ul>
+            @endif
         </div><!-- /.navbar-collapse -->
     </nav>
 </aside><!-- /#left-panel -->

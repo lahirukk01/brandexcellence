@@ -40,33 +40,37 @@ class JudgeR2Controller extends Controller
         foreach ($brands as $b) {
 
             if($b->category->code == 'CSR') {
-                if(CsrScore::whereBrandId($b->id)->whereJudgeId($judge->id)->whereRound(2)
-                        ->whereJudgeFinalized(true)->count() != 0) {
-                    $b->judge_has_finalized = true;
-                }else {
-                    $b->judge_has_finalized = false;
-                    $brandsToBeFinalized[] = $b->id;
-                }
 
                 if(CsrScore::whereBrandId($b->id)->whereJudgeId($judge->id)->whereRound(2)
                         ->count() != 0) {
                     $b->judge_has_scored = true;
                     $numberOfScoredEntries++;
+
+                    if(CsrScore::whereBrandId($b->id)->whereJudgeId($judge->id)->whereRound(2)
+                            ->whereJudgeFinalized(true)->count() != 0) {
+                        $b->judge_has_finalized = true;
+                    }else {
+                        $b->judge_has_finalized = false;
+                        $brandsToBeFinalized[] = $b->id;
+                    }
+
                 } else {
                     $b->judge_has_scored = false;
                 }
             } else {
 
-                if(BrandJudge::whereBrandId($b->id)->whereJudgeId($judge->id)->whereRound(2)->whereJudgeFinalized(true)->count() != 0) {
-                    $b->judge_has_finalized = true;
-                } else {
-                    $b->judge_has_finalized = false;
-                    $brandsToBeFinalized[] = $b->id;
-                }
-
-                if($b->judges()->whereJudgeId($judge->id)->where('round', 2)->count() != 0) {
+                if(BrandJudge::whereJudgeId($judge->id)->whereBrandId($b->id)->whereRound(2)->count() != 0) {
                     $b->judge_has_scored = true;
                     $numberOfScoredEntries++;
+
+                    if(BrandJudge::whereBrandId($b->id)->whereJudgeId($judge->id)->whereRound(2)
+                            ->whereJudgeFinalized(true)->count() != 0) {
+                        $b->judge_has_finalized = true;
+                    } else {
+                        $b->judge_has_finalized = false;
+                        $brandsToBeFinalized[] = $b->id;
+                    }
+
                 } else {
                     $b->judge_has_scored = false;
                 }
@@ -81,12 +85,14 @@ class JudgeR2Controller extends Controller
 
         if(count($brandsToBeFinalized) == 0) {
             $brandsToBeFinalized = '[]';
+            $brandsToBeFinalizedExist = false;
         } else {
             $brandsToBeFinalized = json_encode($brandsToBeFinalized);
+            $brandsToBeFinalizedExist = true;
         }
 
         return view('judge.entries_r2', compact('brands', 'judgeHasScoredAll',
-            'brandsToBeFinalized'));
+            'brandsToBeFinalized', 'brandsToBeFinalizedExist'));
     }
 
     public function myScores()
@@ -116,7 +122,7 @@ class JudgeR2Controller extends Controller
         session(['scoringStart' => $scoringStart]);
 
         if($brand->category->code == 'CSR') {
-            $view = 'judge.score_r2';
+            $view = 'judge.csr.score_r2';
         } else {
             $view = 'judge.score_r2';
         }
@@ -138,7 +144,7 @@ class JudgeR2Controller extends Controller
             'process' => 'required|min:0|max:40',
             'health' => 'required|min:0|max:18',
             'performance' => 'required|min:0|max:12',
-            'total' => 'required|min:0|max:100|unique:brand_judge',
+            'total' => ['required', 'min:0', 'max:100',],
             'good' => 'required',
             'bad' => 'required',
             'improvement' => 'required',
@@ -146,6 +152,13 @@ class JudgeR2Controller extends Controller
 
         $data = $request->all();
         $data['round'] = 2;
+
+        $count = BrandJudge::whereTotal($data['total'])->whereRound(2)->whereBrandId($brand->id)->count();
+
+        if($count != 0) {
+            return redirect()->back()
+                ->withErrors(['message' => 'Total value already exist']);
+        }
 
         unset($data['_token']);
 
@@ -176,7 +189,7 @@ class JudgeR2Controller extends Controller
             'activities' => 'required|min:0|max:15',
             'communication' => 'required|min:0|max:7',
             'internal' => 'required|min:0|max:8',
-            'total' => 'required|min:0|max:100|unique:csr_scores',
+            'total' => 'required|min:0|max:100',
             'good' => 'required',
             'bad' => 'required',
             'improvement' => 'required',
@@ -184,6 +197,13 @@ class JudgeR2Controller extends Controller
 
         $data = $request->all();
         $data['round'] = 2;
+
+        $count = CsrScore::whereTotal($data['total'])->whereRound(2)->whereBrandId($brand->id)->count();
+
+        if($count != 0) {
+            return redirect()->back()
+                ->withErrors(['message' => 'Total value already exist']);
+        }
 
         unset($data['_token']);
 
@@ -237,10 +257,10 @@ class JudgeR2Controller extends Controller
             $csrScore = CsrScore::whereJudgeId(Auth::user()->id)->whereBrandId($brand->id)
                 ->whereRound(2)->first();
 
-            return view('judge.edit_r2', compact('brand', 'csrScore', 'startEditing'));
+            return view('judge.csr.edit_r2', compact('brand', 'csrScore', 'startEditing'));
         } else {
             $score = Auth::user()->brands()->whereBrandId($brand->id)->whereRound(2)->first()->score;
-            return view('judge.edit', compact('brand', 'score', 'startEditing'));
+            return view('judge.edit2', compact('brand', 'score', 'startEditing'));
         }
     }
 
@@ -259,12 +279,20 @@ class JudgeR2Controller extends Controller
             'process' => 'required|min:0|max:40',
             'health' => 'required|min:0|max:18',
             'performance' => 'required|min:0|max:12',
+            'total' => 'required|min:0|max:100',
             'good' => 'required',
             'bad' => 'required',
             'improvement' => 'required',
         ]);
 
         $data = $request->all();
+
+        $count = BrandJudge::whereTotal($data['total'])->whereRound(2)->whereBrandId($brand->id)->count();
+
+        if($count != 0) {
+            return redirect()->back()
+                ->withErrors(['message' => 'Total value already exist']);
+        }
 
         unset($data['_token'], $data['_method']);
 
@@ -300,13 +328,20 @@ class JudgeR2Controller extends Controller
             'activities' => 'required|min:0|max:15',
             'communication' => 'required|min:0|max:7',
             'internal' => 'required|min:0|max:8',
-            'total' => 'required|min:0|max:100|unique:csr_scores,total,' . $csrScore->id,
+            'total' => 'required|min:0|max:100',
             'good' => 'required',
             'bad' => 'required',
             'improvement' => 'required',
         ]);
 
         $data = $request->all();
+
+        $count = CsrScore::whereTotal($data['total'])->whereRound(2)->whereBrandId($brand->id)->count();
+
+        if($count != 0) {
+            return redirect()->back()
+                ->withErrors(['message' => 'Total value already exist']);
+        }
 
         unset($data['_token'], $data['_method']);
 
@@ -356,7 +391,7 @@ class JudgeR2Controller extends Controller
             $score = $b->score;
             if($score->round == 2) {
                 $names[] = $b->name;
-                $scores[] = $score->total;
+                $scores[] = round($score->total, 1);
             }
         }
 
@@ -364,7 +399,7 @@ class JudgeR2Controller extends Controller
 
         foreach ($csrBrands as $b) {
             $names[] = $b->brand->name;
-            $scores[] = $b->total;
+            $scores[] = round($b->total, 1);
         }
 
         $names = json_encode($names);

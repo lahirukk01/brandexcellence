@@ -1,7 +1,7 @@
 
 @extends('layouts.auditor')
 
-@section('title', 'Brand Excellence Judge Dashboard')
+@section('title', 'Brand Excellence Auditor Entries')
 
 
 @section('styles')
@@ -64,11 +64,15 @@
                                     <td>{{ $b->company->name }}</td>
                                     <td>{{ $d['average'] }}</td>
                                     <td>
-                                        <button brand_id="{{ $b->id }}" judges='{!! $d['judgeIds'] !!}' class="btn btn-primary view-summary">View</button>
+                                        <button brand_id="{{ $b->id }}" judges='{!! $d['judgeIds'] !!}'
+                                                category_code="{{ $d['categoryCode'] }}"
+                                                class="btn btn-primary view-summary">View</button>
                                     </td>
                                     <td>
                                         @if( $b->auditor_id == null)
-                                            <input brand_id="{{ $b->id }}" class="select-audited d-block mx-auto" type="checkbox" name="" id="">
+                                            <input brand_id="{{ $b->id }}" class="select-audited d-block mx-auto"
+                                                   category_code="{{ $d['categoryCode'] }}"
+                                                   type="checkbox" name="" id="">
                                         @else
                                             <span class="text-success">Audited</span>
                                         @endif
@@ -145,18 +149,22 @@
         })
 
         $('#approve-selected-btn').click(function () {
-            let brandIds = []
+            let myData = []
 
             $('.select-audited:checked').each(function (index) {
-                brandIds.push($(this).attr('brand_id'))
+                let temp = []
+                temp.push($(this).attr('category_code'))
+                temp.push($(this).attr('brand_id'))
+                myData.push(temp)
             })
 
-            if(brandIds.length === 0) {
+            if(myData.length === 0) {
+                alert('You have not selected any entries to approve')
                 return false
             }
 
             const data = {
-                brandIds,
+                myData,
                 _token: '{{ csrf_token() }}'
             }
 
@@ -177,10 +185,12 @@
         $('.view-summary').click(function () {
             const judgeIds = JSON.parse($(this).attr('judges'))
             const brandId = $(this).attr('brand_id')
+            const categoryCode = $(this).attr('categoryCode')
             const url = '{{ route('auditor.get_summary') }}'
             const data = {
                 judgeIds,
-                brandId
+                brandId,
+                categoryCode,
             }
 
             contentBox.children().remove()
@@ -189,7 +199,60 @@
 
                 for(let i = 0; i < response.length; i++) {
                     let temp = response[i]
-                    let newRow = `
+                    let newRow = ``
+
+                    if(categoryCode == 'CSR') {
+                        newRow = `
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h4>Judge Name: ${temp.name}</h4>
+                                        <ul>
+                                            <li>Brand and CSR Intent: ${temp.intent}</li>
+                                            <li>Brand TG and CSR Recipient: ${temp.recipient}</li>
+                                            <li>Brand Purpose and CSR Purpose: ${temp.purpose}</li>
+                                            <li>Brand Vision: ${temp.vision}</li>
+                                            <li>Brand Mission: ${temp.mission}</li>
+                                            <li>Brand Identity: ${temp.identity}</li>
+                                            <li>Strategic Intent to Brand Intent: ${temp.strategic}</li>
+                                            <li>Key Activities and Link to CSR Strategy: ${temp.activities}</li>
+                                            <li>Communication of CSR to Brand TG: ${temp.communication}</li>
+                                            <li>Internal Communication to generate employee engagement: ${temp.internal}</li>
+                                            <li>Total: ${temp.total}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                    } else if(categoryCode == 'SME') {
+                        newRow = `
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h4>Judge Name: ${temp.name}</h4>
+                                        <ul>
+                                            <li>Identification of Business Opportunity: ${temp.opportunity}</li>
+                                            <li>Need Gap Satisfaction on Prior to Launch: ${temp.satisfaction}</li>
+                                            <li>Description of Target Audience: ${temp.description}</li>
+                                            <li>Targeting: ${temp.targeting}</li>
+                                            <li>Brand Name Decision: ${temp.decision}</li>
+                                            <li>Brand Identity: ${temp.identity}</li>
+                                            <li>POD/S: ${temp.pod}</li>
+                                            <li>Application of Marketing Mix(Consider 4Ps): ${temp.marketing}</li>
+                                            <li>Financial Performance (Sales, GP and/or NP): ${temp.performance}</li>
+                                            <li>Internal Communication to Generate Employee Engagement: ${temp.engagement}</li>
+                                            <li>Total: ${temp.total}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                    } else {
+                        newRow = `
                         <div class="row mb-3">
                             <div class="col-md-12">
                                 <div class="row">
@@ -208,32 +271,12 @@
                             </div>
                         </div>
                     `
+                    }
+
                     contentBox.append(newRow)
                 }
 
                 $('#entry-score-modal').modal()
-            })
-        })
-
-        $('#finalize').click(function () {
-            if(!confirm('Are you sure you want to finalize scoring?')) {
-                return false
-            }
-
-            const numberOfEntriesFinalized = $(this).attr('num-entries')
-            const url = '{{ route('judge.finalize') }}'
-            const data = {
-                _token: '{{ csrf_token() }}',
-                numberOfEntriesFinalized
-            }
-
-            $.post(url, data, function (result) {
-                // console.log(result)
-                if(result === 'success') {
-                    location.reload()
-                } else {
-                    alert('Failed to finalize')
-                }
             })
         })
 

@@ -14,7 +14,7 @@
 
 @section('breadcrumbs')
     <li><a href="{{route('judge.index2')}}">Entries R2</a></li>
-    <li class="active">Edit Score R2</li>
+    <li class="active">Edit Score</li>
 @endsection
 
 
@@ -224,6 +224,10 @@
             function getQuotient(number, divider) {
                 return Math.floor(number/divider)
             }
+
+            $(document).bind("contextmenu",function(e){
+                return false;
+            });
         })
 
         $.validate()

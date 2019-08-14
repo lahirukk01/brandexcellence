@@ -18,7 +18,7 @@
 @section('breadcrumbs_title', 'SME Entries')
 
 @section('breadcrumbs')
-    <li><a href="{{route('judge.sme.index_r1')}}">SME Entries</a></li>
+    <li><a href="{{route('judge.sme.index_r1')}}">SME Entries R1</a></li>
     <li class="active">Edit Score</li>
 @endsection
 
@@ -253,6 +253,10 @@
             function getQuotient(number, divider) {
                 return Math.floor(number/divider)
             }
+
+            $(document).bind("contextmenu",function(e){
+                return false;
+            });
         })
 
         $.validate()

@@ -84,6 +84,15 @@
                     </ul>
                 </li>
 
+                <li id="scores-sme-r1-li" class="menu-item-has-children dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false"> <i class="menu-icon fa fa-star"></i>SME Scores R1</a>
+                    <ul class="sub-menu children dropdown-menu">
+                        <li id="judge-wise-sme-r1-li"><i class="fa fa-user"></i><a href="{{ route('admin.sme.score.judge_wise') }}">Judge Wise</a></li>
+                        <li id="entry-wise-sme-r1-li"><i class="fa fa-list"></i><a href="{{ route('admin.sme.score.entry_wise') }}">Entry Wise</a></li>
+                    </ul>
+                </li>
+
                 <li id="benchmarks-li">
                     <a href="{{route('admin.benchmark.index')}}"> <i class="menu-icon fa fa-scissors"></i>Benchmarks </a>
                 </li>
@@ -102,6 +111,15 @@
                         <li id="entry-wise-r2-li"><i class="fa fa-list"></i>
                             <a href="{{ route('admin.score.entry_wise2') }}">Entry Wise</a>
                         </li>
+                    </ul>
+                </li>
+
+                <li id="scores-sme-r2-li" class="menu-item-has-children dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false"> <i class="menu-icon fa fa-star"></i>SME Scores R2</a>
+                    <ul class="sub-menu children dropdown-menu">
+                        <li id="judge-wise-sme-r2-li"><i class="fa fa-user"></i><a href="{{ route('admin.sme.score.judge_wise_r2') }}">Judge Wise</a></li>
+                        <li id="entry-wise-sme-r2-li"><i class="fa fa-list"></i><a href="{{ route('admin.sme.score.entry_wise_r2') }}">Entry Wise</a></li>
                     </ul>
                 </li>
 

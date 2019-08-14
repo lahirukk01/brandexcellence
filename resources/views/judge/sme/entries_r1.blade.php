@@ -151,6 +151,12 @@
             // ],
         } );
 
+        $('#judge-entries-table').on('page.dt', function () {
+            $('html, body').animate({
+                scrollTop: $('.card-body').offset().top
+            }, 'slow')
+        })
+
     </script>
 
 @endsection

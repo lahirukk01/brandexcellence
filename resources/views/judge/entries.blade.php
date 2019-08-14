@@ -83,8 +83,8 @@
                         </table>
                     </div>
                     <div class="card-footer">
-                        @if ($judgeHasScoredAll)
-                            <button id="finalize" brands-to-be-finalized="{{ $brandsToBeFinalized }}" class="btn btn-primary">Finalize</button>
+                        @if ($judgeHasScoredAll && $brandsToBeFinalizedExist)
+                            <button id="finalize" class="btn btn-primary">Finalize</button>
                         @endif
                     </div>
                 </div>
@@ -107,9 +107,16 @@
 
         $('#finalize').click(function () {
 
-            let str = $(this).attr('brands-to-be-finalized')
+            // let str = $(this).attr('brands-to-be-finalized')
 
-            if( str === '[]') {
+            const brandsToBeFinalized = {{ $brandsToBeFinalized }}
+
+            // if( str === '[]') {
+            //     alert('There are no entries to be finalized')
+            //     return false
+            // }
+
+            if( brandsToBeFinalized.length === 0) {
                 alert('There are no entries to be finalized')
                 return false
             }
@@ -122,7 +129,7 @@
 
             $(this).prop('disabled', true)
 
-            const brandsToBeFinalized = JSON.parse(str)
+            // const brandsToBeFinalized = JSON.parse(str)
 
             const url = '{{ route('judge.finalize') }}'
             const data = {
@@ -134,6 +141,7 @@
                 finalize.prop('disabled', false)
                 if(result === 'success') {
                     alert('success')
+                    location.reload()
                 } else {
                     alert('Failed to finalize')
                 }
@@ -170,6 +178,12 @@
                 } );
             }
         } );
+
+        $('#judge-entries-table').on('page.dt', function () {
+            $('html, body').animate({
+                scrollTop: $('.card-body').offset().top
+            }, 'slow')
+        })
 
     </script>
 

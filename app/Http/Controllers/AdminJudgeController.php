@@ -26,6 +26,27 @@ class AdminJudgeController extends Controller
     {
         $judges = Judge::all();
 
+        $currentRound = Flag::first()->current_round;
+
+        foreach ($judges as $j) {
+            $numberOfScoredNormalEntries = BrandJudge::whereJudgeId($j->id)->whereRound($currentRound)->count();
+            $numberOfScoredCsrEntries = CsrScore::whereJudgeId($j->id)->whereRound($currentRound)->count();
+
+            $numberOfFinalizedNormalEntries = BrandJudge::whereJudgeId($j->id)->whereRound($currentRound)
+                ->whereJudgeFinalized(true)->count();
+            $numberOfFinalizedCsrEntries = CsrScore::whereJudgeId($j->id)->whereRound($currentRound)
+                ->whereJudgeFinalized(true)->count();
+
+            $numberOfTotalScoredEntries = $numberOfScoredNormalEntries + $numberOfScoredCsrEntries;
+            $numberOfTotalFinalizedEntries = $numberOfFinalizedNormalEntries + $numberOfFinalizedCsrEntries;
+
+            if($numberOfTotalScoredEntries == $numberOfTotalFinalizedEntries) {
+                $j->finalized = true;
+            } else {
+                $j->finalized = false;
+            }
+        }
+
         return view('admin.judges.index', compact('judges'));
     }
 
@@ -51,7 +72,7 @@ class AdminJudgeController extends Controller
         $request->validate([
             'name' => 'required|max:100',
             'email' => 'required|max:100|unique:judges',
-//            'contact_number' => 'max:15|digits:10|unique:users',
+//            'industry_categories' => 'required',
             'password' => 'required|min:3|max:15|confirmed',
         ]);
 
@@ -60,14 +81,15 @@ class AdminJudgeController extends Controller
         $judge = Judge::create([
             'name' => $data['name'],
             'email' => $data['email'],
-//            'contact_number' => $data['contact_number'],
             'password' => Hash::make($data['password']),
         ]);
 
         $judge->save();
 
-        foreach ($data['industry_categories'] as $ic) {
-            $judge->industryCategories()->attach($ic);
+        if(!empty($data['industry_categories'])) {
+            foreach ($data['industry_categories'] as $ic) {
+                $judge->industryCategories()->attach($ic);
+            }
         }
 
         Mail::to($judge->email)->send(new JudgeRegistered($data));
@@ -119,7 +141,7 @@ class AdminJudgeController extends Controller
         $request->validate([
             'name' => 'required|max:100',
             'email' => 'required|max:100|unique:judges,email,' . $judge->id,
-//            'contact_number' => 'max:15|digits:10|unique:users,contact_number,' . $judge->id,
+            'industry_categories' => 'required',
         ]);
 
         $data = $request->all();
@@ -200,6 +222,8 @@ class AdminJudgeController extends Controller
             }
         }
 
+        BrandJudge::whereJudgeId($judgeId)->whereIn('brand_id', $ids)->delete();
+
         return response()->json('success');
     }
 
@@ -212,13 +236,10 @@ class AdminJudgeController extends Controller
 
         $judgeId = $request->get('judgeId');
 
-        if(Flag::first()->current_round == 1) {
-            BrandJudge::whereJudgeId($judgeId)->whereRound(1)->update(['judge_finalized' => false]);
-            CsrScore::whereJudgeId($judgeId)->whereRound(1)->update(['judge_finalized' => false]);
-        } else {
-            BrandJudge::whereJudgeId($judgeId)->whereRound(2)->update(['judge_finalized' => false]);
-            CsrScore::whereJudgeId($judgeId)->whereRound(2)->update(['judge_finalized' => false]);
-        }
+        $currentRound = Flag::first()->current_round;
+
+        BrandJudge::whereJudgeId($judgeId)->whereRound($currentRound)->update(['judge_finalized' => false]);
+        CsrScore::whereJudgeId($judgeId)->whereRound($currentRound)->update(['judge_finalized' => false]);
 
         return response()->json('success');
     }

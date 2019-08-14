@@ -205,6 +205,24 @@ Route::prefix('admin')->name('admin.')->middleware(['verified', 'auth:admin', ])
         ->name('score.show');
     //////////////////////////////////  Round 1 Scores end ///////////////////////////////////
 
+    ////////////////////////////////// Round 1 SME Scores ////////////////////////////////////////
+
+    Route::prefix('sme')->name('sme.')->group(function () {
+        Route::get('score/judge_wise', 'AdminSmeScoreController@judgeWise')->name('score.judge_wise');
+        Route::get('score/entry_wise', 'AdminSmeScoreController@entryWise')->name('score.entry_wise');
+
+        Route::get('score/judge_wise_entries/{judge}', 'AdminSmeScoreController@judgeWiseEntries')
+            ->name('score.judge_wise_entries');
+
+        Route::get('score/entry_wise_judges/{sme}', 'AdminSmeScoreController@entryWiseJudges')
+            ->name('score.entry_wise_judges');
+
+        Route::get('score/show/{judge}/{sme}/{direction}', 'AdminSmeScoreController@show')
+            ->name('score.show');
+    });
+
+    //////////////////////////////////  Round 1 SME Scores end ///////////////////////////////////
+
     ////////////////////////////////// Round 2 Scores ////////////////////////////////////////
     Route::get('score/judge_wise2', 'AdminScoreR2Controller@judgeWise')->name('score.judge_wise2');
     Route::get('score/entry_wise2', 'AdminScoreR2Controller@entryWise')->name('score.entry_wise2');
@@ -217,8 +235,25 @@ Route::prefix('admin')->name('admin.')->middleware(['verified', 'auth:admin', ])
 
     Route::get('score/show2/{judge}/{brand}/{direction}', 'AdminScoreR2Controller@show')
         ->name('score.show2');
-    //////////////////////////////////  Round 2 Scores end ///////////////////////////////////
+    //////////////////////////////////  Round 2 Scores end //////////////////////////////////////////
 
+    ////////////////////////////////// Round 2 SME Scores ////////////////////////////////////////
+
+    Route::prefix('sme')->name('sme.')->group(function () {
+        Route::get('score/judge_wise_r2', 'AdminSmeScoreR2Controller@judgeWise')->name('score.judge_wise_r2');
+        Route::get('score/entry_wise_r2', 'AdminSmeScoreR2Controller@entryWise')->name('score.entry_wise_r2');
+
+        Route::get('score/judge_wise_entries_r2/{judge}', 'AdminSmeScoreController@judgeWiseEntries')
+            ->name('score.judge_wise_entries_r2');
+
+        Route::get('score/entry_wise_judges_r2/{sme}', 'AdminSmeScoreR2Controller@entryWiseJudges')
+            ->name('score.entry_wise_judges_r2');
+
+        Route::get('score/show_r2/{judge}/{sme}/{direction}', 'AdminSmeScoreR2Controller@show')
+            ->name('score.show_r2');
+    });
+
+    //////////////////////////////////  Round 2 SME Scores end ///////////////////////////////////
 });
 
 
@@ -305,71 +340,74 @@ Route::prefix('home')->name('client.')->middleware(['verified', 'auth:client', '
 Route::prefix('judge')->middleware(['verified', 'auth:judge', 'allowed', 'judge_status'])
     ->name('judge.')->group(function () {
 
-    ///////////////////////////////// JudgeController Start ////////////////////////////////////////
+    Route::middleware(['judge_first_pw_reset'])->group(function () {
 
-    Route::get('/', 'JudgeController@index')->name('index');
-    Route::get('my_scores', 'JudgeController@myScores')->name('my_scores');
-    Route::get('score_pattern', 'JudgeController@scorePattern')->name('score_pattern');
-    Route::get('score/{brand}', 'JudgeController@score')->name('score');
-    Route::post('store/{brand}', 'JudgeController@store')->name('store');
-    Route::post('store_csr/{brand}', 'JudgeController@storeCsr')->name('store_csr');
-    Route::get('edit/{brand}', 'JudgeController@edit')->name('edit');
-    Route::get('show_score/{brand}', 'JudgeController@showScore')->name('show_score');
-    Route::patch('update/{brand}', 'JudgeController@update')->name('update');
-    Route::patch('update_csr/{brand}', 'JudgeController@updateCsr')->name('update_csr');
-    Route::post('finalize', 'JudgeController@finalize')->name('finalize');
+        ///////////////////////////////// JudgeController Start ////////////////////////////////////////
 
+        Route::get('/', 'JudgeController@index')->name('index');
+        Route::get('my_scores', 'JudgeController@myScores')->name('my_scores');
+        Route::get('score_pattern', 'JudgeController@scorePattern')->name('score_pattern');
+        Route::get('score/{brand}', 'JudgeController@score')->name('score');
+        Route::post('store/{brand}', 'JudgeController@store')->name('store');
+        Route::post('store_csr/{brand}', 'JudgeController@storeCsr')->name('store_csr');
+        Route::get('edit/{brand}', 'JudgeController@edit')->name('edit');
+        Route::get('show_score/{brand}', 'JudgeController@showScore')->name('show_score');
+        Route::patch('update/{brand}', 'JudgeController@update')->name('update');
+        Route::patch('update_csr/{brand}', 'JudgeController@updateCsr')->name('update_csr');
+        Route::post('finalize', 'JudgeController@finalize')->name('finalize');
+
+        ///////////////////////////////// JudgeController Ends ///////////////////////////////////////////
+
+        ///////////////////////////////// JudgeR2Controller Start ////////////////////////////////////////
+
+        Route::get('index2', 'JudgeR2Controller@index')->name('index2');
+        Route::get('my_scores2', 'JudgeR2Controller@myScores')->name('my_scores2');
+        Route::get('score_pattern2', 'JudgeR2Controller@scorePattern')->name('score_pattern2');
+        Route::get('score2/{brand}', 'JudgeR2Controller@score')->name('score2');
+        Route::post('store2/{brand}', 'JudgeR2Controller@store')->name('store2');
+        Route::post('store2_csr/{brand}', 'JudgeR2Controller@storeCsr')->name('store2_csr');
+        Route::get('edit2/{brand}', 'JudgeR2Controller@edit')->name('edit2');
+        Route::get('show_score2/{brand}', 'JudgeR2Controller@showScore')->name('show_score2');
+        Route::patch('update2/{brand}', 'JudgeR2Controller@update')->name('update2');
+        Route::patch('update2_csr/{brand}', 'JudgeR2Controller@updateCsr')->name('update2_csr');
+        Route::post('finalize2', 'JudgeR2Controller@finalize')->name('finalize2');
+
+        ///////////////////////////////// JudgeR2Controller Ends ////////////////////////////////////////
+
+
+        ///////////////////////////////// JudgeSmeController Starts ////////////////////////////////////////
+
+        Route::prefix('sme')->name('sme.')->group(function () {
+            Route::get('index_r1', 'JudgeSmeController@indexR1')->name('index_r1');
+            Route::get('my_scores_r1', 'JudgeSmeController@myScoresR1')->name('my_scores_r1');
+            Route::get('show_score_r1/{sme}', 'JudgeSmeController@showScoreR1')->name('show_score_r1');
+            Route::get('score_pattern_r1', 'JudgeSmeController@scorePatternR1')->name('score_pattern_r1');
+            Route::get('score_r1/{sme}', 'JudgeSmeController@scoreR1')->name('score_r1');
+            Route::post('store_r1/{sme}', 'JudgeSmeController@storeR1')->name('store_r1');
+            Route::get('edit_r1/{sme}', 'JudgeSmeController@editR1')->name('edit_r1');
+            Route::post('update_r1/{sme}', 'JudgeSmeController@updateR1')->name('update_r1');
+            Route::post('finalize_r1', 'JudgeSmeController@finalizeR1')->name('finalize_r1');
+
+
+            Route::get('index_r2', 'JudgeSmeController@indexR2')->name('index_r2');
+            Route::get('my_scores_r2', 'JudgeSmeController@myScoresR2')->name('my_scores_r2');
+            Route::get('show_score_r2/{sme}', 'JudgeSmeController@showScoreR2')->name('show_score_r2');
+            Route::get('score_pattern_r2', 'JudgeSmeController@scorePatternR2')->name('score_pattern_r2');
+            Route::get('score_r2/{sme}', 'JudgeSmeController@scoreR2')->name('score_r2');
+            Route::post('store_r2/{sme}', 'JudgeSmeController@storeR2')->name('store_r2');
+            Route::get('edit_r2/{sme}', 'JudgeSmeController@editR2')->name('edit_r2');
+            Route::post('update_r2/{sme}', 'JudgeSmeController@updateR2')->name('update_r2');
+            Route::post('finalize_r2', 'JudgeSmeController@finalizeR2')->name('finalize_r2');
+
+        });
+        ///////////////////////////////// JudgeSmeController Starts ////////////////////////////////////////
+
+    });
 
     Route::patch('self_update_password', 'JudgeController@selfUpdatePassword')
         ->name('self_update_password');
     Route::get('show_password_reset_form', 'JudgeController@showInsidePasswordResetForm')
         ->name('show_password_reset_form');
-
-    ///////////////////////////////// JudgeController Ends ///////////////////////////////////////////
-
-    ///////////////////////////////// JudgeR2Controller Start ////////////////////////////////////////
-
-    Route::get('index2', 'JudgeR2Controller@index')->name('index2');
-    Route::get('my_scores2', 'JudgeR2Controller@myScores')->name('my_scores2');
-    Route::get('score_pattern2', 'JudgeR2Controller@scorePattern')->name('score_pattern2');
-    Route::get('score2/{brand}', 'JudgeR2Controller@score')->name('score2');
-    Route::post('store2/{brand}', 'JudgeR2Controller@store')->name('store2');
-    Route::post('store2_csr/{brand}', 'JudgeR2Controller@storeCsr')->name('store2_csr');
-    Route::get('edit2/{brand}', 'JudgeR2Controller@edit')->name('edit2');
-    Route::get('show_score2/{brand}', 'JudgeR2Controller@showScore')->name('show_score2');
-    Route::patch('update2/{brand}', 'JudgeR2Controller@update')->name('update2');
-    Route::patch('update2_csr/{brand}', 'JudgeR2Controller@updateCsr')->name('update2_csr');
-    Route::post('finalize2', 'JudgeR2Controller@finalize')->name('finalize2');
-
-    ///////////////////////////////// JudgeR2Controller Ends ////////////////////////////////////////
-
-
-    ///////////////////////////////// JudgeSmeController Starts ////////////////////////////////////////
-
-    Route::prefix('sme')->name('sme.')->group(function () {
-        Route::get('index_r1', 'JudgeSmeController@indexR1')->name('index_r1');
-        Route::get('my_scores_r1', 'JudgeSmeController@myScoresR1')->name('my_scores_r1');
-        Route::get('show_score_r1/{sme}', 'JudgeSmeController@showScoreR1')->name('show_score_r1');
-        Route::get('score_pattern_r1', 'JudgeSmeController@scorePatternR1')->name('score_pattern_r1');
-        Route::get('score_r1/{sme}', 'JudgeSmeController@scoreR1')->name('score_r1');
-        Route::post('store_r1/{sme}', 'JudgeSmeController@storeR1')->name('store_r1');
-        Route::get('edit_r1/{sme}', 'JudgeSmeController@editR1')->name('edit_r1');
-        Route::post('update_r1/{sme}', 'JudgeSmeController@updateR1')->name('update_r1');
-        Route::post('finalize_r1', 'JudgeSmeController@finalizeR1')->name('finalize_r1');
-
-
-        Route::get('index_r2', 'JudgeSmeController@indexR2')->name('index_r2');
-        Route::get('my_scores_r2', 'JudgeSmeController@myScoresR2')->name('my_scores_r2');
-        Route::get('show_score_r2/{sme}', 'JudgeSmeController@showScoreR2')->name('show_score_r2');
-        Route::get('score_pattern_r2', 'JudgeSmeController@scorePatternR2')->name('score_pattern_r2');
-        Route::get('score_r2/{sme}', 'JudgeSmeController@scoreR2')->name('score_r2');
-        Route::post('store_r2/{sme}', 'JudgeSmeController@storeR2')->name('store_r2');
-        Route::get('edit_r2/{sme}', 'JudgeSmeController@editR2')->name('edit_r2');
-        Route::post('update_r2/{sme}', 'JudgeSmeController@updateR2')->name('update_r2');
-        Route::post('finalize_r2', 'JudgeSmeController@finalizeR2')->name('finalize_r2');
-
-    });
-    ///////////////////////////////// JudgeSmeController Starts ////////////////////////////////////////
 
 });
 
@@ -377,15 +415,15 @@ Route::prefix('judge')->middleware(['verified', 'auth:judge', 'allowed', 'judge_
 Route::prefix('auditor')->middleware(['verified', 'auth:auditor', 'allowed'])
     ->name('auditor.')->group(function () {
 
-        Route::get('/', 'AuditorController@index')->name('index');
-        Route::patch('self_update_password', 'AuditorController@selfUpdatePassword')
-            ->name('self_update_password');
-        Route::get('show_password_reset_form', 'AuditorController@showInsidePasswordResetForm')
-            ->name('show_password_reset_form');
-        Route::get('get_summary', 'AuditorController@getSummary')
-            ->name('get_summary');
-        Route::post('finalize_selected_entries', 'AuditorController@finalizeSelectedEntries')
-            ->name('finalize_selected_entries');
+    Route::get('/', 'AuditorController@index')->name('index');
+    Route::patch('self_update_password', 'AuditorController@selfUpdatePassword')
+        ->name('self_update_password');
+    Route::get('show_password_reset_form', 'AuditorController@showInsidePasswordResetForm')
+        ->name('show_password_reset_form');
+    Route::get('get_summary', 'AuditorController@getSummary')
+        ->name('get_summary');
+    Route::post('finalize_selected_entries', 'AuditorController@finalizeSelectedEntries')
+        ->name('finalize_selected_entries');
 });
 
 

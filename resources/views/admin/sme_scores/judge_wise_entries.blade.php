@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Brand Excellence Judge Wise Entries')
+@section('title', 'Brand Excellence Judge Wise Entries SME')
 
 
 @section('styles')
@@ -16,10 +16,10 @@
 @endsection
 
 
-@section('breadcrumbs_title', 'Scores')
+@section('breadcrumbs_title', 'SME Scores R1')
 
 @section('breadcrumbs')
-    <li><a href="{{route('admin.score.judge_wise')}}">Judge Wise</a></li>
+    <li><a href="{{route('admin.sme.score.judge_wise')}}">Judge Wise</a></li>
     <li class="active">Judge Wise Entries</li>
 @endsection
 
@@ -32,7 +32,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="text-center">Judge Wise Scores R1</h3>
-                        <h5>{{ $judge->name }}</h5>
+                        <h4>{{ $judge->name }}</h4>
                     </div>
                     <div class="card-body">
                         <table id="admin-brands-table" class="table table-striped table-bordered">
@@ -40,51 +40,23 @@
                                 <tr>
                                     <th>Entry ID</th>
                                     <th>Brand Name</th>
-                                    <th>Category</th>
-                                    <th>Industry Category</th>
                                     <th>Company</th>
-                                    <th>In</th>
-                                    <th>Co</th>
-                                    <th>Pr</th>
-                                    <th>He</th>
-                                    <th>Pe</th>
-                                    <th>To</th>
                                     <th>View Score</th>
                                 </tr>
                             </thead>
                             <tbody>
-                            @foreach ($brands as $b)
+                            @foreach ($smes as $b)
                                 <tr>
                                     <td>{{ $b->id_string }}</td>
-                                    <td>{{ $b->name }}</td>
-                                    <td>{{ $b->category->name }}</td>
-                                    <td>{{ $b->industryCategory->name }}</td>
-                                    <td>{{ $b->company->name }}</td>
-                                    @if($b->category->code == 'CSR')
-                                        <td class="text-center" colspan="6">CSR Score</td>
-                                    @else
-                                    <th>{{ $b->scoreDetails->intent }}</th>
-                                    <th>{{ $b->scoreDetails->content }}</th>
-                                    <th>{{ $b->scoreDetails->process }}</th>
-                                    <th>{{ $b->scoreDetails->health }}</th>
-                                    <th>{{ $b->scoreDetails->performance }}</th>
-                                    <th>{{ $b->scoreDetails->total }}</th>
-                                    @endif
+                                    <td>{{ $b->brand_name }}</td>
+                                    <td>{{ $b->company }}</td>
                                     <td>
-                                        <a class="btn btn-primary" href="{{ route('admin.score.show', ['judge' =>$judge->id, 'brand' => $b->id, 'direction' => 'judgewise']) }}">View</a>
+                                        <a class="btn btn-primary" href="{{ route('admin.sme.score.show', ['judge' =>$judge->id, 'brand' => $b->id, 'direction' => 'judgewise']) }}">View</a>
                                     </td>
                                 </tr>
                             @endforeach
                             </tbody>
                             <tfoot>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -115,9 +87,8 @@
     <script src="{{ asset('vendors/chart.js/dist/Chart.bundle.min.js') }}"></script>
 
     <script>
-        $('#scores-r1-li').addClass('active')
-        $('#judge-wise-r1-li > i').css('color', 'white')
-        $('body').addClass('open')
+        $('#scores-sme-r1-li').addClass('active')
+        $('#judge-wise-sme-r1-li > i').css('color', 'white')
 
         var ctx = document.getElementById( 'judge-wise-graph' );
         var myChart = new Chart( ctx, {
@@ -147,37 +118,12 @@
 
         $('#admin-brands-table').DataTable( {
             "columnDefs": [
-                { "orderable": false, "targets": 5 }
+                { "orderable": false,}
             ],
             dom: 'Bfrtip',
             buttons: [
                 'copy', 'csv', 'excel', 'pdf', 'print'
             ],
-            initComplete: function () {
-                this.api().columns().every( function () {
-                    var column = this;
-                    if(column[0][0] == 2 || column[0][0] == 3) {
-
-                        var select = $('<select style="max-width: 150px;" class="form-control"><option value=""></option></select>')
-                            .appendTo( $(column.footer()).empty() )
-                            .on( 'change', function () {
-                                var val = $.fn.dataTable.util.escapeRegex(
-                                    $(this).val()
-                                );
-
-                                column
-                                    .search( val ? '^'+val+'$' : '', true, false )
-                                    .draw();
-                            } );
-
-                        column.data().unique().sort().each( function ( d, j ) {
-                            select.append( '<option value="'+d+'">'+d+'</option>' )
-                        } );
-
-                    }
-
-                } );
-            }
         } );
 
     </script>

@@ -55,27 +55,25 @@
                                 </div>
                             </div>
 
-{{--                            <div class="row form-group">--}}
-{{--                                <div class="col col-md-3"><label for="telephone-input" class=" form-control-label">Telephone (10 digit)</label></div>--}}
-{{--                                <div class="col-12 col-md-9">--}}
-{{--                                    <input type="text" id="judge-telephone-input" name="contact_number"--}}
-{{--                                           class="form-control" value="{{ $judge->contact_number }}">--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-
                             <div class="row form-group">
                                 <div class="col col-md-3"><label for="" class="form-control-label">Select Industry Categories of Judge</label></div>
                                 <div class="col-12 col-md-9">
                                     <div class="form-control" style="height: 300px; overflow-y: scroll;">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input id="select-all-categories" class="mr-2" type="checkbox" name="">
+                                                <span class="bg-info" style="color: white;">Select All</span>
+                                            </label>
+                                        </div>
                                         @foreach($industryCategories as $ic)
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input class="mr-2" type="checkbox" name="industry_categories[]"
-                                                           value="{{ $ic->id }}"
-                                                    @if(in_array($ic->id, $selectedIndustryCategories)) checked @endif>
-                                                    {{ $ic->name }}
-                                                </label>
-                                            </div>
+                                        <div class="checkbox">
+                                            <label>
+                                                <input class="mr-2" type="checkbox" name="industry_categories[]"
+                                                       value="{{ $ic->id }}"
+                                                @if(in_array($ic->id, $selectedIndustryCategories)) checked @endif>
+                                                {{ $ic->name }}
+                                            </label>
+                                        </div>
                                         @endforeach
                                     </div>
                                 </div>
@@ -126,6 +124,12 @@
     <script src="{{asset('vendors/form/src/jquery.form.js')}}"></script>
     <script>
         $('#judges-li').addClass('active')
+
+        $('#select-all-categories').click(function () {
+            if($(this).is(':checked')) {
+                $('input[name="industry_categories[]"]').prop('checked', true)
+            }
+        })
 
         $.validate()
     </script>

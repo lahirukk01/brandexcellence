@@ -361,8 +361,8 @@ class JudgeSmeController extends Controller
 
         foreach ($smes as $b) {
             $names[] = $b->brand_name;
-            $scores[] = SmeScore::whereSmeId($b->id)->whereJudgeId($judge->id)->whereRound(2)
-                ->pluck('total')[0];
+            $scores[] = round(SmeScore::whereSmeId($b->id)->whereJudgeId($judge->id)->whereRound(2)
+                ->pluck('total')[0], 1);
         }
 
         $names = json_encode($names);

@@ -171,6 +171,7 @@
                 if(response == null) {
                     alert('No data found')
                 } else {
+                    console.log(response)
                     tableData = response.brands
                     let categoryCode = response.categoryCode
                     response = response.brands
@@ -203,9 +204,10 @@
 
             for( let i = 0; i < scoreData.length; i++) {
                 let temp = scoreData[i]
+                let newRow = ``
 
                 if(categoryCode === 'CSR') {
-                    let newRow = `
+                    newRow = `
                     <div class="row mb-3">
                         <div class="col-md-12">
                             <div class="row">
@@ -253,8 +255,57 @@
                         </div>
                     </div>
                 `
+                } else if (categoryCode === 'SME') {
+                    newRow = `
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h4>Judge Name: ${temp.judge.name}</h4>
+                                    <ul>
+                                        <li>Identification of Business Opportunity: ${temp.score.opportunity}</li>
+                                        <li>Need Gap Satisfaction on Prior to Launch: ${temp.score.satisfaction}</li>
+                                        <li>Description of Target Audience: ${temp.score.description}</li>
+                                        <li>Targeting: ${temp.score.targeting}</li>
+                                        <li>Brand Name Decision: ${temp.score.decision}</li>
+                                        <li>Brand Identity: ${temp.score.identity}</li>
+                                        <li>POD/S: ${temp.score.pod}</li>
+                                        <li>Application of Marketing Mix(Consider 4Ps): ${temp.score.marketing}</li>
+                                        <li>Financial Performance (Sales, GP and/or NP): ${temp.score.performance}</li>
+                                        <li>Internal Communication to Generate Employee Engagement: ${temp.score.engagement}</li>
+                                        <li>Total: ${temp.score.total}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    What is good?
+                                </div>
+                                <div class="col-sm-9">
+                                    <p>${temp.score.good}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    What is bad?
+                                </div>
+                                <div class="col-sm-9">
+                                    <p>${temp.score.bad}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    What needs to be improved?
+                                </div>
+                                <div class="col-sm-9">
+                                    <p>${temp.score.improvement}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
                 } else {
-                    let newRow = `
+                    newRow = `
                     <div class="row mb-3">
                         <div class="col-md-12">
                             <div class="row">

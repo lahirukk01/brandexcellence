@@ -8,22 +8,13 @@
             width: 100%;
         }
 
-        iframe {
-            width: 100%;
-            height: 500px;
-        }
-
-        div.ndfHFb-c4YZDc-Wrql6b[role="toolbar"] {
-            display: none !important;
-        }
-
     </style>
 @endsection
 
 @section('breadcrumbs_title', 'Dashboard')
 
 @section('breadcrumbs')
-    <li><a href="{{route('judge.index')}}">Dashboard</a></li>
+    <li><a href="{{route('judge.index')}}">Entries R1</a></li>
     <li class="active">Score</li>
 @endsection
 
@@ -182,7 +173,7 @@
 
             $('body').addClass('open')
 
-            $('.score-input').keyup(function () {
+            let setTotal = function () {
                 let total = 0
 
                 $('.score-input').each(function (index, element) {
@@ -198,7 +189,10 @@
                 let temp = total.toFixed(2)
                 $('#total-score').text(temp)
                 $('#total-score-input').val(temp)
-            })
+            }
+
+            $('.score-input').keyup(setTotal)
+            $('.score-input').change(setTotal)
 
             let elapsedSeconds = 0
 
@@ -223,9 +217,15 @@
             function getQuotient(number, divider) {
                 return Math.floor(number/divider)
             }
+
+            $(document).bind("contextmenu",function(e){
+                return false;
+            });
+
+            $.validate()
         })
 
-        $.validate()
+
     </script>
 
 @endsection

@@ -53,14 +53,6 @@
                                 </div>
                             </div>
 
-{{--                            <div class="row form-group">--}}
-{{--                                <div class="col col-md-3"><label for="telephone-input" class=" form-control-label">Telephone (10 digit)</label></div>--}}
-{{--                                <div class="col-12 col-md-9">--}}
-{{--                                    <input type="text" id="judge-telephone-input" name="contact_number"--}}
-{{--                                           class="form-control" value="{{old('contact_number')}}">--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-
                             <div class="row form-group">
                                 <div class="col col-md-3"><label for="" class="form-control-label">Select Industry Categories of Judge</label></div>
                                 <div class="col-12 col-md-9">
@@ -126,6 +118,6 @@
                 $('input[name="industry_categories[]"]').prop('checked', true)
             }
         })
-        
+
     </script>
 @endsection

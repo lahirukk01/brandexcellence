@@ -6,7 +6,6 @@ use App\Brand;
 use App\BrandJudge;
 use App\CsrScore;
 use App\Judge;
-use Illuminate\Support\Facades\DB;
 
 
 class AdminScoreController extends Controller
@@ -17,6 +16,7 @@ class AdminScoreController extends Controller
         $csrJudgeIds = CsrScore::whereRound(1)->pluck('judge_id');
 
         $allJudgeIds = $judgeIds->concat($csrJudgeIds);
+        $allJudgeIds = $allJudgeIds->unique();
         $judges = Judge::find($allJudgeIds);
 
         foreach ($judges as $j) {
@@ -24,7 +24,7 @@ class AdminScoreController extends Controller
             $csrBrandsTotals = CsrScore::whereJudgeId($j->id)->whereRound(1)->pluck('total');
 
             $allTotals = $brandsTotals->concat($csrBrandsTotals);
-            $j->average = round( $allTotals->average(), 2);
+            $j->average = round( $allTotals->average(), 1);
         }
 
         return view('admin.scores.judge_wise', compact('judges'));
@@ -37,7 +37,7 @@ class AdminScoreController extends Controller
 
         foreach ($brands as $b) {
             $b->average = round( BrandJudge::whereBrandId($b->id)
-                ->whereRound(1)->pluck('total')->average(),2);
+                ->whereRound(1)->pluck('total')->average(),1);
         }
 
         $csrBrandIds = CsrScore::whereRound(1)->pluck('brand_id');
@@ -45,7 +45,7 @@ class AdminScoreController extends Controller
 
         foreach ($csrBrands as $b) {
             $b->average = round( CsrScore::whereBrandId($b->id)
-                ->whereRound(1)->pluck('total')->average(),2);
+                ->whereRound(1)->pluck('total')->average(),1);
         }
 
         $brands = $brands->concat($csrBrands);
@@ -65,8 +65,10 @@ class AdminScoreController extends Controller
 
         foreach ($brands as $b) {
             $names[] = $b->name;
-            $scores[] = BrandJudge::whereBrandId($b->id)->whereJudgeId($judge->id)->whereRound(1)
-                ->pluck('total')[0];
+            $scores[] = round(BrandJudge::whereBrandId($b->id)->whereJudgeId($judge->id)->whereRound(1)
+                ->first()->total, 1);
+            $b->scoreDetails = BrandJudge::whereBrandId($b->id)->whereJudgeId($judge->id)->whereRound(1)
+                ->first();
         }
 
         $csrBrandIds = CsrScore::whereRound(1)->whereJudgeId($judge->id)->pluck('brand_id');
@@ -74,8 +76,8 @@ class AdminScoreController extends Controller
 
         foreach ($csrBrands as $b) {
             $names[] = $b->name;
-            $scores[] = CsrScore::whereBrandId($b->id)->whereJudgeId($judge->id)->whereRound(1)
-                ->pluck('total')[0];
+            $scores[] = round(CsrScore::whereBrandId($b->id)->whereJudgeId($judge->id)->whereRound(1)
+                ->first()->total, 1);
         }
 
         $brands = $brands->concat($csrBrands);
@@ -98,8 +100,8 @@ class AdminScoreController extends Controller
 
             foreach ($judges as $j) {
                 $names[] = $j->name;
-                $scores[] = CsrScore::whereBrandId($brand->id)->whereJudgeId($j->id)->whereRound(1)
-                    ->pluck('total')[0];
+                $scores[] = round(CsrScore::whereBrandId($brand->id)->whereJudgeId($j->id)->whereRound(1)
+                    ->pluck('total')[0], 1);
             }
 
         } else {
@@ -109,8 +111,8 @@ class AdminScoreController extends Controller
 
             foreach ($judges as $j) {
                 $names[] = $j->name;
-                $scores[] = BrandJudge::whereBrandId($brand->id)->whereJudgeId($j->id)->whereRound(1)
-                    ->pluck('total')[0];
+                $scores[] = round(BrandJudge::whereBrandId($brand->id)->whereJudgeId($j->id)->whereRound(1)
+                    ->pluck('total')[0], 1);
             }
         }
 

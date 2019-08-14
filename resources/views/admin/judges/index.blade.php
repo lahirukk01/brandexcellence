@@ -59,7 +59,7 @@
                                         </form>
 
                                     </td>
-                                    <td><button id="{{ $j->id }}" class="btn btn-info unlock-btn" @if($j->finalized == false) disabled @endif>Unlock</button></td>
+                                    <td><button id="{{ $j->id }}" class="btn btn-info unlock-btn" @if($j->finalized == false) disabled @endif>Un-Finalize</button></td>
                                     <td>
                                         @if($j->allowed)
                                             <a href="{{ route('admin.judge.toggle_status', $j->id) }}" class="btn btn-danger">Block</a>

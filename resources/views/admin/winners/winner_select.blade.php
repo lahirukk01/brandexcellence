@@ -61,7 +61,7 @@
                                         <span class="d-inline-block" style="background-color: lightblue;">
                                             <input class="d-block mx-auto" type="radio" name="{{ 'medal' . $b->id }}" value="Merit" id="" @if($b->medal == 'Merit') checked @endif>
                                         </span>
-                                        <span class="d-inline-block" style="background-color: black;">
+                                        <span class="d-inline-block">
                                             <input class="d-block mx-auto" type="radio" name="{{ 'medal' . $b->id }}" value="" id=""  @if($b->medal == null) checked @endif>
                                         </span>
                                     </td>
@@ -94,6 +94,8 @@
 
             let results = []
 
+            const categoryCode = '{{ $categoryCode }}'
+
             rows.each(function (index) {
                 let brandId = parseInt($(this).attr('brand_id'))
                 let checkInput = $(this).find(`input:checked`).val()
@@ -103,6 +105,7 @@
 
             const data = {
                 results,
+                categoryCode,
                 _token: '{{ csrf_token() }}'
             }
 
