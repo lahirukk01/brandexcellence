@@ -177,9 +177,8 @@
 
             setTotal()
 
-            $('.score-input').keyup(function () {
-                setTotal()
-            })
+            $('.score-input').change(setTotal)
+            $('.score-input').keyup(setTotal)
 
             //////////////  Set total score //////////////////
             function setTotal() {
@@ -228,9 +227,11 @@
             $(document).bind("contextmenu",function(e){
                 return false;
             });
+
+            $.validate()
         })
 
-        $.validate()
+
     </script>
 
 @endsection

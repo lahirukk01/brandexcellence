@@ -1,7 +1,7 @@
 
 @extends('layouts.judge')
 
-@section('title', 'Brand Excellence Judge Dashboard')
+@section('title', 'Brand Excellence Judge Entries R1')
 
 
 @section('styles')

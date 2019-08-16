@@ -58,6 +58,11 @@
                                         <p>{{ $brand->description }}</p>
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <button id="recuse-btn" brand_id="{{ $brand->id }}" class="btn btn-warning">Recuse</button>
+                                    </div>
+                                </div>
                             </div>
                             <hr>
 
@@ -65,7 +70,8 @@
                             <a class="btn btn-primary" target="_blank" href="{{ asset($brand->supporting_material) }}">Supporting Material</a>
                             @endif
 
-                            <embed src="{{ asset($brand->entry_kit) }}#toolbar=0" width="100%" height="400">
+                            <embed id="pdf-embed" src="{{ asset($brand->entry_kit) }}#toolbar=0" width="100%" height="400">
+
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="table-responsive">
@@ -165,6 +171,7 @@
 
 @section('scripts')
     <script src="{{asset('vendors/form/src/jquery.form.js')}}"></script>
+    <script src="{{asset('vendors/jquery-loading/dist/jquery.loading.js')}}"></script>
 
     <script>
         $('#entries-r1-li').addClass('active')
@@ -223,6 +230,31 @@
             });
 
             $.validate()
+
+            $('#recuse-btn').click(function () {
+                if(!confirm('Are you sure you want to recuse this entry?')) {
+                    return false
+                }
+
+                const brandId = $(this).attr('brand_id')
+
+                const data = {
+                    brandId,
+                    _token: '{{ csrf_token() }}'
+                }
+
+                const url = '{{ route('judge.recuse') }}'
+
+                $.post(url, data, function (response) {
+                    console.log(response)
+                    if(response === 'success') {
+                        alert('Successfully recused')
+                        location.assign('{{ url()->previous() }}')
+                    } else {
+                        alert('Failed to recuse')
+                    }
+                })
+            })
         })
 
 

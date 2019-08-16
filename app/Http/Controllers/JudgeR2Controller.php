@@ -162,7 +162,12 @@ class JudgeR2Controller extends Controller
 
         unset($data['_token']);
 
-        Auth::user()->brands()->attach($brand->id, $data);
+        $data['round'] = 2;
+        $data['brand_id'] = $brand->id;
+        $data['judge_id'] = Auth::user()->id;
+
+//        Auth::user()->brands()->attach($brand->id, $data);
+        BrandJudge::create($data);
 
         $emailData['start'] = session()->pull('scoringStart');
         $emailData['end'] = Carbon::now();

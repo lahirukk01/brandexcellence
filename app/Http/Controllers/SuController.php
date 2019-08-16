@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\BlockedEntry;
 use App\Flag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,6 +14,8 @@ class SuController extends Controller
         $flag = Flag::whereId(1)->first();
         $flag->current_round = 2;
         $flag->save();
+
+        BlockedEntry::truncate();
 
         return redirect()->route('admin.index');
     }

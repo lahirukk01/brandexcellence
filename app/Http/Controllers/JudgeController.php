@@ -154,7 +154,6 @@ class JudgeController extends Controller
 
 //        Auth::user()->brands()->attach($brand->id, $data);
         BrandJudge::create($data);
-//        dd($data);
 
 
         $emailData['start'] = session()->pull('scoringStart');
@@ -377,6 +376,18 @@ class JudgeController extends Controller
         $scores = json_encode($scores);
 
         return view('judge.score_pattern', compact('names', 'scores'));
+    }
+
+    public function recuse(Request $request)
+    {
+        $brandId = $request->brandId;
+
+        BlockedEntry::create([
+            'brand_id' => $brandId,
+            'judge_id' => Auth::user()->id,
+        ]);
+
+        return response()->json('success');
     }
 
     ///////////////////////////// Inside Password Reset ///////////////////////////////////

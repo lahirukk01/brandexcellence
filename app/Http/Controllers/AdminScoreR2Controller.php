@@ -78,6 +78,7 @@ class AdminScoreR2Controller extends Controller
             $names[] = $b->name;
             $scores[] = round(CsrScore::whereBrandId($b->id)->whereJudgeId($judge->id)->whereRound(2)
                 ->first()->total, 1);
+            $b->scoreDetails = null;
         }
 
         $brands = $brands->concat($csrBrands);
@@ -102,6 +103,7 @@ class AdminScoreR2Controller extends Controller
                 $names[] = $j->name;
                 $scores[] = round(CsrScore::whereBrandId($brand->id)->whereJudgeId($j->id)->whereRound(2)
                     ->first()->total, 1);
+                $j->scoreDetails = null;
             }
 
         } else {
@@ -113,6 +115,8 @@ class AdminScoreR2Controller extends Controller
                 $names[] = $j->name;
                 $scores[] = round(BrandJudge::whereBrandId($brand->id)->whereJudgeId($j->id)->whereRound(2)
                     ->first()->total, 1);
+                $j->scoreDetails = BrandJudge::whereBrandId($brand->id)->whereJudgeId($j->id)->whereRound(2)
+                    ->first();
             }
         }
 

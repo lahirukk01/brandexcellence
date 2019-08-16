@@ -199,7 +199,7 @@
 
             $('body').addClass('open')
 
-            $('.score-input').keyup(function () {
+            let setTotal = function () {
                 let total = 0
 
                 $('.score-input').each(function (index, element) {
@@ -215,7 +215,10 @@
                 let temp = total.toFixed(2)
                 $('#total-score').text(temp)
                 $('#total-score-input').val(temp)
-            })
+            }
+
+            $('.score-input').keyup(setTotal)
+            $('.score-input').change(setTotal)
 
             let elapsedSeconds = 0
 

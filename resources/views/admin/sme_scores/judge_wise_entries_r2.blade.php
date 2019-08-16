@@ -35,12 +35,22 @@
                         <h4>{{ $judge->name }}</h4>
                     </div>
                     <div class="card-body">
-                        <table id="admin-brands-table" class="table table-striped table-bordered">
+                        <table id="judge-wise-entries-table" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
                                     <th>Entry ID</th>
                                     <th>Brand Name</th>
-                                    <th>Company</th>
+                                    <th>Op</th>
+                                    <th>Sa</th>
+                                    <th>Des</th>
+                                    <th>Ta</th>
+                                    <th>Dec</th>
+                                    <th>Id</th>
+                                    <th>POD</th>
+                                    <th>Ma</th>
+                                    <th>Pe</th>
+                                    <th>En</th>
+                                    <th>To</th>
                                     <th>View Score</th>
                                 </tr>
                             </thead>
@@ -49,7 +59,17 @@
                                 <tr>
                                     <td>{{ $b->id_string }}</td>
                                     <td>{{ $b->brand_name }}</td>
-                                    <td>{{ $b->company }}</td>
+                                    <td>{{ $b->scoreDetails->opportunity }}</td>
+                                    <td>{{ $b->scoreDetails->satisfaction }}</td>
+                                    <td>{{ $b->scoreDetails->description }}</td>
+                                    <td>{{ $b->scoreDetails->targeting }}</td>
+                                    <td>{{ $b->scoreDetails->decision }}</td>
+                                    <td>{{ $b->scoreDetails->identity }}</td>
+                                    <td>{{ $b->scoreDetails->pod }}</td>
+                                    <td>{{ $b->scoreDetails->marketing }}</td>
+                                    <td>{{ $b->scoreDetails->performance }}</td>
+                                    <td>{{ $b->scoreDetails->engagement }}</td>
+                                    <td>{{ $b->scoreDetails->total }}</td>
                                     <td>
                                         <a class="btn btn-primary" href="{{ route('admin.sme.score.show_r2', ['judge' =>$judge->id, 'brand' => $b->id, 'direction' => 'judgewise']) }}">View</a>
                                     </td>
@@ -89,6 +109,7 @@
     <script>
         $('#scores-sme-r2-li').addClass('active')
         $('#judge-wise-sme-r2-li > i').css('color', 'white')
+        $('body').addClass('open')
 
         var ctx = document.getElementById( 'judge-wise-graph' );
         var myChart = new Chart( ctx, {
@@ -116,9 +137,11 @@
             }
         } );
 
-        $('#admin-brands-table').DataTable( {
+        $('#judge-wise-entries-table').DataTable( {
             "columnDefs": [
-                { "orderable": false,}
+                {
+                    "orderable": false,
+                }
             ],
             dom: 'Bfrtip',
             buttons: [

@@ -58,6 +58,11 @@
                                         <p>{{ $brand->description }}</p>
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <button id="recuse-btn" brand_id="{{ $brand->id }}" class="btn btn-warning">Recuse</button>
+                                    </div>
+                                </div>
                             </div>
                             <hr>
 
@@ -205,7 +210,7 @@
 
             $('body').addClass('open')
 
-            $('.score-input').keyup(function () {
+            let setTotal = function () {
                 let total = 0
 
                 $('.score-input').each(function (index, element) {
@@ -221,7 +226,10 @@
                 let temp = total.toFixed(2)
                 $('#total-score').text(temp)
                 $('#total-score-input').val(temp)
-            })
+            }
+
+            $('.score-input').keyup(setTotal)
+            $('.score-input').change(setTotal)
 
             let elapsedSeconds = 0
 
@@ -249,9 +257,36 @@
             $(document).bind("contextmenu",function(e){
                 return false;
             });
+
+            $.validate()
+
+            $('#recuse-btn').click(function () {
+                if(!confirm('Are you sure you want to recuse this entry?')) {
+                    return false
+                }
+
+                const brandId = $(this).attr('brand_id')
+
+                const data = {
+                    brandId,
+                    _token: '{{ csrf_token() }}'
+                }
+
+                const url = '{{ route('judge.recuse') }}'
+
+                $.post(url, data, function (response) {
+                    console.log(response)
+                    if(response === 'success') {
+                        alert('Successfully recused')
+                        location.assign('{{ url()->previous() }}')
+                    } else {
+                        alert('Failed to recuse')
+                    }
+                })
+            })
         })
 
-        $.validate()
+
     </script>
 
 @endsection

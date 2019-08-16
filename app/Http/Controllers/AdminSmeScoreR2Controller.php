@@ -46,6 +46,7 @@ class AdminSmeScoreR2Controller extends Controller
             $names[] = $s->brand_name;
             $scores[] = round(SmeScore::whereSmeId($s->id)->whereJudgeId($judge->id)->whereRound(2)
                 ->first()->total, 1);
+            $s->scoreDetails = SmeScore::whereSmeId($s->id)->whereJudgeId($judge->id)->whereRound(2)->first();
         }
 
         $names = json_encode($names);
@@ -73,6 +74,7 @@ class AdminSmeScoreR2Controller extends Controller
             $names[] = $j->name;
             $scores[] = round(SmeScore::whereJudgeId($j->id)->whereSmeId($sme->id)->whereRound(2)
                 ->first()->total, 1);
+            $j->scoreDetails = SmeScore::whereSmeId($sme->id)->whereJudgeId($j->id)->whereRound(2)->first();
         }
 
         $names = json_encode($names);

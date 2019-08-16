@@ -101,7 +101,8 @@ class AdminScoreController extends Controller
             foreach ($judges as $j) {
                 $names[] = $j->name;
                 $scores[] = round(CsrScore::whereBrandId($brand->id)->whereJudgeId($j->id)->whereRound(1)
-                    ->pluck('total')[0], 1);
+                    ->first()->total, 1);
+                $j->scoreDetails = null;
             }
 
         } else {
@@ -112,7 +113,9 @@ class AdminScoreController extends Controller
             foreach ($judges as $j) {
                 $names[] = $j->name;
                 $scores[] = round(BrandJudge::whereBrandId($brand->id)->whereJudgeId($j->id)->whereRound(1)
-                    ->pluck('total')[0], 1);
+                    ->first()->total, 1);
+                $j->scoreDetails = BrandJudge::whereBrandId($brand->id)->whereJudgeId($j->id)->whereRound(1)
+                    ->first();
             }
         }
 

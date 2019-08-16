@@ -35,14 +35,11 @@
                         <h5>{{ $judge->name }}</h5>
                     </div>
                     <div class="card-body">
-                        <table id="admin-brands-table" class="table table-striped table-bordered">
+                        <table id="judge-wise-scores-table" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
                                     <th>Entry ID</th>
                                     <th>Brand Name</th>
-                                    <th>Category</th>
-                                    <th>Industry Category</th>
-                                    <th>Company</th>
                                     <th>In</th>
                                     <th>Co</th>
                                     <th>Pr</th>
@@ -57,11 +54,13 @@
                                 <tr>
                                     <td>{{ $b->id_string }}</td>
                                     <td>{{ $b->name }}</td>
-                                    <td>{{ $b->category->name }}</td>
-                                    <td>{{ $b->industryCategory->name }}</td>
-                                    <td>{{ $b->company->name }}</td>
                                     @if($b->category->code == 'CSR')
-                                        <td class="text-center" colspan="6">CSR Score</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
                                     @else
                                     <th>{{ $b->scoreDetails->intent }}</th>
                                     <th>{{ $b->scoreDetails->content }}</th>
@@ -77,9 +76,6 @@
                             @endforeach
                             </tbody>
                             <tfoot>
-                                <td></td>
-                                <td></td>
-                                <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -145,39 +141,42 @@
             }
         } );
 
-        $('#admin-brands-table').DataTable( {
+        $('#judge-wise-scores-table').DataTable( {
             "columnDefs": [
-                { "orderable": false, "targets": 5 }
+                {
+                    "orderable": false,
+                    // "targets": 5
+                }
             ],
             dom: 'Bfrtip',
             buttons: [
                 'copy', 'csv', 'excel', 'pdf', 'print'
             ],
-            initComplete: function () {
-                this.api().columns().every( function () {
-                    var column = this;
-                    if(column[0][0] == 2 || column[0][0] == 3) {
-
-                        var select = $('<select style="max-width: 150px;" class="form-control"><option value=""></option></select>')
-                            .appendTo( $(column.footer()).empty() )
-                            .on( 'change', function () {
-                                var val = $.fn.dataTable.util.escapeRegex(
-                                    $(this).val()
-                                );
-
-                                column
-                                    .search( val ? '^'+val+'$' : '', true, false )
-                                    .draw();
-                            } );
-
-                        column.data().unique().sort().each( function ( d, j ) {
-                            select.append( '<option value="'+d+'">'+d+'</option>' )
-                        } );
-
-                    }
-
-                } );
-            }
+            // initComplete: function () {
+            //     this.api().columns().every( function () {
+            //         var column = this;
+            //         if(column[0][0] == 2 || column[0][0] == 3) {
+            //
+            //             var select = $('<select style="max-width: 150px;" class="form-control"><option value=""></option></select>')
+            //                 .appendTo( $(column.footer()).empty() )
+            //                 .on( 'change', function () {
+            //                     var val = $.fn.dataTable.util.escapeRegex(
+            //                         $(this).val()
+            //                     );
+            //
+            //                     column
+            //                         .search( val ? '^'+val+'$' : '', true, false )
+            //                         .draw();
+            //                 } );
+            //
+            //             column.data().unique().sort().each( function ( d, j ) {
+            //                 select.append( '<option value="'+d+'">'+d+'</option>' )
+            //             } );
+            //
+            //         }
+            //
+            //     } );
+            // }
         } );
 
     </script>

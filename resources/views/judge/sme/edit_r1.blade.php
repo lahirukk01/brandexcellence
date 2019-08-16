@@ -213,11 +213,18 @@
 
             $('body').addClass('open')
 
-            $('.score-input').keyup(function () {
+            setTotal()
+
+            $('.score-input').change(setTotal)
+            $('.score-input').keyup(setTotal)
+
+            //////////////  Set total score //////////////////
+            function setTotal() {
                 let total = 0
 
                 $('.score-input').each(function (index, element) {
                     let val = $(element).val()
+
                     if(val !== '') {
                         val = parseFloat(val)
                     } else {
@@ -229,7 +236,7 @@
                 let temp = total.toFixed(2)
                 $('#total-score').text(temp)
                 $('#total-score-input').val(temp)
-            })
+            }
 
             let elapsedSeconds = 0
 
@@ -257,9 +264,11 @@
             $(document).bind("contextmenu",function(e){
                 return false;
             });
+
+            $.validate()
         })
 
-        $.validate()
+
     </script>
 
 @endsection

@@ -4,6 +4,7 @@
 
 @section('styles')
 
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/r-2.2.2/datatables.css"/>
     <style>
         #entry-wise-sme-r1-li > a {
             color: white !important;
@@ -35,12 +36,22 @@
                         <h3 class="text-center">Entry Wise Scores</h3>
                     </div>
                     <div class="card-body">
-                        <table class="table table-striped table-bordered">
+                        <table id="entry-wise-scores-table" class="table table-striped table-bordered">
                             <thead>
                             <tr>
                                 <th>Name</th>
                                 <th>Email</th>
-                                <th>Telephone</th>
+                                <th>Op</th>
+                                <th>Sa</th>
+                                <th>Des</th>
+                                <th>Ta</th>
+                                <th>Dec</th>
+                                <th>Id</th>
+                                <th>POD</th>
+                                <th>Ma</th>
+                                <th>Pe</th>
+                                <th>En</th>
+                                <th>To</th>
                                 <th>View Score</th>
                             </tr>
                             </thead>
@@ -49,7 +60,17 @@
                                 <tr>
                                     <td>{{ $j->name }}</td>
                                     <td>{{ $j->email }}</td>
-                                    <td>{{ $j->telephone }}</td>
+                                    <td>{{ $j->scoreDetails->opportunity }}</td>
+                                    <td>{{ $j->scoreDetails->satisfaction }}</td>
+                                    <td>{{ $j->scoreDetails->description }}</td>
+                                    <td>{{ $j->scoreDetails->targeting }}</td>
+                                    <td>{{ $j->scoreDetails->decision }}</td>
+                                    <td>{{ $j->scoreDetails->identity }}</td>
+                                    <td>{{ $j->scoreDetails->pod }}</td>
+                                    <td>{{ $j->scoreDetails->marketing }}</td>
+                                    <td>{{ $j->scoreDetails->performance }}</td>
+                                    <td>{{ $j->scoreDetails->engagement }}</td>
+                                    <td>{{ $j->scoreDetails->total }}</td>
                                     <td>
                                         <a class="btn btn-primary" href="{{ route('admin.sme.score.show', ['judge' =>$j->id, 'sme' => $sme->id, 'direction' => 'entrywise']) }}">View</a>
                                     </td>
@@ -74,10 +95,14 @@
 
 @section('scripts')
     <script src="{{ asset('vendors/chart.js/dist/Chart.bundle.min.js') }}"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/r-2.2.2/datatables.js"></script>
 
     <script>
         $('#scores-sme-r1-li').addClass('active')
         $('#entry-wise-sme-r1-li > i').css('color', 'white')
+        $('body').addClass('open')
 
         var ctx = document.getElementById( 'entry-wise-graph' );
         var myChart = new Chart( ctx, {
@@ -105,6 +130,17 @@
             }
         } );
 
+        $('#entry-wise-scores-table').DataTable( {
+            "columnDefs": [
+                {
+                    "orderable": false,
+                }
+            ],
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+        } );
     </script>
 
 @endsection

@@ -355,6 +355,7 @@ Route::prefix('judge')->middleware(['verified', 'auth:judge', 'allowed', 'judge_
         Route::patch('update/{brand}', 'JudgeController@update')->name('update');
         Route::patch('update_csr/{brand}', 'JudgeController@updateCsr')->name('update_csr');
         Route::post('finalize', 'JudgeController@finalize')->name('finalize');
+        Route::post('recuse', 'JudgeController@recuse')->name('recuse');
 
         ///////////////////////////////// JudgeController Ends ///////////////////////////////////////////
 
