@@ -3,37 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="6cce3afd-b485-4f40-9fc9-d4cb57cc1aeb" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/AdminScoreController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/AdminScoreController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/AdminScoreR2Controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/AdminScoreR2Controller.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/AdminSmeScoreController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/AdminSmeScoreController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/AdminSmeScoreR2Controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/AdminSmeScoreR2Controller.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/JudgeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/JudgeController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/JudgeR2Controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/JudgeR2Controller.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/SuController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/SuController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/mr.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/qft.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/admin/scores/entry_wise_judges.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/scores/entry_wise_judges.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/admin/scores/entry_wise_judges_r2.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/scores/entry_wise_judges_r2.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/admin/scores/judge_wise_entries.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/scores/judge_wise_entries.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/admin/scores/judge_wise_entries_r2.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/scores/judge_wise_entries_r2.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/admin/sme_scores/entry_wise_judges.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/sme_scores/entry_wise_judges.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/admin/sme_scores/entry_wise_judges_r2.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/sme_scores/entry_wise_judges_r2.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/admin/sme_scores/judge_wise_entries.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/sme_scores/judge_wise_entries.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/admin/sme_scores/judge_wise_entries_r2.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/sme_scores/judge_wise_entries_r2.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/judge/csr/edit.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/judge/csr/edit.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/judge/csr/edit_r2.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/judge/csr/edit_r2.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/judge/csr/score.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/judge/csr/score.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/judge/csr/score_r2.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/judge/csr/score_r2.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/judge/edit.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/judge/edit.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/judge/edit2.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/judge/edit2.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/judge/entries.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/judge/entries.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/judge/score.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/judge/score.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/judge/score_r2.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/judge/score_r2.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/judge/sme/edit_r1.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/judge/sme/edit_r1.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/judge/sme/edit_r2.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/judge/sme/edit_r2.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/judge/sme/score_r1.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/judge/sme/score_r1.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/judge/sme/score_r2.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/judge/sme/score_r2.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public.zip" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -168,16 +138,16 @@
     <property name="settings.editor.selected.configurable" value="web.server" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/resources/views/judge/csr" />
+      <recent name="$PROJECT_DIR$/resources/views/admin/winners" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/resources/views/admin/sme_scores" />
       <recent name="$PROJECT_DIR$/resources/views/admin" />
       <recent name="$PROJECT_DIR$/resources/views/judge/sme" />
       <recent name="$PROJECT_DIR$/resources/views/admin/scores" />
       <recent name="$PROJECT_DIR$/resources/views/judge" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/resources/views/judge/csr" />
-      <recent name="$PROJECT_DIR$/resources/views/admin/winners" />
     </key>
   </component>
   <component name="RunDashboard">
